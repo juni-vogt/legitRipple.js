@@ -24,10 +24,7 @@ $(".elements").ripple({options}, function($container, $ripple, posI, maxDiameter
 | `maxDiameter`        | Sets a ripple max-width. { adaptPos: true } requires this to be in % for correct rendering; can be any unit for use without adaptPos. 100% for circles. | `false`   |
 | `dragging`           | Whether the ripple should be able to be dragged                                                                                                         | `true`    |
 | `adaptPos`           | Whether to transform the ripple according to dragging coordinates. Note: more info on "adaptPos" at "Why another ripple plugin?""                       | `true`    |
-| `scaleMode`          | How to scale the ripple when dragging:                                                                                                                  | `"fixed"` |
-|                      | `"proportional"`: Proportional to the amount it was dragged. Will probably become much bigger than its container.                                       |           |
-|                      | `"fixed"`: Don't scale and release ripple when dragging upwards.                                                                                        |           |
-|                      | falsey values: Don't scale                                                                                                                              |           |
+| `scaleMode`          | How to scale the ripple when dragging:<br><br>`"proportional"`: Proportional to the amount it was dragged. Will probably become much bigger than its container.<br><br>`"fixed"`: Don't scale and release ripple when dragging upwards.<br><br>falsey values: Don't scale                                                                                                                   | `"fixed"` |
 | `hasCustomRipple`    | If using a custom ripple element.                                                                                                                       | `false`   |
 
 ###Coming soon
