@@ -19,8 +19,7 @@
 			theCorrectAmountOfTimeout = 20, //it's correct.
 
 
-			touch = function(e) {
-				console.log("touch", [e.pageX, e.pageY]);
+			touch = function(x, y) {
 				options = {}; //reset options
 				mousemoved = 0; //reset drag amount
 
@@ -31,7 +30,7 @@
 				setOptions();
 
 				//start ripple effect
-				initalPos = [e.pageX, e.pageY];
+				initalPos = [x, y];
 
 				$ripple = $('<span/>');
 
@@ -44,7 +43,7 @@
 				$ripple.addClass('legitRipple-ripple').appendTo($active);
 
 
-				positionAndScale(initalPos[0], initalPos[1], false);
+				positionAndScale(x, y, false);
 
 				//slowing the first (=width) transition until mouseup
 				initialTransition = $ripple.css("transition"); //for reset later
@@ -56,7 +55,7 @@
 					.css("width", options.maxDiameter);
 			},
 
-			drag = function(e) {
+			drag = function(x, y) {
 				var scale;
 				mousemoved++;
 				//this needs to be here because it's used in positionAndScale to
@@ -77,8 +76,8 @@
 					scale = s > 40 ? 40 : s; //no huge values
 
 				} else if (options.scaleMode == "fixed") {
-					var //xDistance = Math.sqrt(Math.pow(e.pageX - initalPos[0], 2)),
-						yDistance = Math.sqrt(Math.pow(e.pageY - initalPos[1], 2));
+					var //xDistance = Math.sqrt(Math.pow(x - initalPos[0], 2)),
+						yDistance = Math.sqrt(Math.pow(y - initalPos[1], 2));
 					//console.log(xDistance, yDistance);
 
 					if ( /*(xDistance > 50 ||*/ yDistance > 6 /*)*/ ) {
@@ -87,11 +86,10 @@
 					}
 				}
 
-				positionAndScale(e.pageX, e.pageY, scale);
+				positionAndScale(x, y, scale);
 			},
 
 			release = function() {
-				console.log("release");
 				/*
 				tl;dr: this approach is very specific and doesn't scale to
 				transitions we don't know anything about
@@ -106,24 +104,6 @@
 				different units so that transitions can be changed freely,
 				you'll need to use css animations, plugins similar to transit.js
 				or jQuery animations. */
-
-				/*var widthUntilNow =
-				  parseFloat(options.maxDiameter) /
-				  (slowedWidthTD / ((new Date() - dragStartTime) / 1000));*/
-				/* transitionEndValue / (transition duration / time transition ran for) */
-
-				//widthUntilNow = widthUntilNow <= parseFloat(options.maxDiameter) ?
-				//  widthUntilNow + options.maxDiameter.match(/\D+$/) /* add unit */ :
-				//  options.maxDiameter;
-				//console.log(widthUntilNow);
-
-				//transition again from width already animated until mouseup
-
-				//console.log($ripple.css("width", widthUntilNow));
-
-				//stop transition at current state
-
-				//console.log(initialTransition);
 
 				$ripple
 					.css("transition", "all 0s linear 0s")
@@ -149,23 +129,48 @@
 				$active = null;
 			},
 
+			setOptions = function() {
+
+				var defaults = {
+					//some of these are functions, either for their values to be
+					//only processed when needed or because they have
+					//interdependencies with other options and thus need to
+					//check them when being set.
+
+					dragging: true,
+					adaptPos: function() { //depends on dragging
+						return options.dragging;
+					},
+					maxDiameter: function() { //depends on adaptPos
+						return Math.sqrt(
+								Math.pow(activeDimensions[0], 2) +
+								Math.pow(activeDimensions[1], 2)
+							) /
+							$active.outerWidth() *
+							(options.adaptPos ? 100 : 200) + 1 + "%"; //+1 for rounding
+					},
+					//formula for the smallest enclosing circle of a rectancle
+					scaleMode: "fixed",
+					hasCustomRipple: false
+				};
+
+
+				$.each(defaults, function(name, defaultValue) {
+					options[name] = passedOptions.hasOwnProperty(name) ?
+						passedOptions[name] :
+						typeof defaultValue == "function" ?
+						defaultValue() :
+						defaultValue;
+				});
+
+				//console.log("passed options:", passedOptions);
+				//console.log("rendered options:", options);
+			},
+
 
 			positionAndScale = function(clickX, clickY, scale) {
 
-				/*var adaptDragging = options.dragging || mousemoved === 0;
-				console.log(adaptDragging, options.dragging, mousemoved);
-				//positions need to be set on mousedown
-				if (!options.dragging) {
-				console.log("is", mousemoved);
-				console.log(activeDimensions);
-					activeDimensions = [
-						parseFloat(options.maxDiameter),
-						parseFloat(options.maxDiameter)
-					];
-				console.log(activeDimensions, options.maxDiameter);
-				}*/
 				var pos = [],
-					adaptPos = [],
 
 					//calculate ALL the things
 					//default x-coords are always calculated - even though
@@ -199,7 +204,7 @@
 						leftInlineOffset = before.offset().left;
 					before.remove();
 					pos[0] = clickX - leftInlineOffset + "px";
-					console.log(clickX, leftInlineOffset, pos[0]);
+					//console.log(clickX, leftInlineOffset, pos[0]);
 
 					//Relative values for xpos don't work because, when resized,
 					//inline elements can have bigger left than right offsets.
@@ -207,17 +212,11 @@
 					//See also: https://jsbin.com/wotuge/edit
 
 					//console.log("leftInlineOffset", leftInlineOffset, inlineXpx);
-
-				} else if (options.adaptPos) {
-					adaptPos = [
-						circleRelDistanceFromMiddleI[0] * 100 + "%",
-						circleRelDistanceFromMiddleI[1] * 100 + "%"
-					];
 				}
 
 				//run hook before position/transform change
 				if (hook) //typeof hook == "function"
-					hook($active, $ripple, posI, parseFloat(options.maxDiameter)/100);
+					hook($active, $ripple, posI, parseFloat(options.maxDiameter) / 100);
 
 				if (adaptDragging) {
 					pos = [
@@ -226,7 +225,7 @@
 					];
 					$ripple
 						.css("left", pos[0])
-						.css("top", pos[1])
+						.css("top", pos[1]);
 				}
 
 				//position can't be done with translate3d because we need
@@ -238,136 +237,55 @@
 					//support is similar to that of transitions
 					"translate3d(-50%, -50%, 0)" +
 					(options.adaptPos ?
-						"translate3d(" + adaptPos[0] + ", " + adaptPos[1] + ", 0)" : "") +
+						"translate3d(" +
+						circleRelDistanceFromMiddleI[0] * 100 + "%, " +
+						circleRelDistanceFromMiddleI[1] * 100 + "%" +
+						", 0)" : "") +
 					(scale ? "scale(" + scale + ")" : "") //could be undefined
 				);
-			},
-
-			setOptions = function() {
-
-				var defaults = {
-					//these are functions to be only processed when needed
-					//todo: find a better way
-					dragging: function() {
-						return true;
-					},
-					adaptPos: function() { //depends on dragging
-						return options.dragging;
-					},
-					maxDiameter: function() { //depends on adaptPos
-						return Math.sqrt(
-								Math.pow(activeDimensions[0], 2) +
-								Math.pow(activeDimensions[1], 2)
-							) /
-							$active.outerWidth() *
-							(options.adaptPos ? 100 : 200) + 1 + "%"; //+1 for rounding
-					},
-					//formula for the smallest enclosing circle of a rectancle
-					scaleMode: function() {
-						return "fixed";
-					},
-					hasCustomRipple: function() {
-						return false;
-					}
-				};
-
-
-				$.each(defaults, function(name, defaultValue) {
-					options[name] = passedOptions.hasOwnProperty(name) ?
-						passedOptions[name] : defaultValue();
-				});
-
-				//console.log("options before interdependencies", options);
-				//option interdependencies
-				//options.maxDiameter = getAttr("isCircle") ? "100%" : options.maxDiameter;
-				//options.adaptPos = getAttr("maxDiameter") ? false : options.adaptPos;
-				//options.scaleMode = getAttr("maxDiameter") ? false : options.scaleMode;
-				//if the maxDiameter option is not default, position won't be adapted
-
-				console.log("passed options:", passedOptions);
-				console.log("rendered options:", options);
 			};
 
 
-		$(function() { //possibly redundant
+		//When called:
 
-			initTouchHandlers(); //make touch handlers work
+		calledOn.addClass("legitRipple"); //add class for css
 
-			calledOn.addClass("legitRipple"); //add class for css
-
-			//fixes webkit bug with inline elements by updating the property
-			//TODO: be more specific
-			var il = calledOn.filter(function(index) {
-					return $(this).css("display") === "inline";
-				})
-				.css("display", "inline-block");
-			setTimeout(function() {
-				il.css("display", "inline").css("display", "");
-			}, 0);
+		//fixes webkit bug with inline elements by updating the property
+		//TODO: be more specific
+		var il = calledOn.filter(function(index) {
+				return $(this).css("display") === "inline";
+			})
+			.css("display", "inline-block");
+		setTimeout(function() {
+			il.css("display", "inline").css("display", "");
+		}, 0);
 
 
-			//wrap void elements
-			/* (should be done manually and thus consciously)
-	        var voidElements = [
-	            'AREA', 'BASE', 'BR', 'COL', 'EMBED', 'HR', 'IMG', 'INPUT',
-	            'KEYGEN', 'LINK', 'MENUITEM', 'META', 'PARAM', 'SOURCE',
-	            'TRACK', 'WBR', 'BASEFONT', 'BGSOUND', 'FRAME', 'ISINDEX'
-	        ];
+		calledOn
+			.on("mousedown", function(e) {
+				$active = $(this);
+				touch(e.pageX, e.pageY);
+			})
+			.on('dragstart', function(e) {
 
-	        calledOn.each(function(i, o) {
-	            //$(o).addClass("legitRipple");
-	            if (~$.inArray($(this).prop('tagName').toUpperCase(), voidElements))
-	                $(o).wrap('<div class="legitRipple-wrapper">');
-	        });
-			*/
-		});
+				//disable dragging because it would interfere with ripple effect
+				//hopefully, this doesn't break your app c:
+				e.preventDefault();
+			});
 
-		calledOn.mousedown(function(e) {
-			$active = $(this);
-			touch(e);
-		});
-		$(document).mousemove(function(e) {
-			if ($active) drag(e);
-		});
-		$(document).mouseup(function(e) {
-			if ($active && e.which == 1) release();
-		});
-		$(window).scroll(function() {
+		$(document)
+			.on("mousemove", function(e) {
+				if ($active) drag(e.pageX, e.pageY);
+			})
+			.on("mouseup", function(e) {
+				if ($active && e.which == 1) release();
+			});
+
+		$(window).on("scroll", function() {
+			console.log("awd");
 			if ($active) release();
 		});
 
-		//disable image dragging because it would interfere with ripple effect
-		calledOn /*.filter("img")*/ .on('dragstart', function(e) {
-			e.preventDefault();
-		});
-
 	};
-
-	//converting touch handlers to mouse events
-	//ross.posterous.com/2008/08/19/iphone-touch-events-in-javascript
-	//TODO: should I move these out of the plugin?
-	function touchHandler(event) {
-		var touch = event.changedTouches[0],
-
-			simulatedEvent = document.createEvent("MouseEvent");
-		simulatedEvent.initMouseEvent({
-				touchstart: "mousedown",
-				touchmove: "mousemove",
-				touchend: "mouseup"
-			}[event.type], true, true, window, 1,
-			touch.screenX, touch.screenY,
-			touch.clientX, touch.clientY, false,
-			false, false, false, 0, null);
-
-		touch.target.dispatchEvent(simulatedEvent);
-		event.preventDefault();
-	}
-
-	function initTouchHandlers() {
-		document.addEventListener("touchstart", touchHandler, true);
-		document.addEventListener("touchmove", touchHandler, true);
-		document.addEventListener("touchend", touchHandler, true);
-		document.addEventListener("touchcancel", touchHandler, true);
-	}
 
 }(jQuery));
