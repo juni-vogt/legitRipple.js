@@ -25,9 +25,9 @@ $(".elements").ripple({options}, function($container, $ripple, posI, maxDiameter
 | `dragging`           | Whether the ripple should be able to be dragged                                                                                                         | `true`    |
 | `adaptPos`           | Whether to transform the ripple according to dragging coordinates. Note: more info on "adaptPos" at "Why another ripple plugin?""                       | `true`    |
 | `scaleMode`          | How to scale the ripple when dragging:                                                                                                                  | `"fixed"` |
-|                      | `"proportional": Proportional to the amount it was dragged. Will probably become much bigger than its container.                                        |           |
-|                      | `"fixed": Don't scale and release ripple when dragging upwards.                                                                                         |           |
-|                      | `falsey values: Don't scale                                                                                                                             |           |
+|                      | `"proportional"`: Proportional to the amount it was dragged. Will probably become much bigger than its container.                                        |           |
+|                      | `"fixed"`: Don't scale and release ripple when dragging upwards.                                                                                         |           |
+|                      | `falsey` values: Don't scale                                                                                                                             |           |
 | `hasCustomRipple`    | If using a custom ripple element.                                                                                                                       | `false`   |
 ###Coming soon
 | Option               | Description                                                                                                                                             | Default   |
@@ -36,6 +36,15 @@ $(".elements").ripple({options}, function($container, $ripple, posI, maxDiameter
 | `destinationElement` | An element other than the clicked one the ripple should travel to                                                                                       | `null`    |
 
 ##Custom ripples
+
+###Custom CSS
+
+Ripples can be targeted using the `.legitRipple-ripple` class, containers using `.legitRipple` CSS selectors for ripples shouldn't be order-specific to target all ripples because there can be multiple ripples active at once. For example, `.legitRipple-custom:first-of-type` wouldn't target all ripples.
+```css
+.container .legitRipple-ripple {
+    background: yellow;
+}
+```
 
 ###Custom elements
 
@@ -71,18 +80,10 @@ Each direct child of `.legitRipple-custom` will be scaled up to cover the ripple
   transform: translate(-50%, -50%);
 }
 ```
-###Custom CSS
-
-Ripples can be targeted using the `.legitRipple-ripple` class, containers using `.legitRipple` CSS selectors for ripples shouldn't be order-specific to target all ripples because there can be multiple ripples active at once. For example, `.legitRipple-custom:first-of-type` wouldn't target all ripples.
-```css
-.container .legitRipple-ripple {
-    background: yellow;
-}
-```
 
 ##Callback
 
-There's a callback.
+There's a callback which is called everytime the ripple's style attribute changes.
 ```javascript
 $(".elements").ripple({options}, function($container, $ripple, posI, maxDiameter) {
     /* $container: The ripple container element
