@@ -25,10 +25,11 @@ $(".elements").ripple({options}, function($container, $ripple, posI, maxDiameter
 | `dragging`           | Whether the ripple should be able to be dragged                                                                                                         | `true`    |
 | `adaptPos`           | Whether to transform the ripple according to dragging coordinates. Note: more info on "adaptPos" at "Why another ripple plugin?""                       | `true`    |
 | `scaleMode`          | How to scale the ripple when dragging:                                                                                                                  | `"fixed"` |
-|                      | `"proportional"`: Proportional to the amount it was dragged. Will probably become much bigger than its container.                                        |           |
-|                      | `"fixed"`: Don't scale and release ripple when dragging upwards.                                                                                         |           |
-|                      | `falsey` values: Don't scale                                                                                                                             |           |
+|                      | `"proportional"`: Proportional to the amount it was dragged. Will probably become much bigger than its container.                                       |           |
+|                      | `"fixed"`: Don't scale and release ripple when dragging upwards.                                                                                        |           |
+|                      | falsey values: Don't scale                                                                                                                              |           |
 | `hasCustomRipple`    | If using a custom ripple element.                                                                                                                       | `false`   |
+
 ###Coming soon
 | Option               | Description                                                                                                                                             | Default   |
 |----------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------|-----------|
