@@ -29,7 +29,14 @@ var jshint = require('gulp-jshint'),
     date = new Date(),
     datetime = date.getDate() + "/" + (date.getMonth() + 1) + "/" + date.getFullYear() +
     " @ " + date.getHours() + ":" + (date.getMinutes() < 10 ? "0" : "") + date.getMinutes() +
-    ":" + (date.getSeconds() < 10 ? "0" : "") + date.getSeconds();
+    ":" + (date.getSeconds() < 10 ? "0" : "") + date.getSeconds(),
+    headerText = function(filename) {
+        return '/*' + "\n" +
+            p.name + " v" + p.version + /*" by " + p.author +*/ " (" + p.license + " license)" +
+            "\n" +
+            filename+", compiled: " + datetime + "\n" +
+            '*/\n';
+    };
 
 
 // Lint Task
@@ -59,13 +66,7 @@ gulp.task('buildJS', ['jshint'], function() {
             preserveComments: "some"
         }))
         .pipe(rename('ripple.min.js'))
-        .pipe(header(
-            '/*' + "\n" +
-            p.name + " " + p.version + /*" by " + p.author +*/ " (" + p.license + " license)" +
-            "\n" +
-            "ripple.min.js, compiled: " + datetime + "\n" +
-            '*/\n'
-        ))
+        .pipe(header(headerText('ripple.min.js')))
         .pipe(gulp.dest(paths.js.dest));
 });
 
@@ -75,13 +76,7 @@ gulp.task('buildCSS', ['sass'], function() {
     return gulp.src(paths.css.home + "ripple.css")
         .pipe(minifyCss())
         .pipe(rename('ripple.min.css'))
-        .pipe(header(
-            '/*' + "\n" +
-            p.name + " v" + p.version + /*" by " + p.author +*/ " (" + p.license + " license)" +
-            "\n" +
-            "ripple.min.css, compiled: " + datetime + "\n" +
-            '*/\n'
-        ))
+        .pipe(header(headerText('ripple.min.css')))
         .pipe(gulp.dest(paths.css.dest))
 });
 
