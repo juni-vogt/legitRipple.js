@@ -1,0 +1,436 @@
+body, html {
+	height: 100%;
+}
+html {
+	box-sizing: border-box;
+}
+*, *:before, *:after {
+	box-sizing: inherit;
+}
+body {
+	margin: 0;
+	font: 20px "Helvetica Neue", Helvetica, Arial, sans-serif;
+	background: #f5f5f5;
+}
+main, .maxWidthWrapper {
+	padding: 3em 2em;
+	max-width: 1024px;
+	margin: 0 auto;
+}
+main section>* {
+	max-width: 100%;
+}
+body, html {
+	overflow: auto;
+}
+.browserupgrade {
+	color: red;
+	border: solid 2px;
+	padding: 1em;
+	display: inline-block;
+}
+
+
+header {
+	margin: 0;
+	margin-bottom: 1em;
+	padding-top: 7.5em;
+	padding-bottom: 4em;
+	overflow: hidden;
+	background: #202429;
+	cursor: pointer;
+	color: white;
+	margin: 0;
+
+	h1 {
+		font-weight: normal;
+	}
+	p {
+		margin: 0;
+		margin-top: .75em;
+		//color: #7E848C;
+	}
+	b {
+		font-weight: normal;
+		border-bottom: solid .075em;
+	}
+	.legitRipple-ripple {
+		background: #CE6363;
+		z-index: -1;
+	}
+
+	.maxWidthWrapper {
+		position: relative;
+
+		&>span {
+			font-size: .65em;
+			right: (2em/.65);
+			position: absolute;
+			bottom: -2.5em;
+		}
+	}
+}
+
+
+main>section {
+	margin-bottom: 5em;
+}
+
+
+
+//Demos
+
+#demos {
+	&>* {
+		margin: 3em;
+	}
+	:first-child {
+		margin-left: 0;
+	}
+}
+
+.levitate {
+	position: relative;
+	box-shadow: 0 .1em .4em -.15em rgba(0,0,0,.75);
+	transition:
+	transform .2s ease-in-out,
+	box-shadow .2s ease-in-out;
+	&:hover {
+		transform: translateY(-.175em);
+		box-shadow: 0 (.175em+.1em) (.175em/2+.4em) (.04em - .15em) rgba(0,0,0,.4);
+	}
+}
+
+button {
+	background: #4184f3;
+	border: 0;
+	font-size: 1em;
+	padding: .65em 2.2em;
+	min-width: 8.5em;
+	color: white;
+	border-radius: 3px; //causes weird glitch in FF on mouseup ¯\_(ツ)_/¯
+	cursor: pointer;
+	font-family: "Roboto", "Helvetica Neue", Helvetica, Arial, sans-serif;
+	&.levitate {
+		transition:
+		transform .2s ease-in-out,
+		box-shadow .2s ease-in-out,
+		background-color .2s ease-in-out;
+	}
+
+	&:focus {
+		outline: 0;
+	}
+	&:active {
+		background: #3469C1;
+	}
+}
+
+button.flat {
+	background: transparent;
+	color: #333;
+	transition:
+	background-color .2s ease-in-out;
+	.legitRipple-ripple {
+		background: rgba(0,0,0,0.115);
+	}
+
+	&:active {
+		background: rgba(0,0,0,0.115);
+	}
+}
+
+a.legitRipple {
+	overflow: visible;
+	aside {
+		display: inline;
+	}
+	transition: color .1s ease-out;
+	//animates background color too in chrome and firefox
+	.legitRipple-ripple {
+		background: currentColor;
+	}
+
+	&#inlineBlockLink {
+		display: inline-block;
+		overflow: hidden;
+		padding: .2em;
+	}
+}
+
+.box {
+	padding: 1em;
+	width: 200px;
+	min-height: 200px;
+	box-sizing: border-box;
+	background: #6D57C5;
+	color: white;
+	display: inline-block;
+	p {
+		font-size: .7em;
+	}
+}
+aside {
+	font-size: .6em
+}
+.box[data-text] {
+	width: 1em;
+	height: 300px;
+	color: black;
+	line-height: 1.75;
+	position: relative;
+
+	p {
+		width: 100px;
+	}
+	&:before, &:after {
+		display: inline-block;
+		content: attr(data-text);
+	}
+	&:before {
+		overflow: hidden;
+		color: white;
+		width: 1em;
+		display: inline-block;
+	}
+	&:after {
+		position: absolute;
+		padding: 1em;
+		left: 0;
+		top: 0;
+		z-index: -1;
+		color: #aaa;
+	}
+}
+.wrapper {
+	display: inline-block;
+	img {
+		float: left;
+		width: 200px;
+	}
+	span:first-child { //selectors can conflict (.legitRipple-ripple is a span)
+		opacity: 0;
+
+		font-size: .7em;
+		position: absolute;
+		bottom: 0;
+		right: 0;
+		width: 80%;
+		text-shadow: 0 0 7px white;
+		background-color: rgba(255,255,255,.7);
+		padding: .7em;
+		max-width: 140px;
+		transition: opacity .2s ease-out .4s;
+	}
+	&:hover span:first-child {
+		opacity: 1;
+	}
+}
+.overflow {
+	overflow: visible;
+	.legitRipple-ripple {
+		background: rgba(236, 87, 232, .4);
+	}
+}
+
+#circle {
+	padding: 0;
+	border-radius: 50%;
+	width: 300px;
+	position: relative;
+	span:first-child { //selectors can conflict (.legitRipple-ripple is a span)
+		position: absolute;
+		top: 50%;
+		width: 100%;
+		transform: translateY(-50%);
+		text-align: center;
+		padding: 1em;
+	}
+	&:before {
+		content: "";
+		display: block;
+		padding-top: 100%;
+	}
+	code {
+		font-size: .65em;
+	}
+}
+
+
+
+//Info sections
+
+#usage {
+	dt span {
+		color: #aaa;
+		//margin-left: 1em;
+
+		&:before {
+			content: "(default: ";
+		}
+		&:after {
+			content: ")";
+}
+}
+dt {
+	margin-top: 1.25em;
+	margin-bottom: .125em;
+}
+dl dl dt {
+	margin-top: .25em;
+	&:after {
+		content: ":";
+	}
+}
+h3 {
+	margin-top: 2em;
+}
+dt.comment, dt.comment + dd {
+	opacity: 0.3;
+}
+dt.comment {
+	&:after {
+		content: " *coming soon*";
+	}
+}
+}
+
+#cards div {
+	padding: 1.5em 1.25em;
+	box-sizing: border-box;
+	background: #fff;
+	height: 150px;
+	width: 420px;
+	border-radius: 8px;
+	margin: 1.5em 0;
+	&:nth-child(2) {
+
+	}
+
+	&:before, &:after{
+		color: #777;
+	}
+	&:before{
+		content: "{"
+	}
+	&:after{
+		content: "}"
+	}
+	.legitRipple-ripple {
+		background: rgba(0,0,0,.2);
+	}
+}
+
+#customRipple {
+	padding-right: 20%;
+	width: 400px;
+	min-height: 400px;
+
+	.legitRipple-ripple {
+		background: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAQAAAAECAYAAACp8Z5+AAAAGklEQVQYV2NgYGA4g4bBRBqIAaPBosgARQUAI/sHLRRKoKMAAAAASUVORK5CYII=);
+		//background: url(https://i.imgur.com/j6PUc.jpg) center center !important;
+		//background-size: cover !important;
+	}
+}
+
+#why {
+	video {
+		width: 100%;
+	}
+	.touchposition {
+		display: inline-block
+	}
+	.touchposition, .container:after {
+		padding: 0.25em;
+		background: rgba(204, 204, 204, 0.5);
+		border: solid white 2px;
+		border-radius: 50%;
+	}
+	.container {
+		display: inline-block;
+		width: 275px;
+		position: relative;
+
+		&~.container {
+			margin-left: 1.5em;
+		}
+
+		&:after {
+			content: "";
+			position: absolute;
+		}
+
+		&:first-of-type:after {
+			top: 227px;
+			left: 227px;
+		}
+		&:nth-of-type(2):after {
+			top: 77px;
+			left: 186px;
+
+		}
+	}
+	aside {
+		margin-top: .5em;
+		color: #999;
+		font-style: italic;
+		a {
+			color: #6a6a6a;
+		}
+	}
+	#v1, #v2 {
+		display: inline-block;
+		height: 200px;
+		width: 200px;
+		border-radius: 6px;
+		margin: 1.5em 0;
+		padding: 1em;
+		font-size: .8em;
+		color: rgb(204, 204, 204);
+		.legitRipple-ripple {
+			background: rgba(204, 204, 204, 0.5)
+		}
+	}
+	#v2 {
+		margin-left: 1em;
+	}
+}
+header, section:not(#demos), footer {
+	a {
+		text-decoration: none;
+		border-bottom: solid .1em;
+	}
+}
+
+footer {
+	background: #202429;
+	line-height: 2;
+	color: #aaa;
+	a {
+		color: white;
+	}
+}
+
+pre.rainbow {
+	display: inline-block;
+	overflow: auto;
+	tab-size: 4;
+	margin: 0;
+	code {
+		white-space: pre;
+		display: inline-block;
+	}
+}
+
+@media (max-width: 480px) {
+	header {
+		padding-top: 4em;
+		min-height: 70%;
+		p span {
+			display: none;
+		}
+	}
+	#demos > * {
+		margin: 3em 0;
+	}
+}

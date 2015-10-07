@@ -1,0 +1,91 @@
+/**
+ * GitHub theme
+ *
+ * @author Craig Campbell
+ * @version 1.0.4
+ */
+
+/* Modified to only target .rainbow elements */
+
+pre.rainbow {
+    border: 1px solid #ccc;
+    word-wrap: break-word;
+    padding: 6px 10px;
+    line-height: 19px;
+    margin-bottom: 20px;
+}
+
+code.rainbow {
+    border: 1px solid #eaeaea;
+    margin: 0px 2px;
+    padding: 0px 5px;
+    font-size: 12px;
+}
+
+pre.rainbow code.rainbow {
+    border: 0px;
+    padding: 0px;
+    margin: 0px;
+    -moz-border-radius: 0px;
+    -webkit-border-radius: 0px;
+    border-radius: 0px;
+}
+
+pre.rainbow, code.rainbow {
+    font-family: Consolas, 'Liberation Mono', Courier, monospace;
+    color: #333;
+    background: #f8f8f8;
+    -moz-border-radius: 3px;
+    -webkit-border-radius: 3px;
+    border-radius: 3px;
+}
+
+pre.rainbow, pre.rainbow code.rainbow {
+    font-size: 13px;
+}
+
+pre.rainbow .comment {
+    color: #998;
+}
+
+pre.rainbow .support {
+    color: #0086B3;
+}
+
+pre.rainbow .tag, pre.rainbow .tag-name {
+    color: navy;
+}
+
+pre.rainbow .keyword, pre.rainbow .css-property, pre.rainbow .vendor-prefix.rainbow, pre.rainbow .sass, pre.rainbow .class, pre.rainbow .id, pre.rainbow .css-value, pre.rainbow .entity.function, pre.rainbow .storage.function {
+    font-weight: bold;
+}
+
+pre.rainbow .css-property, pre.rainbow .css-value, pre.rainbow .vendor-prefix.rainbow, pre.rainbow .support.namespace {
+    color: #333;
+}
+
+pre.rainbow .constant.numeric, pre.rainbow .keyword.unit, pre.rainbow .hex-color {
+    font-weight: normal;
+    color: #099;
+}
+
+pre.rainbow .entity.class {
+    color: #458;
+}
+
+pre.rainbow .entity.id, pre.rainbow .entity.function {
+    color: #900;
+}
+
+pre.rainbow .attribute, pre.rainbow .variable {
+    color: teal;
+}
+
+pre.rainbow .string, pre.rainbow .support.value  {
+    font-weight: normal;
+    color: #d14;
+}
+
+pre.rainbow .regexp {
+    color: #009926;
+}

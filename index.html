@@ -1,0 +1,329 @@
+<!doctype html>
+
+<head>
+	<meta charset="utf-8">
+	<title>legitRipple.js - Demos and Docs</title>
+	<meta name="description" content="The legitRipple.js jQuery plugin's Demos and Documentation. A lightweight, CSS based jQuery plugin for material-design ripple effects.">
+	<meta http-equiv="x-ua-compatible" content="ie=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="canonical" href=".">
+
+	<link rel="stylesheet" href="css/ripple.css">
+	<link rel="stylesheet" href="css/demo.css">
+
+	<!-- github ribbon -->
+	<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/github-fork-ribbon-css/0.1.1/gh-fork-ribbon.min.css" />
+	<!--[if lt IE 9]>
+	  <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/github-fork-ribbon-css/0.1.1/gh-fork-ribbon.ie.min.css" />
+	<![endif]-->
+</head>
+
+<body>
+	<!--[if lte IE 9]>
+		 <p class="browserupgrade">IE7, IE8 and IE9 aren't supported by this plugin. <a href="http://caniuse.com/#feat=css-transitions">Browser support</a></p>
+	<![endif]-->
+
+	<header>
+		<div class="maxWidthWrapper">
+			<h1>Here's a jQuery plugin for all your ripple needs.</h1>
+			<p>It works with smooth <b>CSS transitions</b>, is totally <b>customizable</b> and weighs <b>~3kb</b> with CSS</p>
+			<span>*clicky clicky*</span>
+		</div>
+	</header>
+
+	<div class="github-fork-ribbon-wrapper right">
+		<div class="github-fork-ribbon">
+			<a href="https://github.com/matthias-vogt/legitRipple.js">Fork me on GitHub</a>
+		</div>
+	</div>
+
+	<!-- <header>
+	  <svg>
+	   <defs>
+	     <mask id="mask" >
+	       <rect id="alpha"/>
+	       <text id="title" dy="1em">Here's a lightweight, CSS-based approach</text>
+	       <text id="title" dy="1em">to the material ripple-effect</text>
+	       <text id="subtitle" dy="1em">It works with jQuery though ;)</text>
+	     </mask>
+	    </defs>
+	    <rect id="base"/>
+	  </svg>
+	</header> -->
+
+
+	<main>
+		<h2>Demos</h2>
+		<section id="demos">
+
+			<div class="box levitate" id="demobox">
+				I'm a Box!
+				<p>Try to click and hold/drag or right-clicking to see the ripple effect respond</p>
+			</div>
+
+			<button class="levitate">Button</button>
+			<button class="flat">Flat Button</button>
+			<!--<button class="levitate">No drop effect</button>-->
+
+
+			<div class="box levitate longDrop longOpacity overflow" id="customRipple">
+				You can customize your ripples
+				<p>Custom elements, custom CSS, whatever you want.</p>
+				<p>
+					<aside>try holding for a long time</aside>
+				</p>
+				<video class="legitRipple-custom" poster="demo-media/tumblr_nqotmoSJyx1ta8bfso1_500.gif" preload="none">
+					<source src="demo-media/ISS%20Video%20Resource_Earth_Views_720p.webmhd.webm#t=38" type="video/webm">
+					<source src="https://ia801004.us.archive.org/33/items/ISSVideoResourceEarthViews720p/ISS%20Video%20Resource_Earth_Views_720p.mp4#t=38" type="video/mp4">
+				</video>
+				<!-- sources: fuckyeahtrippysgifs.tumblr.com, archive.org/details/ISSVideoResourceEarthViews720p -->
+			</div>
+
+			<a href="#" id="link">
+				Works on links and other <code>inline</code> elements <aside>(most of the time…)</aside>
+			 </a>
+			<!--<div class="box levitate" id="zindex">
+				You can position the ripple-effect behind the parent contents too, using <code>z-index</code>
+			</div>-->
+
+			<div class="wrapper">
+				<span>Void elements (those that can't have child elements) need a wrapper for the effect to work.</span>
+				<img title src="demo-media/deer-album-cover-new.jpg" alt="album cover">
+				<!-- image courtesy of https://caliography.wordpress.com/2013/07/24/animals-like-us/ -->
+			</div>
+
+			<div class="box levitate" id="maxDiameter">
+				You can set a maxDiameter option for the ripple effect
+				<p><code>.ripple({ maxDiameter: 40px });</code></p>
+				<aside>If you set <code>scaleMode</code> to "proportional" and drag, though, the ripple will still get bigger.</aside>
+			</div>
+			<div class="box levitate" id="proportional">
+				<p>The plugin features two <code>scaleMode</code> options for dragging:</p>
+				<code>proportional</code>
+				<p>Scales the ripple proportional to the amount it was dragged.
+					<br>Will probably become bigger than its container.</p>
+			</div>
+			<div class="box levitate" id="fixed">
+				<p>…and</p>
+				<code>fixed</code>
+				<p>Don't scale and release ripple when dragging upwards.</p>
+			</div>
+
+			<div class="longDrop longOpacity box levitate" id="long">
+				You can add <code>longDrop</code> and <code>longOpacity</code> classes
+				<p>
+					…for longer transitions.
+					<br>
+					<br>
+					<code>class="longDrop longOpacity"</code>
+				</p>
+			</div>
+
+			<a href="#" id="inlineBlockLink">This is an <code>inline-block</code> link</a>
+
+			<div class="longDrop box overflow" id="overflow">
+				Try this one to see overflow
+				<p>Notice how the ripple responds to the mouse position in the box</p>
+			</div>
+
+			<div class="longDrop overflow box" id="circle">
+				<span>
+				Works with circles
+				<br><code>.ripple({ maxDiameter: "100%" });</code>
+				</span>
+			</div>
+
+			<div class="overflow box" data-text="Works on weird aspect ratios!">
+				<p>bleh</p>
+			</div>
+			<!--
+			<br>
+			<br>
+			<a href="#">Check it out on GitHub</a> -->
+		</section>
+
+		<h2>Usage</h2>
+		<section id="usage">
+			<p>The plugin depends on jQuery, so make sure you have that loaded. Afterwards, you can use it like this:</p>
+			<pre class="rainbow"><code data-language="javascript">$(".some, .elements").ripple(); //ripple with default options</code></pre>
+			<br>
+			<pre class="rainbow"><code data-language="javascript">$(".elements").ripple({ maxDiameter: "100%" }); //ripple with custom options</code></pre>
+			<br>
+			<pre class="rainbow"><code data-language="javascript">//ripple with custom options and callback
+$(".elements").ripple({options}, function($container, $ripple, posI, maxDiameter) {
+	//is called everytime the ripple's css property changes
+});
+</code></pre>
+			<h3>Options</h3>
+
+			<!--
+			options: [(…) = defaults to]
+
+			maxDiameter:
+				Sets a ripple max width. Any unit is possible. 100% for circles. (false)
+			dragging:
+				Whether the ripple should be able to be dragged (true)
+			adaptPos:
+				Whether to position the ripple according to dragging coordinates. (true)
+			scaleMode:
+				How to scale the ripple while dragging: ("fixed")
+					"proportional": Proportional to the amount it was dragged.
+									Will probably become much bigger than its container.
+					"fixed": Don't scale and release ripple when dragging upwards.
+					falsey values: Don't scale
+			hasCustomRipple:
+				If using a custom ripple element. Should be wrapped in a span with the a
+				"legitRipple-custom" class. Will be .clone()'d, so css shouldn't be
+				order specific. (false)
+			rippleOnHover:
+				Whether to use the ripple as a hover effect (false)
+
+			The difference between "dragging" and "adaptPos" is that, while "dragging"
+			specifies that the center of the ripple should change according to the mouse
+			coordinates, "adaptPos" does the transformation of the ripple according to
+			the relative position of the dragging coordinates in the parent element.
+			-->
+
+			<dl>
+				<dt><code>maxDiameter</code> <span>false</span></dt>
+				<!-- a space between <code/> and <span/> for better text selectability -->
+				<dd>Sets a ripple max-width. <code>{ adaptPos: true }</code> requires this to be in % for correct rendering; can be any unit for use without <code>adaptPos</code>. 100% for circles.</dd>
+				<dt><code>dragging</code> <span>true</span></dt>
+				<dd>Whether the ripple should be able to be dragged</dd>
+				<dt><code>adaptPos</code> <span>true</span></dt>
+				<dd>Whether to transform the ripple according to dragging coordinates.
+					<p>Note: <a href="#why">more info on "adaptPos"</a></p>
+					<!--is that, while "dragging" specifies that the center of the ripple should change according to the mouse coordinates, "adaptPos" does the transformation of the ripple according to the relative position of the dragging coordinates in the parent element.-->
+				</dd>
+				<dt><code>scaleMode</code> <span>"fixed"</span></dt>
+				<dd>How to scale the ripple when dragging:
+					<dl>
+						<dt>"proportional"</dt>
+						<dd>Proportional to the amount it was dragged. Will probably become much bigger than its container.</dd>
+						<dt>"fixed"</dt>
+						<dd>Don't scale and release ripple when dragging upwards.</dd>
+						<dt>falsey values</dt>
+						<dd>Don't scale</dd>
+					</dl>
+				</dd>
+				<dt><code>hasCustomRipple</code> <span>false</span></dt>
+				<dd>If using a custom ripple element.</dd>
+				<dt class="comment"><code>rippleOnHover</code> <span>false</span></dt>
+				<dd>Whether to use the ripple as a hover effect</dd>
+				<dt class="comment"><code>destinationElement</code> <span>null</span></dt>
+				<dd>An element other than the clicked one the ripple should travel to</dd>
+			</dl>
+			<h3>Custom ripples</h3>
+			<h4>Custom elements</h4>
+
+			<p>You can customize ripples by setting the <code>hasCustomRipple</code> option to <code>true</code> and adding the following markup to your HTML:</p>
+			<pre class="rainbow"><code data-language="html"><div>
+	Container Element
+	<div class="legitRipple-custom">Your custom element</div>
+</div></code></pre>
+			<p>…how the code will look after a ripple is triggered
+				<pre class="rainbow"><code data-language="html"><div>
+	Container Element
+	<div class="legitRipple-custom someclass">Your custom element</div>
+	<span class="legitRipple-ripple">
+		<div class="someclass">Your custom element</div>
+	</span>
+</div></code></pre>
+				<p>The custom element is used as a template and will be hidden via CSS on load. It'll be <code>.clone()</code>'d and wrapped in a <code>&lt;span/&gt;</code> via jQuery on demand.</p>
+				<p>Each direct child of <code>.legitRipple-custom</code> will be scaled up to cover the ripple element, like:</p>
+				<pre class="rainbow">
+				<code data-language="css">.legitRipple .legitRipple-custom > * {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  min-width: 100%;
+  min-height: 100%;
+  transform: translate(-50%, -50%);
+}</code></pre>
+
+
+				<h4>Custom CSS</h4>
+				<p>Ripples can be targeted using the <code>.legitRipple-ripple</code> class, containers using <code>.legitRipple</code>. CSS selectors for ripples shouldn't be order-specific to target all ripples because there can be multiple ripples active at once. For example, <code>.legitRipple-custom:first-of-type</code> wouldn't target all ripples.</p>
+				<pre class="rainbow">
+					<code data-language="css">.container .legitRipple-ripple {
+	background: yellow;
+}</code>
+				</pre>
+			</p>
+
+			<h4>Callback</h4>
+			<p>There's a callback.</p>
+			<pre class="rainbow"><code data-language="javascript">$(".elements").ripple({options}, function($container, $ripple, posI, maxDiameter) {
+	/* $container: The ripple container element
+	   $ripple: The ripple element
+	   posI: An array with two indices (0 &lt;= i &lt;= 1) for the
+	   		x- and y-position of the ripple in the parent
+	   maxDiameterI: An index (0 &lt;= i &lt; ∞) of the max-width
+	   		of the ripple element relative to the container's width
+	 */
+});
+</code></pre>
+			</p>
+		</section>
+
+		<!--
+		<h2>Try <em>all the options!</em></h2>
+		<section id="cards">
+			<div class="levitate">awd</div>
+			<div class="levitate"></div>
+			<div class="levitate"></div>
+		</section>
+		-->
+
+
+		<h2>Why another ripple plugin?</h2>
+		<section id="why">
+			<p>There are a <a href="https://github.com/search?l=JavaScript&q=material+ripple&type=Repositories&utf8=%E2%9C%93"><em>lot</em></a> of javascript ripple plugins out there but I noticed that none of them replicate the ripple on android exactly. Which is not surprising since it's not documented in <a href="https://www.google.com/design/spec/animation/responsive-interaction.html">google's design spec</a> either.</p>
+
+			<p>On android, the ripple itself doesn't spread in all directions equally as fast, it is positioned relative to the touch position (<span class="touchposition"></span>) as the touch position is positioned relative to the ripple's container.</p>
+
+			<div class="container">
+				<video loop autoplay>
+					<source src="demo-media/reference-1.webm" type="video/webm">
+					<source src="demo-media/reference-1.mp4" type="video/mp4">
+				</video>
+			</div>
+			<div class="container">
+				<video loop autoplay>
+					<source src="demo-media/reference-2.webm" type="video/webm">
+					<source src="demo-media/reference-2.mp4" type="video/mp4">
+				</video>
+			</div>
+			<aside>App courtesy of <a href="https://play.google.com/store/apps/details?id=com.sonyericsson.music">Music</a> and <a href="https://play.google.com/store/apps/details?id=com.kabouzeid.gramophone">Phonograph Music Player</a></aside>
+			<br>
+			<div class="levitate overflow" id="v1">{ adaptPos: true }</div>
+			<div class="levitate overflow" id="v2">{ adaptPos: false }</div>
+
+			<p>This effect however hadn't been replicated in any plugins yet, so I decided to make one.</p>
+			<p>Adding to the incentive was that most of them don't slow the ripple spread on mousedown and speed it up again on mouseup or don't have what is called the "fixed" <code>scaleMode</code> in this plugin implemented correctly</p>
+			<p>This plugin is probably also the only one with customizable ripples and that works with inline elements.</p>
+			<p>You could maybe say that it's an unnecessarily perfectionist approach to this simple effect but that's your call to decide ;)</p>
+		</section>
+
+		<h2>Browser support</h2>
+		<section id="support">
+			<p>This uses CSS3 transitions, so <a href="http://caniuse.com/#feat=css-transitions">browser support</a> is ie10+</p>
+		</section>
+
+	</main>
+	<footer>
+		<div class="maxWidthWrapper">
+			Made by <a href="https://github.com/matthias-vogt">Matthias Vogt</a>
+			<br>
+			<a href="https://github.com/matthias-vogt/legitRipple.js">Download and contribute on GitHub!</a>
+		</div>
+	</footer>
+
+	<script type="text/javascript" src="libs/jquery-2.1.4.min.js"></script>
+	<script type="text/javascript" src="js/ripple.js"></script>
+	<script type="text/javascript" src="js/demo.js"></script>
+
+	<!-- syntax highlighting -->
+	<script type="text/javascript" src="libs/rainbow-custom.min.js"></script>
+	<link rel="stylesheet" href="libs/github.css">
+</body>

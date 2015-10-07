@@ -1,0 +1,71 @@
+.legitRipple {
+  position: relative;
+  overflow: hidden;
+  -webkit-user-select: none;
+     -moz-user-select: none;
+      -ms-user-select: none;
+          user-select: none;
+  z-index: 0;
+}
+
+.legitRipple.longOpacity .legitRipple-ripple {
+  -webkit-transition-duration: 0.125s, 3.6s;
+          transition-duration: 0.125s, 3.6s;
+}
+
+.legitRipple.longDrop .legitRipple-ripple {
+  -webkit-transition-duration: 0.7s, 0.9s;
+          transition-duration: 0.7s, 0.9s;
+  -webkit-transition-timing-function: linear, cubic-bezier(1, 0, 0.8, 0);
+          transition-timing-function: linear, cubic-bezier(1, 0, 0.8, 0);
+}
+
+.legitRipple.longOpacity.longDrop .legitRipple-ripple {
+  -webkit-transition-duration: 0.7s, 3.6s;
+          transition-duration: 0.7s, 3.6s;
+  -webkit-transition-timing-function: linear, cubic-bezier(1, 0, 0.8, 0);
+          transition-timing-function: linear, cubic-bezier(1, 0, 0.8, 0);
+}
+
+.legitRipple-ripple {
+  position: absolute;
+  z-index: -1;
+  -webkit-transform: translate(-50%, -50%) scale(1);
+          transform: translate(-50%, -50%) scale(1);
+  -webkit-transition: width 0.125s linear, opacity 0.9s ease-out;
+          transition: width 0.125s linear, opacity 0.9s ease-out;
+  width: 0;
+  opacity: 1;
+  pointer-events: none;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.4);
+}
+
+.legitRipple-ripple:before {
+  content: "";
+  padding-top: 100%;
+  display: block;
+}
+
+img ~ .legitRipple-ripple {
+  z-index: 0;
+}
+
+.legitRipple-custom {
+  display: none;
+}
+
+.legitRipple-custom ~ .legitRipple-ripple {
+  display: inline-block;
+  overflow: hidden;
+}
+
+.legitRipple-custom ~ .legitRipple-ripple > * {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  min-width: 100%;
+  min-height: 100%;
+  -webkit-transform: translate(-50%, -50%);
+          transform: translate(-50%, -50%);
+}
