@@ -5,15 +5,18 @@ A lightweight, CSS based jQuery plugin for material-design ripple effects.
 ##Usage
 
 The plugin depends on [jQuery](https://jquery.com/), so make sure you have that loaded. Afterwards, you can use it like this:
-
-    $(".some, .elements").ripple(); //ripple with default options
-
-    $(".elements").ripple({ maxDiameter: "100%" }); //ripple with custom options
-
-    //ripple with custom options and callback
-    $(".elements").ripple({options}, function($container, $ripple, posI, maxDiameter) {
-        //is called everytime the ripple's css property changes
-    });
+```javascript
+$(".some, .elements").ripple(); //ripple with default options
+```
+```javascript
+$(".elements").ripple({ maxDiameter: "100%" }); //ripple with custom options
+```
+```javascript
+//ripple with custom options and callback
+$(".elements").ripple({options}, function($container, $ripple, posI, maxDiameter) {
+    //is called everytime the ripple's css property changes
+});
+```
 
 ##Options
 | Option               | Description                                                                                                                                             | Default   |
@@ -37,56 +40,60 @@ The plugin depends on [jQuery](https://jquery.com/), so make sure you have that 
 ###Custom elements
 
 You can customize ripples by setting the `hasCustomRipple` option to true and adding the following markup to your HTML:
-
-    <div>
-        Container Element
-        <div class="legitRipple-custom">Your custom element</div>
-    </div>
-
+```html
+<div>
+    Container Element
+    <div class="legitRipple-custom">Your custom element</div>
+</div>
+```
 How the code will look after a ripple is triggered:
+```html
+<div>
+    Container Element
+    <div class="legitRipple-custom someclass">Your custom element</div>
+    <span class="legitRipple-ripple">
+        <div class="someclass">Your custom element</div>
+    </span>
+</div>
+```
 
-    <div>
-        Container Element
-        <div class="legitRipple-custom someclass">Your custom element</div>
-        <span class="legitRipple-ripple">
-            <div class="someclass">Your custom element</div>
-        </span>
-    </div>
-
-The custom element is used as a template and will be hidden via CSS on load. It'll be `.clone()'d and wrapped in a `<span/> via jQuery on demand.
+The custom element is used as a template and will be hidden via CSS on load. It'll be `.clone()'d` and wrapped in a `<span/>` via jQuery on demand.
 
 Each direct child of `.legitRipple-custom` will be scaled up to cover the ripple element, like:
 
-    .legitRipple .legitRipple-custom > * {
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      min-width: 100%;
-      min-height: 100%;
-      transform: translate(-50%, -50%);
-    }
-
+```css
+.legitRipple .legitRipple-custom > * {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  min-width: 100%;
+  min-height: 100%;
+  transform: translate(-50%, -50%);
+}
+```
 ###Custom CSS
 
 Ripples can be targeted using the `.legitRipple-ripple` class, containers using `.legitRipple` CSS selectors for ripples shouldn't be order-specific to target all ripples because there can be multiple ripples active at once. For example, `.legitRipple-custom:first-of-type` wouldn't target all ripples.
-
-    .container .legitRipple-ripple {
-        background: yellow;
-    }
+```css
+.container .legitRipple-ripple {
+    background: yellow;
+}
+```
 
 ##Callback
 
 There's a callback.
-
-    $(".elements").ripple({options}, function($container, $ripple, posI, maxDiameter) {
-        /* $container: The ripple container element
-           $ripple: The ripple element
-           posI: An array with two indices (0 <= i <= 1) for the
-                x- and y-position of the ripple in the parent
-           maxDiameterI: An index (0 <= i < ∞) of the max-width
-                of the ripple element relative to the container's width
-         */
-    });
+```javascript
+$(".elements").ripple({options}, function($container, $ripple, posI, maxDiameter) {
+    /* $container: The ripple container element
+       $ripple: The ripple element
+       posI: An array with two indices (0 <= i <= 1) for the
+            x- and y-position of the ripple in the parent
+       maxDiameterI: An index (0 <= i < ∞) of the max-width
+            of the ripple element relative to the container's width
+     */
+});
+```
 
 ##Why another ripple plugin?
 
@@ -96,12 +103,11 @@ On android, the ripple itself doesn't spread in all directions equally as fast, 
 
 This effect however hadn't been replicated in any plugins yet, so I decided to make one.
 
-Adding to the incentive was that most of them don't slow the ripple spread on mousedown and speed it up again on mouseup or don't have what is called the `"fixed"` ` `scaleMode` in this plugin implemented correctly
+Adding to the incentive was that most of them don't slow the ripple spread on mousedown and speed it up again on mouseup or don't have what is called the `"fixed"` `scaleMode` in this plugin implemented correctly
 
 This plugin is probably also the only one with customizable ripples and that works with inline elements.
 
 You could maybe say that it's an unnecessarily perfectionist approach to this simple effect but that's your call to decide ;)
 
 ##Browser support
-
 This uses CSS3 transitions, so [browser support](http://caniuse.com/#feat=css-transitions) is ie10+
