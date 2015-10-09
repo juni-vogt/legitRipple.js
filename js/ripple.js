@@ -26,7 +26,6 @@
 			//handlers and use new options
 			.addClass("legitRipple")
 			.on(tap, function(e) {
-				console.log("down");
 				$active = $(this);
 
 				if (e.type == "touchstart") {
@@ -51,7 +50,7 @@
 			});
 
 		$(window).on("scroll", function() {
-			console.log("awd");
+			//TODO: doesn't work
 			if ($active) release();
 		});
 
