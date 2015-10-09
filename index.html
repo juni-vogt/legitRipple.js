@@ -147,16 +147,38 @@
 
 		<h2>Usage</h2>
 		<section id="usage">
-			<p>The plugin depends on jQuery, so make sure you have that loaded. Afterwards, you can use it like this:</p>
-			<pre class="rainbow"><code data-language="javascript">$(".some, .elements").ripple(); //ripple with default options</code></pre>
-			<br>
-			<pre class="rainbow"><code data-language="javascript">$(".elements").ripple({ maxDiameter: "100%" }); //ripple with custom options</code></pre>
-			<br>
-			<pre class="rainbow"><code data-language="javascript">//ripple with custom options and callback
+		<p>The plugin depends on <a href="https://jquery.com">jQuery</a>, so make sure you have that loaded. Afterwards, you can use it like this:</p>
+		<pre class="rainbow"><code data-language="javascript">//ripple with default options
+$(".some, .elements").ripple();</code></pre><br>
+		<pre class="rainbow"><code data-language="javascript">//ripple with custom options
+$(".elements").ripple({ maxDiameter: "100%" });</code></pre><br>
+		<pre class="rainbow"><code data-language="javascript">//ripple with custom options and callback
 $(".elements").ripple({options}, function($container, $ripple, posI, maxDiameter) {
-	//is called everytime the ripple's css property changes
-});
-</code></pre>
+    //is called everytime the ripple's css property changes
+});</code></pre><br>
+
+		<p>You can also use alternative syntax if you have a lot of ripple elements with different options.</p>
+		<pre class="rainbow"><code data-language="javascript">$.ripple({
+  ".material": {},
+  ".material.circle": {maxWidth: "100%"},
+  ".callback": [
+    {hasCustomRipple: true},
+    function($container, $ripple, posI, maxDiameter) {
+
+    }
+  ],
+});</code></pre><br>
+
+		<p>Ripples can be overwritten as you'd expect:</p>
+		<pre class="rainbow"><code data-language="javascript">$(".ripple").ripple();
+$(".ripple.noScale").ripple({scaleMode: 0});
+//.ripple has no options
+//.ripple.noScale has {scaleMode: 0}
+
+$(".foo").ripple();
+$(".foo, .bar").ripple({scaleMode: 0});
+//.foo has {scaleMode: 0}</code></pre>
+
 			<h3>Options</h3>
 
 			<!--
@@ -211,6 +233,8 @@ $(".elements").ripple({options}, function($container, $ripple, posI, maxDiameter
 				</dd>
 				<dt><code>hasCustomRipple</code> <span>false</span></dt>
 				<dd>If using a custom ripple element.</dd>
+				<dt><code>allowDragging</code> <span>false</span></dt>
+				<dd>HTML5 dragging is disabled on ripple elements by default for nicer interaction.</dd>
 				<dt class="comment"><code>rippleOnHover</code> <span>false</span></dt>
 				<dd>Whether to use the ripple as a hover effect</dd>
 				<dt class="comment"><code>destinationElement</code> <span>null</span></dt>
