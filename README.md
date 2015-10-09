@@ -1,5 +1,5 @@
 #legitRipple.js
-A lightweight, CSS based jQuery plugin for material-design ripple effects.
+A lightweight, CSS based jQuery plugin for material-design ripple effects.<br>
 Demo: https://matthias-vogt.github.io/legitRipple.js/
 
 ##Usage
