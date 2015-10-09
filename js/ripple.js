@@ -16,13 +16,18 @@
 
 			theCorrectAmountOfTimeout = 20; //it's correct.
 
-		this.off("mousedown.ripple touchstart.ripple dragstart.ripple")
+		var isTouchDevice = //stackoverflow.com/a/4819886
+			'ontouchstart' in window ||
+			'onmsgesturechange' in window, //ie10
+			tap = isTouchDevice ? "touchstart" : "mousedown";
+
+		this.off(tap + " dragstart.ripple")
 			//if .ripple() is called on the same element twice, remove old event
 			//handlers and use new options
-			.on("mousedown.ripple touchstart.ripple", function(e) {
+			.addClass("legitRipple")
+			.on(tap, function(e) {
+				console.log("down");
 				$active = $(this);
-
-				$active.addClass("legitRipple"); //add class for css
 
 				if (e.type == "touchstart") {
 					e.pageX = e.originalEvent.touches[0].pageX
@@ -42,7 +47,7 @@
 				if ($active) drag(e.pageX, e.pageY);
 			})
 			.on("mouseup", function(e) {
-				if ($active && e.which == 1) release();
+				if ($active && (e.which == 1 || isTouchDevice)) release();
 			});
 
 		$(window).on("scroll", function() {
