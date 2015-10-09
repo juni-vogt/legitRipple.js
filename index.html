@@ -16,6 +16,9 @@
 	<!--[if lt IE 9]>
 	  <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/github-fork-ribbon-css/0.1.1/gh-fork-ribbon.ie.min.css" />
 	<![endif]-->
+
+	<link rel="shortcut icon" type="image/x-icon" href="demo-media/favicon.png">
+	<link rel="apple-touch-icon" href="demo-media/apple-touch-icon.png">
 </head>
 
 <body>
@@ -80,7 +83,7 @@
 			</div>
 
 			<a href="#" id="link">
-				Works on links and other <code>inline</code> elements <aside>(most of the time…)</aside>
+				Works on links and other <code>inline</code> elements <span>(most of the time…)</span>
 			 </a>
 			<!--<div class="box levitate" id="zindex">
 				You can position the ripple-effect behind the parent contents too, using <code>z-index</code>
@@ -319,11 +322,15 @@ $(".elements").ripple({options}, function($container, $ripple, posI, maxDiameter
 		</div>
 	</footer>
 
-	<script type="text/javascript" src="libs/jquery-2.1.4.min.js"></script>
-	<script type="text/javascript" src="js/ripple.js"></script>
-	<script type="text/javascript" src="js/demo.js"></script>
+	<script src="libs/jquery-2.1.4.min.js"></script>
+
+	<script src="js/ripple.js"></script>
+	<!-- ^ using the uncompressed version for developement
+		In production, please use: <script src="dist/ripple.min.js"></script>
+	-->
+	<script src="js/demo.js"></script>
 
 	<!-- syntax highlighting -->
-	<script type="text/javascript" src="libs/rainbow-custom.min.js"></script>
+	<script src="libs/rainbow-custom.min.js"></script>
 	<link rel="stylesheet" href="libs/github.css">
 </body>
