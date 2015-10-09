@@ -1,25 +1,56 @@
 (function($) {
 
-	$.fn.ripple = function(passedOptions, hook) {
+	$.fn.ripple = function(passedOptions, callback) {
 
-		passedOptions = passedOptions || {};
-
-		var calledOn = this,
-			options,
+		var options,
 
 			$active,
-			initalPos,
-			mousemoved,
 			activeDimensions,
-			$ripple,
 			initialTransition,
+			$ripple,
 
-			contextMenuOpen,
+			mousedownCoords,
+			mousemoved,
 
-			theCorrectAmountOfTimeout = 20, //it's correct.
+			//contextMenuOpen,
 
+			theCorrectAmountOfTimeout = 20; //it's correct.
 
-			touch = function(x, y) {
+		this.off("mousedown.ripple touchstart.ripple dragstart.ripple")
+			//if .ripple() is called on the same element twice, remove old event
+			//handlers and use new options
+			.on("mousedown.ripple touchstart.ripple", function(e) {
+				$active = $(this);
+
+				$active.addClass("legitRipple"); //add class for css
+
+				if (e.type == "touchstart") {
+					e.pageX = e.originalEvent.touches[0].pageX
+					e.pageY = e.originalEvent.touches[0].pageY
+				}
+
+				touch(e.pageX, e.pageY);
+			})
+			.on('dragstart.ripple', function(e) {
+				//disable native dragging on ripple elements by default
+				if (!options.allowDragging)
+					e.preventDefault();
+			});
+
+		$(document)
+			.on("mousemove", function(e) {
+				if ($active) drag(e.pageX, e.pageY);
+			})
+			.on("mouseup", function(e) {
+				if ($active && e.which == 1) release();
+			});
+
+		$(window).on("scroll", function() {
+			console.log("awd");
+			if ($active) release();
+		});
+
+		var touch = function(x, y) {
 				options = {}; //reset options
 				mousemoved = 0; //reset drag amount
 
@@ -30,7 +61,7 @@
 				setOptions();
 
 				//start ripple effect
-				initalPos = [x, y];
+				mousedownCoords = [x, y];
 
 				$ripple = $('<span/>');
 
@@ -76,11 +107,7 @@
 					scale = s > 40 ? 40 : s; //no huge values
 
 				} else if (options.scaleMode == "fixed") {
-					var //xDistance = Math.sqrt(Math.pow(x - initalPos[0], 2)),
-						yDistance = Math.sqrt(Math.pow(y - initalPos[1], 2));
-					//console.log(xDistance, yDistance);
-
-					if ( /*(xDistance > 50 ||*/ yDistance > 6 /*)*/ ) {
+					if (Math.abs(y - mousedownCoords[1]) > 6) {
 						release(); //might be slower than scale effect
 						return; //end function
 					}
@@ -151,40 +178,42 @@
 					},
 					//formula for the smallest enclosing circle of a rectancle
 					scaleMode: "fixed",
-					hasCustomRipple: false
+					hasCustomRipple: false,
+					allowDragging: false
 				};
 
+				passedOptions = passedOptions || {};
 
-				$.each(defaults, function(name, defaultValue) {
+				$.each(defaults, function(name, defaultVal) {
 					options[name] = passedOptions.hasOwnProperty(name) ?
 						passedOptions[name] :
-						typeof defaultValue == "function" ?
-						defaultValue() :
-						defaultValue;
+						typeof defaultVal == "function" ?
+						defaultVal() :
+						defaultVal;
 				});
 
-				//console.log("passed options:", passedOptions);
-				//console.log("rendered options:", options);
+				// console.log("passed options:", passedOptions);
+				// console.log("rendered options:", options);
 			},
-
 
 			positionAndScale = function(clickX, clickY, scale) {
 
 				var pos = [],
 
 					//calculate ALL the things
-					//default x-coords are always calculated - even though
-					//that might be redundant - for markup convenience c:
+					//for markup convenience, default x-coords are always
+					//calculated - even though that might be redundant c:
 					posI = [
-						((clickX - $active.offset().left) / activeDimensions[0]), ((clickY - $active.offset()
-							.top) / activeDimensions[1])
+						((clickX - $active.offset().left) / activeDimensions[0]),
+						((clickY - $active.offset().top) / activeDimensions[1])
 					],
 					distanceFromMiddleI = [
 						0.5 - posI[0], // middle: 0, left and right: 0.5
 						0.5 - posI[1]
 					],
 					activeDimensionsRelToMaxDiameter = [
-						(100 / parseFloat(options.maxDiameter)), (100 / parseFloat(options.maxDiameter)) *
+						(100 / parseFloat(options.maxDiameter)),
+						(100 / parseFloat(options.maxDiameter)) *
 						(activeDimensions[1] / activeDimensions[0]),
 					],
 					circleRelDistanceFromMiddleI = [
@@ -194,15 +223,21 @@
 				//TODO: do this with vectors
 
 
-				var adaptDragging = options.dragging || mousemoved === 0;
+				var shouldChangePos = options.dragging || mousemoved === 0;
 				//positions need to be set on mousedown
 
-				if (adaptDragging && $active.css("display") == "inline") { // options.adaptPos?
+				if (shouldChangePos && $active.css("display") == "inline") {
 					//fix for inline elements (stackoverflow.com/questions/995838)
 
-					var before = $('<span/>').text("Hi!").css("font-size", 0).prependTo($active),
+					var before = $('<span/>')
+						.text("Hi!")
+						.css("font-size", 0)
+						.prependTo($active),
+
 						leftInlineOffset = before.offset().left;
+
 					before.remove();
+
 					pos[0] = clickX - leftInlineOffset + "px";
 					//console.log(clickX, leftInlineOffset, pos[0]);
 
@@ -214,11 +249,7 @@
 					//console.log("leftInlineOffset", leftInlineOffset, inlineXpx);
 				}
 
-				//run hook before position/transform change
-				if (hook) //typeof hook == "function"
-					hook($active, $ripple, posI, parseFloat(options.maxDiameter) / 100);
-
-				if (adaptDragging) {
+				if (shouldChangePos) {
 					pos = [
 						pos[0] || posI[0] * 100 + "%",
 						posI[1] * 100 + "%"
@@ -243,49 +274,29 @@
 						", 0)" : "") +
 					(scale ? "scale(" + scale + ")" : "") //could be undefined
 				);
+
+				//run callback after css change
+				if (callback) //typeof callback == "function"
+					callback($active, $ripple, posI, parseFloat(options.maxDiameter) / 100);
 			};
 
-
-		//When called:
-
-		calledOn.addClass("legitRipple"); //add class for css
-
-		//fixes webkit bug with inline elements by updating the property
-		//TODO: be more specific
-		var il = calledOn.filter(function(index) {
-				return $(this).css("display") === "inline";
-			})
-			.css("display", "inline-block");
-		setTimeout(function() {
-			il.css("display", "inline").css("display", "");
-		}, 0);
-
-
-		calledOn
-			.on("mousedown", function(e) {
-				$active = $(this);
-				touch(e.pageX, e.pageY);
-			})
-			.on('dragstart', function(e) {
-
-				//disable dragging because it would interfere with ripple effect
-				//hopefully, this doesn't break your app c:
-				e.preventDefault();
-			});
-
-		$(document)
-			.on("mousemove", function(e) {
-				if ($active) drag(e.pageX, e.pageY);
-			})
-			.on("mouseup", function(e) {
-				if ($active && e.which == 1) release();
-			});
-
-		$(window).on("scroll", function() {
-			console.log("awd");
-			if ($active) release();
-		});
-
+		return this;
 	};
+
+	$.ripple = function(dataObj) {
+		$.each(dataObj, function(selector, optionsAndCallback) {
+
+			$(selector).ripple(
+				//optionsAndCallback could either be
+				//an array containing an object for options and a callback
+				//function or
+				//an object for options
+				optionsAndCallback[0] || optionsAndCallback,
+				optionsAndCallback[1] //undefined if not an array
+			)
+		});
+	};
+
+	//this is my first jQuery plugin, so please be harsh :)
 
 }(jQuery));
