@@ -26,10 +26,6 @@ main section > * {
   max-width: 100%;
 }
 
-body, html {
-  overflow: auto;
-}
-
 .browserupgrade {
   color: red;
   border: solid 2px;
@@ -161,8 +157,8 @@ a.legitRipple {
           transition: color 0.1s ease-out;
 }
 
-a.legitRipple aside {
-  display: inline;
+a.legitRipple span {
+  font-size: .6em;
 }
 
 a.legitRipple .legitRipple-ripple {

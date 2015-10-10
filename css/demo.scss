@@ -20,9 +20,6 @@ main, .maxWidthWrapper {
 main section>* {
 	max-width: 100%;
 }
-body, html {
-	overflow: auto;
-}
 .browserupgrade {
 	color: red;
 	border: solid 2px;
@@ -155,8 +152,8 @@ button.flat {
 
 a.legitRipple {
 	overflow: visible;
-	aside {
-		display: inline;
+	span {
+		font-size: .6em;
 	}
 	transition: color .1s ease-out;
 	//animates background color too in chrome and firefox
@@ -215,6 +212,7 @@ aside {
 		color: #aaa;
 	}
 }
+
 .wrapper {
 	display: inline-block;
 	img {
@@ -276,38 +274,36 @@ aside {
 #usage {
 	dt span {
 		color: #aaa;
-		//margin-left: 1em;
-
-		&:before {
-			content: "(default: ";
-		}
-		&:after {
-			content: ")";
+        //margin-left: 1em;
+        &:before {
+        	content: "(default: ";
+        }
+        &:after {
+        	content: ")";
+        }
+    }
+    dt {
+    	margin-top: 1.25em;
+    	margin-bottom: .125em;
+    }
+    dl dl dt {
+    	margin-top: .25em;
+    	&:after {
+    		content:":";
+    	}
+    }
+    h3 {
+    	margin-top: 2em;
+    }
+    dt.comment, dt.comment + dd {
+    	opacity: 0.3;
+    }
+    dt.comment {
+    	&:after {
+    		content:" *coming soon*";
+    	}
+    }
 }
-}
-dt {
-	margin-top: 1.25em;
-	margin-bottom: .125em;
-}
-dl dl dt {
-	margin-top: .25em;
-	&:after {
-		content: ":";
-	}
-}
-h3 {
-	margin-top: 2em;
-}
-dt.comment, dt.comment + dd {
-	opacity: 0.3;
-}
-dt.comment {
-	&:after {
-		content: " *coming soon*";
-	}
-}
-}
-
 // #cards div {
 // 	padding: 1.5em 1.25em;
 // 	box-sizing: border-box;

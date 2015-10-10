@@ -19,21 +19,19 @@
 		var isTouchDevice = //stackoverflow.com/a/4819886
 			'ontouchstart' in window ||
 			'onmsgesturechange' in window, //ie10
-			tap = isTouchDevice ? "touchstart" : "mousedown";
+			tap = isTouchDevice ? "touchstart" : "mousedown",
+			touchConvert = function(e) {
+				if (isTouchDevice) e = e.originalEvent.touches[0];
+				return [e.pageX,e.pageY];
+			};
 
 		this.off(tap + " dragstart.ripple")
 			//if .ripple() is called on the same element twice, remove old event
 			//handlers and use new options
-			.addClass("legitRipple")
+			.addClass("legitRipple") //only adds if not added 👍
 			.on(tap, function(e) {
 				$active = $(this);
-
-				if (e.type == "touchstart") {
-					e.pageX = e.originalEvent.touches[0].pageX
-					e.pageY = e.originalEvent.touches[0].pageY
-				}
-
-				touch(e.pageX, e.pageY);
+				touch(touchConvert(e));
 			})
 			.on('dragstart.ripple', function(e) {
 				//disable native dragging on ripple elements by default
@@ -42,19 +40,18 @@
 			});
 
 		$(document)
-			.on("mousemove", function(e) {
-				if ($active) drag(e.pageX, e.pageY);
+			.on("mousemove touchmove", function(e) {
+				if ($active) drag(touchConvert(e));
 			})
-			.on("mouseup", function(e) {
+			.on("mouseup touchend", function(e) {
 				if ($active && (e.which == 1 || isTouchDevice)) release();
 			});
 
 		$(window).on("scroll", function() {
-			//TODO: doesn't work
 			if ($active) release();
 		});
 
-		var touch = function(x, y) {
+		var touch = function(coords) {
 				options = {}; //reset options
 				mousemoved = 0; //reset drag amount
 
@@ -65,7 +62,7 @@
 				setOptions();
 
 				//start ripple effect
-				mousedownCoords = [x, y];
+				mousedownCoords = coords;
 
 				$ripple = $('<span/>');
 
@@ -78,7 +75,7 @@
 				$ripple.addClass('legitRipple-ripple').appendTo($active);
 
 
-				positionAndScale(x, y, false);
+				positionAndScale(coords, false);
 
 				//slowing the first (=width) transition until mouseup
 				initialTransition = $ripple.css("transition"); //for reset later
@@ -90,7 +87,7 @@
 					.css("width", options.maxDiameter);
 			},
 
-			drag = function(x, y) {
+			drag = function(coords) {
 				var scale;
 				mousemoved++;
 				//this needs to be here because it's used in positionAndScale to
@@ -111,13 +108,13 @@
 					scale = s > 40 ? 40 : s; //no huge values
 
 				} else if (options.scaleMode == "fixed") {
-					if (Math.abs(y - mousedownCoords[1]) > 6) {
+					if (Math.abs(coords[1] - mousedownCoords[1]) > 6) {
 						release(); //might be slower than scale effect
 						return; //end function
 					}
 				}
 
-				positionAndScale(x, y, scale);
+				positionAndScale(coords, scale);
 			},
 
 			release = function() {
@@ -200,7 +197,7 @@
 				// console.log("rendered options:", options);
 			},
 
-			positionAndScale = function(clickX, clickY, scale) {
+			positionAndScale = function(coords, scale) {
 
 				var pos = [],
 
@@ -208,8 +205,8 @@
 					//for markup convenience, default x-coords are always
 					//calculated - even though that might be redundant c:
 					posI = [
-						((clickX - $active.offset().left) / activeDimensions[0]),
-						((clickY - $active.offset().top) / activeDimensions[1])
+						((coords[0] - $active.offset().left) / activeDimensions[0]),
+						((coords[1] - $active.offset().top) / activeDimensions[1])
 					],
 					distanceFromMiddleI = [
 						0.5 - posI[0], // middle: 0, left and right: 0.5
@@ -242,21 +239,24 @@
 
 					before.remove();
 
-					pos[0] = clickX - leftInlineOffset + "px";
-					//console.log(clickX, leftInlineOffset, pos[0]);
+					pos = [
+						coords[0] - leftInlineOffset + "px",
+						coords[1] - $active.offset().top + "px"
+					];
 
+					//Using absolute values because relative ones are buggy.
 					//Relative values for xpos don't work because, when resized,
 					//inline elements can have bigger left than right offsets.
-					//Firefox also shows wrong y-coords in that case.
+					//Gecko and webkit also treat relative values for ypos
+					//differently as webkit takes 100% as the height of one line
+					//while gecko takes 100% as the height of the whole element.
 					//See also: https://jsbin.com/wotuge/edit
-
-					//console.log("leftInlineOffset", leftInlineOffset, inlineXpx);
 				}
 
 				if (shouldChangePos) {
 					pos = [
 						pos[0] || posI[0] * 100 + "%",
-						posI[1] * 100 + "%"
+						pos[1] || posI[1] * 100 + "%"
 					];
 					$ripple
 						.css("left", pos[0])
