@@ -85,6 +85,7 @@ Ripples can be targeted using the `.legitRipple-ripple` class, containers using 
 ```css
 .container .legitRipple-ripple {
     background: yellow;
+    transition-duration: .15s, .9s; /*width, opacity*/
 }
 ```
 
@@ -157,7 +158,7 @@ On android, the ripple itself doesn't spread in all directions equally as fast, 
 
 ![Reference 1](https://raw.githubusercontent.com/matthias-vogt/legitRipple.js/gh-pages/demo-media/reference-1.gif)
 ![Reference 2](https://raw.githubusercontent.com/matthias-vogt/legitRipple.js/gh-pages/demo-media/reference-2.gif)
-<br>App courtesy of [Music](https://play.google.com/store/apps/details?id=com.sonyericsson.music) and [Phonograph Music Player](https://play.google.com/store/apps/details?id=com.kabouzeid.gramophone)
+<br>*App courtesy of [Music](https://play.google.com/store/apps/details?id=com.sonyericsson.music) and [Phonograph Music Player](https://play.google.com/store/apps/details?id=com.kabouzeid.gramophone)*
 
 This effect however hadn't been replicated in any plugins yet, so I decided to make one.
 

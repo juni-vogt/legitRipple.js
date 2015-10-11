@@ -32,7 +32,7 @@ var jshint = require('gulp-jshint'),
     ":" + (date.getSeconds() < 10 ? "0" : "") + date.getSeconds(),
     headerText = function(filename) {
         return '/*' + "\n" +
-            p.name + " v" + p.version + /*" by " + p.author +*/ " (" + p.license + " license)" +
+            p.name + " v" + p.version + /*" by " + p.author +*/ ", Copyright by " + p.author + " (" + p.license + " license)" +
             "\n" +
             filename + ", compiled: " + datetime + "\n" +
             '*/\n';

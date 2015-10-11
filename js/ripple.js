@@ -19,11 +19,16 @@
 		var isTouchDevice = //stackoverflow.com/a/4819886
 			'ontouchstart' in window ||
 			'onmsgesturechange' in window, //ie10
-			tap = (isTouchDevice ? "touchstart" : "mousedown") + ".ripple",
-			//touch events or mouse events - there can only be one!
-			move = (isTouchDevice ? "touchmove" : "mousemove") + ".ripple",
-			//touch screens call mousemove events
+			filterEvents = function(touch, mouse) {
+				//touch events or mouse events - there can only be one!
+				return (isTouchDevice ? "touch" + touch : "mouse" + mouse) + ".ripple"
+			},
+			fingers = function(e) {
+				//returns how many fingers are on the screen or 0 for mouse
+				return isTouchDevice ? e.originalEvent.touches.length : 0;
+			},
 			touchConvert = function(e) {
+				//returns coordinates of touch or mouse events
 				if (isTouchDevice) e = e.originalEvent.touches[0];
 				return [e.pageX, e.pageY];
 			};
@@ -46,9 +51,11 @@
 
 		this.addClass("legitRipple") //only adds if not added 👍
 			.removeData("unbound")
-			.on(tap, function(e) {
-				$active = $(this);
-				touch(touchConvert(e));
+			.on(filterEvents("start", "down"), function(e) {
+				if (fingers(e) <= 1) {
+					$active = $(this);
+					touch(touchConvert(e));
+				}
 			})
 			.on('dragstart.ripple', function(e) {
 				//disable native dragging on ripple elements by default
@@ -57,21 +64,31 @@
 			});
 
 		$(document)
-			.on(move, function(e) {
-				if ($active && !$active.data("unbound")) {
-					drag(touchConvert(e));
-				}
-			})
-			.on("mouseup.ripple touchend.ripple", function(e) {
+			.on(filterEvents("move", "move"), function(e) {
 				if ($active &&
-					(e.which == 1 || isTouchDevice) &&
-					!$active.data("unbound"))
-					release();
+					!$active.data("unbound") &&
+					fingers(e) <= 1)
+					drag(touchConvert(e));
 
+			})
+			.on(filterEvents("end", "up"), function(e) {
+				if ($active &&
+					!$active.data("unbound") &&
+					!fingers(e)) //if no fingers remaining
+					release();
+			})
+			.on('contextmenu.ripple', function(e) {
+				//workaround for webkit
+				//unlike gecko, webkit doesn't trigger mouseup when opening the
+				//context menu, which wouldn't trigger release()
+				if ('WebkitAppearance' in document.documentElement.style) //is webkit
+					$(document).trigger('mouseup.ripple');
 			});
 
-		$(window).on("scroll.ripple", function() {
-			if ($active && !$active.data("unbound")) release();
+		$(window).on("scroll.ripple blur.ripple", function() {
+			//blur for tab switching on chrome mobile
+			if ($active && !$active.data("unbound"))
+				release();
 		});
 
 		var touch = function(coords) {
@@ -105,7 +122,7 @@
 				var transitionDurs = $ripple.css("transition-duration").split(",");
 
 				$ripple
-					.css("transition-duration", [parseFloat(transitionDurs) * 7 + "s"]
+					.css("transition-duration", [parseFloat(transitionDurs) * 5.5 + "s"]
 						.concat(transitionDurs.slice(1)).join(","))
 					.css("width", options.maxDiameter);
 			},

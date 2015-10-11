@@ -9,20 +9,20 @@
 }
 
 .legitRipple.longOpacity .legitRipple-ripple {
-  -webkit-transition-duration: 0.125s, 3.6s;
-          transition-duration: 0.125s, 3.6s;
+  -webkit-transition-duration: 0.15s, 3.6s;
+          transition-duration: 0.15s, 3.6s;
 }
 
 .legitRipple.longDrop .legitRipple-ripple {
-  -webkit-transition-duration: 0.7s, 0.9s;
-          transition-duration: 0.7s, 0.9s;
+  -webkit-transition-duration: 0.75s, 0.9s;
+          transition-duration: 0.75s, 0.9s;
   -webkit-transition-timing-function: linear, cubic-bezier(1, 0, 0.8, 0);
           transition-timing-function: linear, cubic-bezier(1, 0, 0.8, 0);
 }
 
 .legitRipple.longOpacity.longDrop .legitRipple-ripple {
-  -webkit-transition-duration: 0.7s, 3.6s;
-          transition-duration: 0.7s, 3.6s;
+  -webkit-transition-duration: 0.75s, 3.6s;
+          transition-duration: 0.75s, 3.6s;
   -webkit-transition-timing-function: linear, cubic-bezier(1, 0, 0.8, 0);
           transition-timing-function: linear, cubic-bezier(1, 0, 0.8, 0);
 }
@@ -32,8 +32,8 @@
   z-index: -1;
   -webkit-transform: translate(-50%, -50%) scale(1);
           transform: translate(-50%, -50%) scale(1);
-  -webkit-transition: width 0.125s linear, opacity 0.9s ease-out;
-          transition: width 0.125s linear, opacity 0.9s ease-out;
+  -webkit-transition: width 0.15s linear, opacity 0.9s ease-out;
+          transition: width 0.15s linear, opacity 0.9s ease-out;
   width: 0;
   opacity: 1;
   pointer-events: none;

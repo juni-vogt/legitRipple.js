@@ -6,16 +6,16 @@
 	//z-index needs to be defined or sometimes the ripple will be
 	//behind the element
 
-	//default: .125s, .9s
+	//default: .15s, .9s
 	&.longOpacity .legitRipple-ripple {
-		transition-duration: .125s, 3.6s;
+		transition-duration: .15s, .9s*4;
 	}
 	&.longDrop .legitRipple-ripple {
-		transition-duration: .7s, .9s;
+		transition-duration: .15s*5, .9s;
 		transition-timing-function: linear, cubic-bezier(1, 0, 0.8, 0);
 	}
 	&.longOpacity.longDrop .legitRipple-ripple {
-		transition-duration: .7s, 3.6s;
+		transition-duration: .15s*5, .9s*4;
 		transition-timing-function: linear, cubic-bezier(1, 0, 0.8, 0);
 	}
 }
@@ -26,7 +26,7 @@
 	z-index: -1;
 	transform: translate(-50%, -50%) scale(1); //pixelated scaling :/
 	transition:
-		width .125s linear, //has to be linear
+		width .15s linear, //has to be linear
 		opacity .9s ease-out; //cubic-bezier(1, 0, 0.75, 0.75)
 	//transition initial values
 	width: 0;
