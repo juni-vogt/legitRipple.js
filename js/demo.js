@@ -5,7 +5,7 @@ $(function() {
         //"#cards>div": {},
 
         //demos
-        "#demos h2*": {},
+        "#demos-section h2~*": {},
         //"button": {},
         //"#demobox": {}, //scaleMode: "proportional"
 
@@ -16,9 +16,7 @@ $(function() {
                 hasCustomRipple: true
             },
             function($active, $ripple, posI, maxDiameter) {
-                console.log("awd");
-                if ($ripple.has("video").length)
-                    $ripple.children()[0].play();
+                $ripple.children()[0].play(); //play video
             }
         ],
         "#link": {
@@ -120,8 +118,10 @@ $(function() {
             scrollTop: $($(this).attr("href")).offset().top - 15
         }, '500');
     });
+
     var $navLinks = $("nav a"),
         $headings = $("h2, h3, h4");
+
     $(window).scroll(function(event) {
         var visible = [];
         $headings.each(function(index, el) {
