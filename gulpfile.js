@@ -10,7 +10,7 @@ var jshint = require('gulp-jshint'),
     uglify = require('gulp-uglify'),
     rename = require('gulp-rename'),
     header = require('gulp-header'),
-    livereload = require('gulp-livereload'),
+    connect = require('gulp-connect'),
 
     //file watch paths
     paths = {
@@ -34,7 +34,7 @@ var jshint = require('gulp-jshint'),
         return '/*' + "\n" +
             p.name + " v" + p.version + /*" by " + p.author +*/ " (" + p.license + " license)" +
             "\n" +
-            filename+", compiled: " + datetime + "\n" +
+            filename + ", compiled: " + datetime + "\n" +
             '*/\n';
     };
 
@@ -76,27 +76,33 @@ gulp.task('buildCSS', ['sass'], function() {
     return gulp.src(paths.css.home + "ripple.css")
         .pipe(minifyCss())
         .pipe(rename('ripple.min.css'))
-        .pipe(header(headerText('ripple.min.css')))
-        .pipe(gulp.dest(paths.css.dest))
+        .pipe(header(headerText('ripple.min.css')));
+});
+
+//webserver
+gulp.task('connect', function() {
+    connect.server({
+        port: 8000,
+        livereload: true
+    });
 });
 
 // Watch Files For Changes
 gulp.task('watch', function() {
-    livereload.listen();
 
-    gulp.watch("**/*.html").on("change", function(e) {
-        livereload.changed(e.path);
+    gulp.watch("**/*.html").on("change", function() {
+        gulp.src("**/*.html").pipe(connect.reload());
     });
-    gulp.watch(paths.js.src + "*.js", ['jshint']).on("change", function(e) {
-        livereload.changed(e.path);
+    gulp.watch(paths.js.src + "*.js", ['jshint']).on("change", function() {
+        gulp.src(paths.js.src + "*.js").pipe(connect.reload());
     });
     gulp.watch(paths.css.src + "*.scss", ['sass']);
-    gulp.watch(paths.css.src + "*.css").on("change", function(e) {
-        livereload.changed(e.path);
+    gulp.watch(paths.css.src + "*.css").on("change", function() {
+        gulp.src(paths.css.src + "*.css").pipe(connect.reload());
     });
 
 });
 
 
-gulp.task('default', ['watch']);
+gulp.task('default', ['watch', 'connect']);
 gulp.task('build', ['buildCSS', 'buildJS']);

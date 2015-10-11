@@ -21,12 +21,14 @@ main section>* {
 	max-width: 100%;
 }
 .browserupgrade {
-	color: red;
-	border: solid 2px;
+	background: red;
+	color: white;
 	padding: 1em;
-	display: inline-block;
 }
 
+.legitRipple {
+	-webkit-tap-highlight-color: transparent;
+}
 
 header {
 	margin: 0;
@@ -34,9 +36,7 @@ header {
 	padding-top: 7.5em;
 	padding-bottom: 4em;
 	overflow: hidden;
-	background: #202429;
 	cursor: pointer;
-	-webkit-tap-highlight-color: transparent;
 	color: white;
 	margin: 0;
 
@@ -69,11 +69,28 @@ header {
 	}
 }
 
+#fadeInOverlay {
+	background: white;
+	&>.legitRipple-ripple {
+		&:nth-of-type(1) {
+			background: #536DFE;
+		}
+		&:nth-of-type(2) {
+			background: #FFEB3B;
+		}
+		&:nth-of-type(3) {
+			background: #E91E63;
+		}
+	}
+	&.introFinished,
+	&>.legitRipple-ripple:nth-of-type(4) {
+		background: #202429;
+	}
+}
 
 main>section {
 	margin-bottom: 5em;
 }
-
 
 
 //Demos
@@ -280,29 +297,29 @@ aside {
         }
         &:after {
         	content: ")";
-        }
-    }
-    dt {
-    	margin-top: 1.25em;
-    	margin-bottom: .125em;
-    }
-    dl dl dt {
-    	margin-top: .25em;
-    	&:after {
-    		content:":";
-    	}
-    }
-    h3 {
-    	margin-top: 2em;
-    }
-    dt.comment, dt.comment + dd {
-    	opacity: 0.3;
-    }
-    dt.comment {
-    	&:after {
-    		content:" *coming soon*";
-    	}
-    }
+		}
+	}
+	dt {
+		margin-top: 1.25em;
+		margin-bottom: .125em;
+	}
+	dl dl dt {
+		margin-top: .25em;
+		&:after {
+			content:":";
+		}
+	}
+	h3 {
+		margin-top: 2em;
+	}
+	dt.comment, dt.comment + dd {
+		opacity: 0.3;
+	}
+	dt.comment {
+		&:after {
+			content:" *coming soon*";
+		}
+	}
 }
 // #cards div {
 // 	padding: 1.5em 1.25em;

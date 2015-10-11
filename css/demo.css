@@ -27,10 +27,13 @@ main section > * {
 }
 
 .browserupgrade {
-  color: red;
-  border: solid 2px;
+  background: red;
+  color: white;
   padding: 1em;
-  display: inline-block;
+}
+
+.legitRipple {
+  -webkit-tap-highlight-color: transparent;
 }
 
 header {
@@ -39,9 +42,7 @@ header {
   padding-top: 7.5em;
   padding-bottom: 4em;
   overflow: hidden;
-  background: #202429;
   cursor: pointer;
-  -webkit-tap-highlight-color: transparent;
   color: white;
   margin: 0;
 }
@@ -74,6 +75,27 @@ header .maxWidthWrapper > span {
   right: 3.07692em;
   position: absolute;
   bottom: -2.5em;
+}
+
+#fadeInOverlay {
+  background: white;
+}
+
+#fadeInOverlay > .legitRipple-ripple:nth-of-type(1) {
+  background: #536DFE;
+}
+
+#fadeInOverlay > .legitRipple-ripple:nth-of-type(2) {
+  background: #FFEB3B;
+}
+
+#fadeInOverlay > .legitRipple-ripple:nth-of-type(3) {
+  background: #E91E63;
+}
+
+#fadeInOverlay.introFinished,
+#fadeInOverlay > .legitRipple-ripple:nth-of-type(4) {
+  background: #202429;
 }
 
 main > section {

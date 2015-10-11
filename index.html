@@ -23,16 +23,18 @@
 
 <body>
 	<!--[if lte IE 9]>
-		 <p class="browserupgrade">IE7, IE8 and IE9 aren't supported by this plugin. <a href="http://caniuse.com/#feat=css-transitions">Browser support</a></p>
+		 <div class="browserupgrade">IE7, IE8 and IE9 aren't supported by this plugin. <a href="http://caniuse.com/#feat=css-transitions">Browser support</a></div>
 	<![endif]-->
 
-	<header>
-		<div class="maxWidthWrapper">
-			<h1>Here's a jQuery plugin for all your ripple needs.</h1>
-			<p>It works with smooth <b>CSS transitions</b>, is totally <b>customizable</b> and weighs <b>~4kb</b> with CSS</p>
-			<span>*clicky clicky*</span>
-		</div>
-	</header>
+	<div id="fadeInOverlay">
+		<header>
+			<div class="maxWidthWrapper">
+				<h1>Here's a jQuery plugin for all your ripple needs.</h1>
+				<p>It works with smooth <b>CSS transitions</b>, is totally <b>customizable</b> and weighs <b>~4kb</b> with CSS</p>
+				<span>*clicky clicky*</span>
+			</div>
+		</header>
+	</div>
 
 	<div class="github-fork-ribbon-wrapper right">
 		<div class="github-fork-ribbon">
@@ -56,8 +58,8 @@
 
 
 	<main>
-		<h2>Demos</h2>
 		<section id="demos">
+			<h2>Demos</h2>
 
 			<div class="box levitate" id="demobox">
 				I'm a Box!
@@ -72,9 +74,7 @@
 			<div class="box levitate longDrop longOpacity overflow" id="customRipple">
 				You can customize your ripples
 				<p>Custom elements, custom CSS, whatever you want.</p>
-				<p>
-					<aside>try holding for a long time</aside>
-				</p>
+				<aside>try holding for a long time</aside>
 				<video class="legitRipple-custom" poster="demo-media/tumblr_nqotmoSJyx1ta8bfso1_500.gif" preload="none">
 					<source src="demo-media/ISS%20Video%20Resource_Earth_Views_720p.webmhd.webm#t=38" type="video/webm">
 					<source src="https://ia801004.us.archive.org/33/items/ISSVideoResourceEarthViews720p/ISS%20Video%20Resource_Earth_Views_720p.mp4#t=38" type="video/mp4">
@@ -137,7 +137,7 @@
 			</div>
 
 			<div class="overflow box" data-text="Works on weird aspect ratios!">
-				<p>bleh</p>
+				<!-- <p>bleh</p> -->
 			</div>
 			<!--
 			<br>
@@ -145,20 +145,23 @@
 			<a href="#">Check it out on GitHub</a> -->
 		</section>
 
-		<h2>Usage</h2>
 		<section id="usage">
-		<p>The plugin depends on <a href="https://jquery.com">jQuery</a>, so make sure you have that loaded. Afterwards, you can use it like this:</p>
-		<pre class="rainbow"><code data-language="javascript">//ripple with default options
-$(".some, .elements").ripple();</code></pre><br>
-		<pre class="rainbow"><code data-language="javascript">//ripple with custom options
-$(".elements").ripple({ maxDiameter: "100%" });</code></pre><br>
-		<pre class="rainbow"><code data-language="javascript">//ripple with custom options and callback
+			<h2>Usage</h2>
+			<p>The plugin depends on <a href="https://jquery.com">jQuery</a>, so make sure you have that loaded. Afterwards, you can use it like this:</p>
+			<pre class="rainbow"><code data-language="javascript">//ripple with default options
+$(".some, .elements").ripple();</code></pre>
+			<br>
+			<pre class="rainbow"><code data-language="javascript">//ripple with custom options
+$(".elements").ripple({ maxDiameter: "100%" });</code></pre>
+			<br>
+			<pre class="rainbow"><code data-language="javascript">//ripple with custom options and callback
 $(".elements").ripple({options}, function($container, $ripple, posI, maxDiameter) {
     //is called everytime the ripple's css property changes
-});</code></pre><br>
+});</code></pre>
+			<br>
 
-		<p>You can also use alternative syntax if you have a lot of ripple elements with different options.</p>
-		<pre class="rainbow"><code data-language="javascript">$.ripple({
+			<p>You can also use alternative syntax if you have a lot of ripple elements with different options.</p>
+			<pre class="rainbow"><code data-language="javascript">$.ripple({
   ".material": {},
   ".material.circle": {maxWidth: "100%"},
   ".callback": [
@@ -167,10 +170,11 @@ $(".elements").ripple({options}, function($container, $ripple, posI, maxDiameter
 
     }
   ],
-});</code></pre><br>
+});</code></pre>
+			<br>
 
-		<p>Ripples can be overwritten as you'd expect:</p>
-		<pre class="rainbow"><code data-language="javascript">$(".ripple").ripple();
+			<p>Ripples can be overwritten as you'd expect:</p>
+			<pre class="rainbow"><code data-language="javascript">$(".ripple").ripple();
 $(".ripple.noScale").ripple({scaleMode: 0});
 //.ripple has no options
 //.ripple.noScale has {scaleMode: 0}
@@ -235,27 +239,40 @@ $(".foo, .bar").ripple({scaleMode: 0});
 				<dd>If using a custom ripple element.</dd>
 				<dt><code>allowDragging</code> <span>false</span></dt>
 				<dd>HTML5 dragging is disabled on ripple elements by default for nicer interaction.</dd>
+				<dt><code>unbind</code> <span>false</span></dt>
+				<dd>When set, unbinds all event handlers of the ripple (see Destroy and unbind)</dd>
 				<dt class="comment"><code>rippleOnHover</code> <span>false</span></dt>
 				<dd>Whether to use the ripple as a hover effect</dd>
 				<dt class="comment"><code>destinationElement</code> <span>null</span></dt>
 				<dd>An element other than the clicked one the ripple should travel to</dd>
 			</dl>
+			<h3>Destroy and unbind</h3>
+			<pre class="rainbow"><code data-language="javascript">$(".ripple").ripple({unbind: true});
+//removes all event handlers from a ripple element.
+//if you call it during a ripple animation, the animation
+//will still complete
+
+$.ripple.destroy();
+//stops any ripple animations in their tracks and removes any
+//plugin created elements, classes and event bindings.
+//calling .ripple() will still work</code></pre>
+
 			<h3>Custom ripples</h3>
 			<h4>Custom elements</h4>
 
 			<p>You can customize ripples by setting the <code>hasCustomRipple</code> option to <code>true</code> and adding the following markup to your HTML:</p>
-			<pre class="rainbow"><code data-language="html"><div>
+			<pre class="rainbow"><code data-language="html">&lt;div&gt;
 	Container Element
-	<div class="legitRipple-custom">Your custom element</div>
-</div></code></pre>
+	&lt;div class="legitRipple-custom"&gt;Your custom element&lt;/div&gt;
+&lt;/div&gt;</code></pre>
 			<p>…how the code will look after a ripple is triggered
-				<pre class="rainbow"><code data-language="html"><div>
+				<pre class="rainbow"><code data-language="html">&lt;div&gt;
 	Container Element
-	<div class="legitRipple-custom someclass">Your custom element</div>
-	<span class="legitRipple-ripple">
-		<div class="someclass">Your custom element</div>
-	</span>
-</div></code></pre>
+	&lt;div class="legitRipple-custom someclass"&gt;Your custom element&lt;/div&gt;
+	&lt;span class="legitRipple-ripple"&gt;
+		&lt;div class="someclass"&gt;Your custom element&lt;/div&gt;
+	&lt;/span&gt;
+&lt;/div&gt;</code></pre>
 				<p>The custom element is used as a template and will be hidden via CSS on load. It'll be <code>.clone()</code>'d and wrapped in a <code>&lt;span/&gt;</code> via jQuery on demand.</p>
 				<p>Each direct child of <code>.legitRipple-custom</code> will be scaled up to cover the ripple element, like:</p>
 				<pre class="rainbow">
@@ -276,7 +293,17 @@ $(".foo, .bar").ripple({scaleMode: 0});
 	background: yellow;
 }</code>
 				</pre>
-			</p>
+
+				<h4>Manually controlling ripples</h4>
+				<p>Since ripple elements will only be removed on `transitionend`, adding the following CSS will keep them alive forever.</p>
+				<pre class="rainbow"><code data-language="css">.legitRipple-ripple {
+    opacity: 1 !important;
+}</code></pre>
+				<p>If you want to remove the ripple later, just change the CSS via jQuery like:</p>
+				<pre class="rainbow"><code data-language="javascript">$(".ripple-element>.legitRipple-ripple").css("opacity", "0 !important");</code></pre>
+
+				<p>Moreover, you can manually trigger ripples <a href="https://github.com/matthias-vogt/legitRipple.js/blob/gh-pages/js/demo.js#L68-94">like in this demo</a> by faking mousedown/touchstart events</p>
+
 
 			<h4>Callback</h4>
 			<p>There's a callback.</p>
@@ -290,7 +317,6 @@ $(".foo, .bar").ripple({scaleMode: 0});
 	 */
 });
 </code></pre>
-			</p>
 		</section>
 
 		<!--
@@ -303,9 +329,9 @@ $(".foo, .bar").ripple({scaleMode: 0});
 		-->
 
 
-		<h2>Why another ripple plugin?</h2>
 		<section id="why">
-			<p>There are a <a href="https://github.com/search?l=JavaScript&q=material+ripple&type=Repositories&utf8=%E2%9C%93"><em>lot</em></a> of javascript ripple plugins out there but I noticed that none of them replicate the ripple on android exactly. Which is not surprising since it's not documented in <a href="https://www.google.com/design/spec/animation/responsive-interaction.html">google's design spec</a> either.</p>
+			<h2>Why another ripple plugin?</h2>
+			<p>There are a <a href="https://github.com/search?l=JavaScript&amp;q=material+ripple&amp;type=Repositories&amp;utf8=%E2%9C%93"><em>lot</em></a> of javascript ripple plugins out there but I noticed that none of them replicate the ripple on android exactly. Which is not surprising since it's not documented in <a href="https://www.google.com/design/spec/animation/responsive-interaction.html">google's design spec</a> either.</p>
 
 			<p>On android, the ripple itself doesn't spread in all directions equally as fast, it is positioned relative to the touch position (<span class="touchposition"></span>) as the touch position is positioned relative to the ripple's container.</p>
 
@@ -332,8 +358,8 @@ $(".foo, .bar").ripple({scaleMode: 0});
 			<p>You could maybe say that it's an unnecessarily perfectionist approach to this simple effect but that's your call to decide ;)</p>
 		</section>
 
-		<h2>Browser support</h2>
 		<section id="support">
+			<h2>Browser support</h2>
 			<p>This uses CSS3 transitions, so <a href="http://caniuse.com/#feat=css-transitions">browser support</a> is ie10+</p>
 		</section>
 
@@ -356,5 +382,6 @@ $(".foo, .bar").ripple({scaleMode: 0});
 
 	<!-- syntax highlighting -->
 	<script src="libs/rainbow-custom.min.js"></script>
-	<link rel="stylesheet" href="libs/github.css">
+	<link rel="stylesheet" property="stylesheet" href="libs/github.css">
+	<!-- property="stylesheet" to fight validation errors https://stackoverflow.com/questions/18549726/ -->
 </body>

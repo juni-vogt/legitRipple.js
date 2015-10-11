@@ -31,6 +31,7 @@
 	//transition initial values
 	width: 0;
 	opacity: 1;
+	//will-change: transform, width, opacity;
 	pointer-events: none;
 	//clicking the drops themselves doesn't produce more, covered links work
 	border-radius: 50%;

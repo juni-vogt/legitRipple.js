@@ -1,6 +1,8 @@
 #legitRipple.js
 A lightweight, CSS based jQuery plugin for material-design ripple effects.<br>
-![Demo](https://raw.githubusercontent.com/matthias-vogt/legitRipple.js/gh-pages/demo-media/demo.gif) -->
+<br>
+<img src="https://raw.githubusercontent.com/matthias-vogt/legitRipple.js/gh-pages/demo-media/demo.gif" alt="Demo" height="90">
+<br>
 Demo: https://matthias-vogt.github.io/legitRipple.js/
 
 ##Usage
@@ -51,16 +53,30 @@ $(".foo, .bar").ripple({scaleMode: 0});
 |-------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|----------------------------------------------------|-----------|
 | `maxDiameter`     | Sets a ripple max-width. { adaptPos: true } requires this to be in % for correct rendering; can be any unit for use without adaptPos. 100% for circles.                                                                                                                   | Number with unit as `String` ("100%" or "3.125em") | `false`   |
 | `dragging`        | Whether the ripple should be able to be dragged                                                                                                                                                                                                                           | `Boolean`                                          | `true`    |
-| `adaptPos`        | Whether to transform the ripple according to dragging coordinates. Note: more info on "adaptPos" at "Why another ripple plugin?""                                                                                                                                         | `Boolean`                                          | `true`    |
+| `adaptPos`        | Whether to transform the ripple according to dragging coordinates. Note: [more info on "adaptPos"](#why-another-ripple-plugin)                                                                                                                                        | `Boolean`                                          | `true`    |
 | `scaleMode`       | How to scale the ripple when dragging:<br><br>`"proportional"`: Proportional to the amount it was dragged. Will probably become much bigger than its container.<br><br>`"fixed"`: Don't scale and release ripple when dragging upwards.<br><br>falsey values: Don't scale | `String` or falsey value                           | `"fixed"` |
 | `hasCustomRipple` | If using a custom ripple element.                                                                                                                                                                                                                                         | `Boolean`                                          | `false`   |
 | `allowDragging`   | HTML5 dragging is disabled on ripple elements by default for nicer interaction.                                                                                                                                                                                           | `Boolean`                                          | `false`   |
+| `unbind`          | When set, unbinds all event handlers of the ripple (see [Destroy and unbind](#destroy-and-unbind))                                                                                                                                                                                                 | `Boolean`                                          | `false`   |
 
 ###Coming soon
 | Option               | Description                                                       | Expected Input                             | Default |
 |----------------------|-------------------------------------------------------------------|--------------------------------------------|---------|
 | `rippleOnHover`      | Whether to use the ripple as a hover effect                       | Boolean                                    | `false` |
 | `destinationElement` | An element other than the clicked one the ripple should travel to | jQuery Element Object or selector `String` | `null`  |
+
+###Destroy and unbind
+```javascript
+$(".ripple").ripple({unbind: true});
+//removes all event handlers from a ripple element.
+//if you call it during a ripple animation, the animation
+//will still complete
+
+$.ripple.destroy();
+//stops any ripple animations in their tracks and removes any
+//plugin created elements, classes and event bindings.
+//calling .ripple() will still work
+```
 
 ##Custom ripples
 
@@ -105,6 +121,20 @@ Each direct child of `.legitRipple-custom` will be scaled up to cover the ripple
   transform: translate(-50%, -50%);
 }
 ```
+
+###Manually controlling ripples
+Since ripple elements will only be removed on `transitionend`, adding the following CSS will keep them alive forever.
+```css
+.legitRipple-ripple {
+    opacity: 1 !important;
+}
+```
+If you want to remove the ripple later, just change the CSS via jQuery like:
+```javascript
+$(".ripple-element>.legitRipple-ripple").css("opacity", "0 !important");
+```
+
+Moreover, you can manually trigger ripples [like in the demo](https://github.com/matthias-vogt/legitRipple.js/blob/gh-pages/js/demo.js#L68-94) by faking mousedown/touchstart events
 
 ##Callback
 There's a callback which is called everytime the ripple's style attribute changes.

@@ -19,16 +19,33 @@
 		var isTouchDevice = //stackoverflow.com/a/4819886
 			'ontouchstart' in window ||
 			'onmsgesturechange' in window, //ie10
-			tap = isTouchDevice ? "touchstart" : "mousedown",
+			tap = (isTouchDevice ? "touchstart" : "mousedown") + ".ripple",
+			//touch events or mouse events - there can only be one!
+			move = (isTouchDevice ? "touchmove" : "mousemove") + ".ripple",
+			//touch screens call mousemove events
 			touchConvert = function(e) {
 				if (isTouchDevice) e = e.originalEvent.touches[0];
-				return [e.pageX,e.pageY];
+				return [e.pageX, e.pageY];
 			};
 
-		this.off(tap + " dragstart.ripple")
+
+		this.off(".ripple")
 			//if .ripple() is called on the same element twice, remove old event
 			//handlers and use new options
-			.addClass("legitRipple") //only adds if not added 👍
+			.data("unbound", true);
+		//there's no way to unbind the $(document) events because they are
+		//neither specific to the ripple elements nor identifyable through a
+		//namespace. Thus, the only way to stop them from working is by having
+		//them work conditionally and access some global object to tell them
+		//whether they should work or not. Binding data to the $active element
+		//seems to be the nicest way :/
+
+
+		if (passedOptions && passedOptions.unbind)
+			return this; //dont rebind
+
+		this.addClass("legitRipple") //only adds if not added 👍
+			.removeData("unbound")
 			.on(tap, function(e) {
 				$active = $(this);
 				touch(touchConvert(e));
@@ -40,15 +57,21 @@
 			});
 
 		$(document)
-			.on("mousemove touchmove", function(e) {
-				if ($active) drag(touchConvert(e));
+			.on(move, function(e) {
+				if ($active && !$active.data("unbound")) {
+					drag(touchConvert(e));
+				}
 			})
-			.on("mouseup touchend", function(e) {
-				if ($active && (e.which == 1 || isTouchDevice)) release();
+			.on("mouseup.ripple touchend.ripple", function(e) {
+				if ($active &&
+					(e.which == 1 || isTouchDevice) &&
+					!$active.data("unbound"))
+					release();
+
 			});
 
-		$(window).on("scroll", function() {
-			if ($active) release();
+		$(window).on("scroll.ripple", function() {
+			if ($active && !$active.data("unbound")) release();
 		});
 
 		var touch = function(coords) {
@@ -284,6 +307,7 @@
 					callback($active, $ripple, posI, parseFloat(options.maxDiameter) / 100);
 			};
 
+
 		return this;
 	};
 
@@ -299,6 +323,13 @@
 				optionsAndCallback[1] //undefined if not an array
 			)
 		});
+	};
+
+	$.ripple.destroy = function() {
+		$(".legitRipple").removeClass("legitRipple")
+			.add(window).add(document).off('.ripple');
+		$(".legitRipple-ripple").remove();
+		$active = null;
 	};
 
 	//this is my first jQuery plugin, so please be harsh :)
