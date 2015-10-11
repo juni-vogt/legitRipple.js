@@ -276,6 +276,7 @@ aside {
 
 .wrapper {
   display: inline-block;
+  position: relative;
 }
 
 .wrapper img {
