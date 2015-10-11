@@ -5,7 +5,7 @@ $(function() {
         //"#cards>div": {},
 
         //demos
-        "#demos>*": {},
+        "#demos h2*": {},
         //"button": {},
         //"#demobox": {}, //scaleMode: "proportional"
 
@@ -61,7 +61,6 @@ $(function() {
         },
     });
 
-
     //remember to update "Manually controlling ripples" in readme when adding lines
 
 
@@ -103,4 +102,41 @@ $(function() {
         100 //giving the browser a break
     );
 
+
+    // nav
+
+    // var html = [];
+    // $("h2, h3, h4, h5").filter("[id]").each(function(index, el) {
+    //  html.push(
+    //      $("<a/>").attr("href", "#"+$(this).attr("id"))
+    //      .text($(this).text())
+    //  );
+    // });
+    //removed for SEO
+
+    $("nav a").on("click", function(e) {
+        e.preventDefault();
+        $("html, body").stop().animate({
+            scrollTop: $($(this).attr("href")).offset().top - 15
+        }, '500');
+    });
+    var $navLinks = $("nav a"),
+        $headings = $("h2, h3, h4");
+    $(window).scroll(function(event) {
+        var visible = [];
+        $headings.each(function(index, el) {
+            if ($(this)[0].getBoundingClientRect().top < $(window).height() /
+                (visible.length != $headings.length - 1 ? 2 : 1)
+                //elements count as visible when they are in the upper 50%
+                //of the viewport, except for the last one, which only has
+                //to "touch" the viewport
+            ) visible.push($(this));
+        });
+
+        if (visible.length) {
+            $navLinks.filter(".selected").removeClass('selected');
+            $navLinks.filter("[href='#" + visible[visible.length - 1].attr("id") + "']")
+                .addClass("selected");
+        }
+    });
 });

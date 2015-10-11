@@ -76,7 +76,8 @@ gulp.task('buildCSS', ['sass'], function() {
     return gulp.src(paths.css.home + "ripple.css")
         .pipe(minifyCss())
         .pipe(rename('ripple.min.css'))
-        .pipe(header(headerText('ripple.min.css')));
+        .pipe(header(headerText('ripple.min.css')))
+        .pipe(gulp.dest(paths.css.dest));
 });
 
 //webserver

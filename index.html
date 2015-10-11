@@ -42,6 +42,26 @@
 		</div>
 	</div>
 
+	<nav>
+		<ul>
+
+			<li><a href="#demos">Demos</a></li>
+			<li><a href="#usage">Usage</a>
+				<ul>
+					<li><a href="#options">Options</a></li>
+					<li><a href="#destroy-and-unbind">Destroy and unbind</a></li>
+					<li><a href="#custom-ripples">Custom ripples</a></li>
+					<li><a href="#custom-elements">Custom elements</a></li>
+					<li><a href="#custom-css">Custom CSS</a></li>
+					<li><a href="#manually-controlling-ripples">Manually controlling ripples</a></li>
+					<li><a href="#callback">Callback</a></li>
+				</ul>
+			</li>
+			<li><a href="#why">Why another ripple plugin?</a></li>
+			<li><a href="#browser-support">Browser support</a></li>
+		</ul>
+	</nav>
+
 	<!-- <header>
 	  <svg>
 	   <defs>
@@ -58,8 +78,8 @@
 
 
 	<main>
-		<section id="demos">
-			<h2>Demos</h2>
+		<section id="demos-section">
+			<h2 id="demos">Demos</h2>
 
 			<div class="box levitate" id="demobox">
 				I'm a Box!
@@ -145,8 +165,8 @@
 			<a href="#">Check it out on GitHub</a> -->
 		</section>
 
-		<section id="usage">
-			<h2>Usage</h2>
+		<section id="usage-section">
+			<h2 id="usage">Usage</h2>
 			<p>The plugin depends on <a href="https://jquery.com">jQuery</a>, so make sure you have that loaded. Afterwards, you can use it like this:</p>
 			<pre class="rainbow"><code data-language="javascript">//ripple with default options
 $(".some, .elements").ripple();</code></pre>
@@ -183,7 +203,7 @@ $(".foo").ripple();
 $(".foo, .bar").ripple({scaleMode: 0});
 //.foo has {scaleMode: 0}</code></pre>
 
-			<h3>Options</h3>
+			<h3 id="options">Options</h3>
 
 			<!--
 			options: [(…) = defaults to]
@@ -246,7 +266,7 @@ $(".foo, .bar").ripple({scaleMode: 0});
 				<dt class="comment"><code>destinationElement</code> <span>null</span></dt>
 				<dd>An element other than the clicked one the ripple should travel to</dd>
 			</dl>
-			<h3>Destroy and unbind</h3>
+			<h3 id="destroy-and-unbind">Destroy and unbind</h3>
 			<pre class="rainbow"><code data-language="javascript">$(".ripple").ripple({unbind: true});
 //removes all event handlers from a ripple element.
 //if you call it during a ripple animation, the animation
@@ -257,8 +277,8 @@ $.ripple.destroy();
 //plugin created elements, classes and event bindings.
 //calling .ripple() will still work</code></pre>
 
-			<h3>Custom ripples</h3>
-			<h4>Custom elements</h4>
+			<h3 id="custom-ripples">Custom ripples</h3>
+			<h4 id="custom-elements">Custom elements</h4>
 
 			<p>You can customize ripples by setting the <code>hasCustomRipple</code> option to <code>true</code> and adding the following markup to your HTML:</p>
 			<pre class="rainbow"><code data-language="html">&lt;div&gt;
@@ -286,7 +306,7 @@ $.ripple.destroy();
 }</code></pre>
 
 
-				<h4>Custom CSS</h4>
+				<h4 id="custom-css">Custom CSS</h4>
 				<p>Ripples can be targeted using the <code>.legitRipple-ripple</code> class, containers using <code>.legitRipple</code>. CSS selectors for ripples shouldn't be order-specific to target all ripples because there can be multiple ripples active at once. For example, <code>.legitRipple-custom:first-of-type</code> wouldn't target all ripples.</p>
 				<pre class="rainbow">
 					<code data-language="css">.container .legitRipple-ripple {
@@ -294,7 +314,7 @@ $.ripple.destroy();
 }</code>
 				</pre>
 
-				<h4>Manually controlling ripples</h4>
+				<h4 id="manually-controlling-ripples">Manually controlling ripples</h4>
 				<p>Since ripple elements will only be removed on `transitionend`, adding the following CSS will keep them alive forever.</p>
 				<pre class="rainbow"><code data-language="css">.legitRipple-ripple {
     opacity: 1 !important;
@@ -305,9 +325,9 @@ $.ripple.destroy();
 				<p>Moreover, you can manually trigger ripples <a href="https://github.com/matthias-vogt/legitRipple.js/blob/gh-pages/js/demo.js#L68-94">like in this demo</a> by faking mousedown/touchstart events</p>
 
 
-			<h4>Callback</h4>
-			<p>There's a callback.</p>
-			<pre class="rainbow"><code data-language="javascript">$(".elements").ripple({options}, function($container, $ripple, posI, maxDiameter) {
+				<h4 id="callback">Callback</h4>
+				<p>There's a callback.</p>
+				<pre class="rainbow"><code data-language="javascript">$(".elements").ripple({options}, function($container, $ripple, posI, maxDiameter) {
 	/* $container: The ripple container element
 	   $ripple: The ripple element
 	   posI: An array with two indices (0 &lt;= i &lt;= 1) for the
@@ -320,8 +340,8 @@ $.ripple.destroy();
 		</section>
 
 		<!--
-		<h2>Try <em>all the options!</em></h2>
-		<section id="cards">
+		<h2 id="Try <em>all the options!</em>">Try <em>all the options!</em></h2>
+		<section id="cards-section">
 			<div class="levitate">awd</div>
 			<div class="levitate"></div>
 			<div class="levitate"></div>
@@ -329,8 +349,8 @@ $.ripple.destroy();
 		-->
 
 
-		<section id="why">
-			<h2>Why another ripple plugin?</h2>
+		<section id="why-section">
+			<h2 id="why">Why another ripple plugin?</h2>
 			<p>There are a <a href="https://github.com/search?l=JavaScript&amp;q=material+ripple&amp;type=Repositories&amp;utf8=%E2%9C%93"><em>lot</em></a> of javascript ripple plugins out there but I noticed that none of them replicate the ripple on android exactly. Which is not surprising since it's not documented in <a href="https://www.google.com/design/spec/animation/responsive-interaction.html">google's design spec</a> either.</p>
 
 			<p>On android, the ripple itself doesn't spread in all directions equally as fast, it is positioned relative to the touch position (<span class="touchposition"></span>) as the touch position is positioned relative to the ripple's container.</p>
@@ -358,8 +378,8 @@ $.ripple.destroy();
 			<p>You could maybe say that it's an unnecessarily perfectionist approach to this simple effect but that's your call to decide ;)</p>
 		</section>
 
-		<section id="support">
-			<h2>Browser support</h2>
+		<section id="support-section">
+			<h2 id="browser-support">Browser support</h2>
 			<p>This uses CSS3 transitions, so <a href="http://caniuse.com/#feat=css-transitions">browser support</a> is ie10+</p>
 		</section>
 
@@ -372,7 +392,7 @@ $.ripple.destroy();
 		</div>
 	</footer>
 
-	<script src="libs/jquery-2.1.4.min.js"></script>
+	<script src="demo-media/libs/jquery-2.1.4.min.js"></script>
 
 	<script src="js/ripple.js"></script>
 	<!-- ^ using the uncompressed version for developement
@@ -381,7 +401,7 @@ $.ripple.destroy();
 	<script src="js/demo.js"></script>
 
 	<!-- syntax highlighting -->
-	<script src="libs/rainbow-custom.min.js"></script>
-	<link rel="stylesheet" property="stylesheet" href="libs/github.css">
+	<script src="demo-media/libs/rainbow-custom.min.js"></script>
+	<link rel="stylesheet" property="stylesheet" href="demo-media/libs/github.css">
 	<!-- property="stylesheet" to fight validation errors https://stackoverflow.com/questions/18549726/ -->
 </body>
