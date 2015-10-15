@@ -48,17 +48,15 @@ $(".foo, .bar").ripple({scaleMode: 0});
 //.foo has {scaleMode: 0}
 ```
 
-##Options
-| Option            | Description                                                                                                                                                                                                                                                               | Expected Input                                     | Default   |
+##Options| Option            | Description                                                                                                                                                                                                                                                               | Expected Input                                     | Default   |
 |-------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|----------------------------------------------------|-----------|
 | `maxDiameter`     | Sets a ripple max-width. { adaptPos: true } requires this to be in % for correct rendering; can be any unit for use without adaptPos. 100% for circles.                                                                                                                   | Number with unit as `String` ("100%" or "3.125em") | `false`   |
 | `dragging`        | Whether the ripple should be able to be dragged                                                                                                                                                                                                                           | `Boolean`                                          | `true`    |
-| `adaptPos`        | Whether to transform the ripple according to dragging coordinates. Note: [more info on "adaptPos"](#why-another-ripple-plugin)                                                                                                                                        | `Boolean`                                          | `true`    |
+| `adaptPos`        | Whether to transform the ripple according to dragging coordinates. Note: [more info on "adaptPos"](#why-another-ripple-plugin)                                                                                                                                            | `Boolean`                                          | `true`    |
 | `scaleMode`       | How to scale the ripple when dragging:<br><br>`"proportional"`: Proportional to the amount it was dragged. Will probably become much bigger than its container.<br><br>`"fixed"`: Don't scale and release ripple when dragging upwards.<br><br>falsey values: Don't scale | `String` or falsey value                           | `"fixed"` |
 | `hasCustomRipple` | If using a custom ripple element.                                                                                                                                                                                                                                         | `Boolean`                                          | `false`   |
 | `allowDragging`   | HTML5 dragging is disabled on ripple elements by default for nicer interaction.                                                                                                                                                                                           | `Boolean`                                          | `false`   |
-| `unbind`          | When set, unbinds all event handlers of the ripple (see [Destroy and unbind](#destroy-and-unbind))                                                                                                                                                                                                 | `Boolean`                                          | `false`   |
-
+| `unbind`          | When set, unbinds all of the ripple's event handlers (see [Destroy and unbind](#destroy-and-unbind))                                                                                                                                                                      | `Boolean`                                          | `false`   |
 ###Coming soon
 | Option               | Description                                                       | Expected Input                             | Default |
 |----------------------|-------------------------------------------------------------------|--------------------------------------------|---------|
@@ -81,7 +79,7 @@ $.ripple.destroy();
 ##Custom ripples
 
 ###Custom CSS
-Ripples can be targeted using the `.legitRipple-ripple` class, containers using `.legitRipple` CSS selectors for ripples shouldn't be order-specific to target all ripples because there can be multiple ripples active at once. For example, `.legitRipple-custom:first-of-type` wouldn't target all ripples.
+Ripples can be targeted using the `.legitRipple-ripple` class, containers using `.legitRipple`. CSS selectors for ripples shouldn't be order-specific to target all ripples since there can be multiple ripples active at once. For example, `.legitRipple-custom:first-of-type` wouldn't target all ripples.
 ```css
 .container .legitRipple-ripple {
     background: yellow;
@@ -90,7 +88,7 @@ Ripples can be targeted using the `.legitRipple-ripple` class, containers using 
 ```
 
 ###Custom elements
-You can customize ripples by setting the `hasCustomRipple` option to true and adding the following markup to your HTML:
+You can even use custom elements for the ripple by setting the `hasCustomRipple` option to true and adding the following markup to your HTML:
 ```html
 <div>
     Container Element
@@ -99,21 +97,21 @@ You can customize ripples by setting the `hasCustomRipple` option to true and ad
 ```
 How the code will look after a ripple is triggered:
 ```html
-<div>
+<div class="legitRipple">
     Container Element
-    <div class="legitRipple-custom someclass">Your custom element</div>
+    <div class="legitRipple-custom">Your custom element</div>
     <span class="legitRipple-ripple">
-        <div class="someclass">Your custom element</div>
+        <div>Your custom element</div>
     </span>
 </div>
 ```
 
-The custom element is used as a template and will be hidden via CSS on load. It'll be `.clone()'d` and wrapped in a `<span/>` via jQuery on demand.
+The custom element is used as a template and will be hidden by CSS on load. When a ripple is triggered, the custom element will be `.clone()`'d, the `legitRipple-custom` class removed and the element wrapped in a `<span/>` before being appended to the ripple container.
 
-Each direct child of `.legitRipple-custom` will be scaled up to cover the ripple element, like:
+By default, when using custom ripple elements, each direct child of `.legitRipple-ripple` will be scaled up to cover the entire ripple container, like:
 
 ```css
-.legitRipple .legitRipple-custom > * {
+.legitRipple-custom ~ .legitRipple-ripple > * {
   position: absolute;
   top: 50%;
   left: 50%;
@@ -124,13 +122,8 @@ Each direct child of `.legitRipple-custom` will be scaled up to cover the ripple
 ```
 
 ###Manually controlling ripples
-Since ripple elements will only be removed on `transitionend`, adding the following CSS will keep them alive forever.
-```css
-.legitRipple-ripple {
-    opacity: 1 !important;
-}
-```
-If you want to remove the ripple later, just change the CSS via jQuery like:
+Since ripple elements will only be removed on `transitionend`, adding ```css opacity: 1 !important;``` to their CSS will keep them alive forever.
+If you want to remove these ripples later, just change the CSS via jQuery like:
 ```javascript
 $(".ripple-element>.legitRipple-ripple").css("opacity", "0 !important");
 ```
@@ -152,9 +145,9 @@ $(".elements").ripple({options}, function($container, $ripple, posI, maxDiameter
 ```
 
 ##Why another ripple plugin?
-There are *[a lot](https://github.com/search?l=JavaScript&q=material+ripple&type=Repositories&utf8=%E2%9C%9)* of javascript ripple plugins out there but I noticed that none of them replicate the ripple on android exactly. Which is not surprising since it's not documented in google's design spec either.
+There are *[a lot](https://github.com/search?l=JavaScript&q=material+ripple&type=Repositories&utf8=%E2%9C%9)* of javascript ripple plugins out there but I noticed that none of them replicate the ripple on android exactly. Which is not surprising since it's not documented in [google's Material Design spec](https://www.google.com/design/spec/animation/responsive-interaction.html) either.
 
-On android, the ripple itself doesn't spread in all directions equally as fast, it is positioned relative to the touch position as the touch position is positioned relative to the ripple's container.
+On android, the ripple itself doesn't spread in all directions equally as fast. It's positioned relative to the touch position as the touch position is positioned relative to the ripple's container.
 
 ![Reference 1](https://raw.githubusercontent.com/matthias-vogt/legitRipple.js/gh-pages/demo-media/reference-1.gif)
 ![Reference 2](https://raw.githubusercontent.com/matthias-vogt/legitRipple.js/gh-pages/demo-media/reference-2.gif)
@@ -162,11 +155,11 @@ On android, the ripple itself doesn't spread in all directions equally as fast, 
 
 This effect however hadn't been replicated in any plugins yet, so I decided to make one.
 
-Adding to the incentive was that most of them don't slow the ripple spread on mousedown and speed it up again on mouseup or don't have what is called the `"fixed"` `scaleMode` in this plugin implemented correctly
+Adding to the incentive was that those I've seen don't slow the ripple spread on mousedown and speed it up again on mouseup or don't have, what in this plugin is called the `"fixed"` `scaleMode` implemented correctly.
 
-This plugin is probably also the only one with customizable ripples and that works with inline elements.
+This plugin is probably also the only one with customizable ripples and working with inline elements.
 
-You could maybe say that it's an unnecessarily perfectionist approach to this simple effect but that's your call to decide ;)
+You could maybe say that it's a bit overkill for this simple effect but that's your call to decide ;)
 
 ##Browser support
 This uses CSS3 transitions, so [browser support](http://caniuse.com/#feat=css-transitions) is ie10+
