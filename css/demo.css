@@ -131,6 +131,13 @@ main > section {
   margin-bottom: 4em;
 }
 
+#demos-section {
+  -webkit-user-select: none;
+     -moz-user-select: none;
+      -ms-user-select: none;
+          user-select: none;
+}
+
 #demos-section h2 ~ * {
   margin: 3em;
 }

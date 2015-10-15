@@ -6,15 +6,10 @@
 
 			$active,
 			activeDimensions,
-			initialTransition,
 			$ripple,
 
 			mousedownCoords,
-			mousemoved,
-
-			//contextMenuOpen,
-
-			theCorrectAmountOfTimeout = 20; //it's correct.
+			mousemoved;
 
 		var isTouchDevice = //stackoverflow.com/a/4819886
 			'ontouchstart' in window ||
@@ -118,7 +113,6 @@
 				positionAndScale(coords, false);
 
 				//slowing the first (=width) transition until mouseup
-				initialTransition = $ripple.css("transition"); //for reset later
 				var transitionDurs = $ripple.css("transition-duration").split(",");
 
 				$ripple
@@ -159,42 +153,33 @@
 
 			release = function() {
 				/*
-				tl;dr: this approach is very specific and doesn't scale to
-				transitions we don't know anything about
-
-				If the goal is to be able to change the speed of a linear css
-				transition between two values of the same unit, this code fits
-				very nicely and is the most lightweight and peformant solution
-				because we know the transition we're working with. However, it
-				doesn't translate for use with transitions we don't know about.
-				If you want to change the speed of animations and have a scaling
-				solution with support for easings other than linear, or
-				different units so that transitions can be changed freely,
-				you'll need to use css animations, plugins similar to transit.js
-				or jQuery animations. */
+				this approach to changing transition speed is very specific to
+				the plugin's use case because it's only works with linear
+				easing. If for a more scaling solution, try css animations,
+				plugins similar to transit.js or jQuery animations.
+				*/
 
 				$ripple
-					.css("transition", "all 0s linear 0s")
+					//pausing transition
 					.css('width', $ripple.css('width'))
-					.css("transition", initialTransition);
+					.css("transition", "none") //there can't be custom transitions :(
 
-				setTimeout(function() { //js is weird…
-					$ripple
-						.css("width", options.maxDiameter)
-						.css("opacity", "0");
-				}, theCorrectAmountOfTimeout);
-				//TODO: do this nicer
+					//starting transition again with original (shorter) duration
+					.css("transition", "") //removes overwriting transition property
+					.css('width', $ripple.css('width'))
+					.css("width", options.maxDiameter)
+					.css("opacity", "0");
 
-				//remove ripples when done
+				$active = null; //allows to only trigger release() once
+
+				//remove ripples when both width and opacity transitions ended
 				$ripple.on('transitionend webkitTransitionEnd oTransitionEnd', function() {
-					if ($(this).data("firstTransitionEnded")) {
-						$(this).off().remove(); //remove redundant elements
+					if ($(this).data("firstEnded")) {
+						$(this).off().remove();
 					} else {
-						$(this).data("firstTransitionEnded", true);
+						$(this).data("firstEnded", true);
 					}
 				});
-
-				$active = null;
 			},
 
 			setOptions = function() {

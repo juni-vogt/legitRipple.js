@@ -130,6 +130,7 @@ main>section {
 		margin-left: 0;
 		margin-top: 0.83em;
 	}
+	user-select: none;
 }
 
 .levitate {
@@ -151,7 +152,7 @@ button {
 	padding: .65em 2.2em;
 	min-width: 8.5em;
 	color: white;
-	border-radius: 3px; //causes weird glitch in FF on mouseup ¯\_(ツ)_/¯
+	border-radius: 3px;
 	cursor: pointer;
 	font-family: "Roboto", "Helvetica Neue", Helvetica, Arial, sans-serif;
 	&.levitate {
