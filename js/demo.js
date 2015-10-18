@@ -9,16 +9,14 @@ $(function() {
         //"button": {},
         //"#demobox": {}, //scaleMode: "proportional"
 
-        "#customRipple": [
-            {
-                //scaleMode: "proportional",
-                scaleMode: null,
-                hasCustomRipple: true
-            },
-            function($active, $ripple, posI, maxDiameter) {
+        "#customRipple": {
+            //scaleMode: "proportional",
+            scaleMode: null,
+            hasCustomRipple: true,
+            callback: function($active, $ripple, posI, maxDiameter) {
                 $ripple.children()[0].play(); //play video
             }
-        ],
+        },
         "#link": {
             maxDiameter: "40px",
             dragging: false
@@ -63,27 +61,14 @@ $(function() {
 
 
     //faking mouse/touch events to make ripples:
-
-    var isTouchDevice = //stackoverflow.com/a/4819886
-        'ontouchstart' in window ||
-        'onmsgesturechange' in window, //ie10
-        coords = {
-            pageX: $("h1").offset().left,
-            pageY: $("h1").offset().top
-        },
-        tap = isTouchDevice ?
-        jQuery.Event("touchstart", {
-            originalEvent: {
-                touches: [coords]
-            }
-        }) :
-        jQuery.Event("mousedown", coords);
-
     for (var i = 4; i > 0; i--) {
         setTimeout(function(i) {
             $("#fadeInOverlay")
                 .ripple()
-                .trigger(tap)
+                .trigger($.Event("mousedown", {
+                    pageX: $("h1").offset().left,
+                    pageY: $("h1").offset().top
+                }))
                 .ripple({ //remove user interaction
                     unbind: true
                 });
@@ -110,7 +95,7 @@ $(function() {
     //      .text($(this).text())
     //  );
     // });
-    //removed for SEO
+    //in markup for SEO
 
     $("nav a").on("click", function(e) {
         e.preventDefault();

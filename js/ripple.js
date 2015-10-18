@@ -1,92 +1,186 @@
 (function($) {
 
-	$.fn.ripple = function(passedOptions, callback) {
+	$.fn.ripple = function(passedOptions) {
 
-		var options,
+		//apply plugin to each element it's called on individually
+		if (this.length > 1)
+			return this.each(function(index, el) {
+				$(el).ripple(passedOptions);
+			});
 
-			$active,
-			activeDimensions,
-			$ripple,
 
-			mousedownCoords,
-			mousemoved;
-
-		var isTouchDevice = //stackoverflow.com/a/4819886
-			'ontouchstart' in window ||
-			'onmsgesturechange' in window, //ie10
-			filterEvents = function(touch, mouse) {
-				//touch events or mouse events - there can only be one!
-				return (isTouchDevice ? "touch" + touch : "mouse" + mouse) + ".ripple"
-			},
-			fingers = function(e) {
-				//returns how many fingers are on the screen or 0 for mouse
-				return isTouchDevice ? e.originalEvent.touches.length : 0;
-			},
-			touchConvert = function(e) {
-				//returns coordinates of touch or mouse events
-				if (isTouchDevice) e = e.originalEvent.touches[0];
-				return [e.pageX, e.pageY];
-			};
-
+		// Events
 
 		this.off(".ripple")
 			//if .ripple() is called on the same element twice, remove old event
 			//handlers and use new options
 			.data("unbound", true);
-		//there's no way to unbind the $(document) events because they are
-		//neither specific to the ripple elements nor identifyable through a
-		//namespace. Thus, the only way to stop them from working is by having
-		//them work conditionally and access some global object to tell them
-		//whether they should work or not. Binding data to the $active element
-		//seems to be the nicest way :/
+		//there's no way to unbind the $(document) events specific to the ripple,
+		//which should overwritten, because they are neither specific to the
+		//ripple elements nor identifyable through a namespace. Thus, the only
+		//way to stop them from working is by having them work conditionally and
+		//access some global object to tell them whether they should work or
+		//not. Binding data to the $active element seems to be the nicest way :/
 
 
 		if (passedOptions && passedOptions.unbind)
-			return this; //dont rebind
+			return this; //end here, dont rebind events
+
+		var $active,
+			$ripple,
+
+			initEventID, //ID of the touch event which triggered the ripple
+			isTouchEvent = function(e) {
+				return e.type.startsWith("touch");
+				// return e.originalEvent.constructor.name == "TouchEvent";
+			},
+			getCoords = function(e, id) {
+				//returns coordinates of touch or mouse events
+				if (isTouchEvent(e)) e = e.originalEvent.touches[id];
+				return [e.pageX, e.pageY];
+			},
+			getChangedEventByID = function(e, id) {
+				var changedWithID; //can only be one or none
+				$.each(e.originalEvent.changedTouches, function(i, o)  {
+					if (o.identifier == id) changedWithID = o;
+				});
+				return changedWithID;
+			},
+			eventsToBlock = 0,
+			shouldBeBlocked = function(e) {
+
+				if (e.type == "touchstart")
+					eventsToBlock = 3;
+
+				var shouldBlock = eventsToBlock && !isTouchEvent(e);
+
+				if (shouldBlock) eventsToBlock--;
+
+				// if (shouldBlock)
+				// 	console.log("blocked", e.type, eventsToBlock);
+
+				return !shouldBlock;
+			};
+
+		/*
+		Touch events simulate mouse events on two occasions:
+		touchstart, [no touchmove], touchend > mousemove, mousedown, mouseup
+		touchstart, [hold] > mousemove, mousedown, contextmenu
+		However, we want to prevent that.
+		Introducing: eventsToBlock, an integer that controls whether events
+		should be blocked or not. *audience cheers*
+		And here comes the good part, when the ripple effect starts it is
+		set to 3 and afterwards decreased by 1 for every of the three next
+		events! Thus, we can keep track of the simulated mouse events caused
+		by touch events and prevent them from interfering with our plugin,
+		without interfering with the event handling of other plugins!
+		*someone faints*
+		And there's one more thing…
+		shouldBeBlocked() is a function that does all of this seamlessly and
+		appropriately to the context it's called in!
+		*audience goes comepletely nuts*
+		*/
 
 		this.addClass("legitRipple") //only adds if not added 👍
 			.removeData("unbound")
-			.on(filterEvents("start", "down"), function(e) {
-				if (fingers(e) <= 1) {
+			.on("mousedown.ripple touchstart.ripple", function(e) {
+				// console.log("touchstart, eventsToBlock:", eventsToBlock)
+				if (shouldBeBlocked(e) &&
+					!$active) { //shouldBeBlocked always needs to be tested, so it's first
 					$active = $(this);
-					touch(touchConvert(e));
+					initEventID = isTouchEvent(e) ?
+						e.originalEvent.changedTouches[0].identifier :
+						//using [0] because there can't be multiple ripples
+						//active on the same element at the same time
+						-1; //there can only be one cursor (right?!)
+
+					touch(getCoords(e, initEventID));
 				}
 			})
 			.on('dragstart.ripple', function(e) {
 				//disable native dragging on ripple elements by default
+				//cuz its annoying
 				if (!options.allowDragging)
 					e.preventDefault();
 			});
 
 		$(document)
-			.on(filterEvents("move", "move"), function(e) {
-				if ($active &&
-					!$active.data("unbound") &&
-					fingers(e) <= 1)
-					drag(touchConvert(e));
-
+			.on("mousemove.ripple touchmove.ripple", function(e) {
+				if (shouldBeBlocked(e) &&
+					$active && !$active.data("unbound") &&
+					(isTouchEvent(e) ?
+						getChangedEventByID(e, initEventID) : //if ripple init event changed
+						initEventID == -1)) //only let mouse interfere with mouse caused ripples
+					drag(getCoords(e, initEventID));
 			})
-			.on(filterEvents("end", "up"), function(e) {
-				if ($active &&
-					!$active.data("unbound") &&
-					!fingers(e)) //if no fingers remaining
+			.on("mouseup.ripple touchend.ripple touchcancel.ripple", function(e) {
+				if (shouldBeBlocked(e) &&
+					$active && !$active.data("unbound") &&
+					(isTouchEvent(e) ? getChangedEventByID(e, initEventID) : initEventID == -1))
 					release();
 			})
 			.on('contextmenu.ripple', function(e) {
-				//workaround for webkit
-				//unlike gecko, webkit doesn't trigger mouseup when opening the
-				//context menu, which wouldn't trigger release()
-				if ('WebkitAppearance' in document.documentElement.style) //is webkit
-					$(document).trigger('mouseup.ripple');
+				shouldBeBlocked(e);
 			});
 
-		$(window).on("scroll.ripple blur.ripple", function() {
+		$(window).on("scroll.ripple", function() {
 			//blur for tab switching on chrome mobile
-			if ($active && !$active.data("unbound"))
-				release();
+			eventsToBlock = 0;
+			if ($active && !$active.data("unbound")) release();
 		});
 
-		var touch = function(coords) {
+
+		var options,
+			activeDimensions,
+			mousedownCoords,
+			mousemoved,
+
+			setOptions = function() {
+
+				var defaults = {
+					//some of these are functions, either for their values to be
+					//only processed when needed or because they have
+					//interdependencies with other options and thus need to
+					//check them when being set.
+
+					dragging: true,
+					adaptPos: function() { //depends on dragging
+						return options.dragging;
+					},
+					maxDiameter: function() { //depends on adaptPos
+						return Math.sqrt(
+								Math.pow(activeDimensions[0], 2) +
+								Math.pow(activeDimensions[1], 2)
+							) /
+							$active.outerWidth() *
+							(options.adaptPos ? 100 : 200) + 1 + "%"; //+1 for rounding
+					},
+					//formula for the smallest enclosing circle of a rectancle
+					scaleMode: "fixed",
+					hasCustomRipple: false,
+					allowDragging: false,
+					callback: null
+				};
+
+				passedOptions = passedOptions || {};
+
+				$.each(defaults, function(name, defaultVal) {
+					options[name] = passedOptions.hasOwnProperty(name) ?
+						passedOptions[name] :
+						typeof defaultVal == "function" ?
+						defaultVal() :
+						defaultVal;
+				});
+
+				// console.log("passed options:", passedOptions);
+				// console.log("rendered options:", options);
+			},
+
+
+			//ripple behaviour functions
+
+			touch = function(coords) {
+				// console.log("touch");
 				options = {}; //reset options
 				mousemoved = 0; //reset drag amount
 
@@ -122,6 +216,7 @@
 			},
 
 			drag = function(coords) {
+				// console.log("drag");
 				var scale;
 				mousemoved++;
 				//this needs to be here because it's used in positionAndScale to
@@ -152,6 +247,7 @@
 			},
 
 			release = function() {
+				// console.log("release");
 				/*
 				this approach to changing transition speed is very specific to
 				the plugin's use case because it's only works with linear
@@ -160,12 +256,12 @@
 				*/
 
 				$ripple
-					//pausing transition
+				//pausing transition
 					.css('width', $ripple.css('width'))
 					.css("transition", "none") //there can't be custom transitions :(
 
-					//starting transition again with original (shorter) duration
-					.css("transition", "") //removes overwriting transition property
+				//starting transition again with original (shorter) duration
+				.css("transition", "") //removes overwriting transition property
 					.css('width', $ripple.css('width'))
 					.css("width", options.maxDiameter)
 					.css("opacity", "0");
@@ -180,46 +276,6 @@
 						$(this).data("firstEnded", true);
 					}
 				});
-			},
-
-			setOptions = function() {
-
-				var defaults = {
-					//some of these are functions, either for their values to be
-					//only processed when needed or because they have
-					//interdependencies with other options and thus need to
-					//check them when being set.
-
-					dragging: true,
-					adaptPos: function() { //depends on dragging
-						return options.dragging;
-					},
-					maxDiameter: function() { //depends on adaptPos
-						return Math.sqrt(
-								Math.pow(activeDimensions[0], 2) +
-								Math.pow(activeDimensions[1], 2)
-							) /
-							$active.outerWidth() *
-							(options.adaptPos ? 100 : 200) + 1 + "%"; //+1 for rounding
-					},
-					//formula for the smallest enclosing circle of a rectancle
-					scaleMode: "fixed",
-					hasCustomRipple: false,
-					allowDragging: false
-				};
-
-				passedOptions = passedOptions || {};
-
-				$.each(defaults, function(name, defaultVal) {
-					options[name] = passedOptions.hasOwnProperty(name) ?
-						passedOptions[name] :
-						typeof defaultVal == "function" ?
-						defaultVal() :
-						defaultVal;
-				});
-
-				// console.log("passed options:", passedOptions);
-				// console.log("rendered options:", options);
 			},
 
 			positionAndScale = function(coords, scale) {
@@ -240,7 +296,7 @@
 					activeDimensionsRelToMaxDiameter = [
 						(100 / parseFloat(options.maxDiameter)),
 						(100 / parseFloat(options.maxDiameter)) *
-						(activeDimensions[1] / activeDimensions[0]),
+						(activeDimensions[1] / activeDimensions[0])
 					],
 					circleRelDistanceFromMiddleI = [
 						distanceFromMiddleI[0] * activeDimensionsRelToMaxDiameter[0],
@@ -305,25 +361,16 @@
 				);
 
 				//run callback after css change
-				if (callback) //typeof callback == "function"
-					callback($active, $ripple, posI, parseFloat(options.maxDiameter) / 100);
+				if (options.callback) //typeof callback == "function"
+					options.callback($active, $ripple, posI, options.maxDiameter);
 			};
-
 
 		return this;
 	};
 
 	$.ripple = function(dataObj) {
-		$.each(dataObj, function(selector, optionsAndCallback) {
-
-			$(selector).ripple(
-				//optionsAndCallback could either be
-				//an array containing an object for options and a callback
-				//function or
-				//an object for options
-				optionsAndCallback[0] || optionsAndCallback,
-				optionsAndCallback[1] //undefined if not an array
-			)
+		$.each(dataObj, function(selector, options) {
+			$(selector).ripple(options);
 		});
 	};
 
@@ -331,9 +378,9 @@
 		$(".legitRipple").removeClass("legitRipple")
 			.add(window).add(document).off('.ripple');
 		$(".legitRipple-ripple").remove();
-		$active = null;
+		//TODO: $active = null;
 	};
 
-	//this is my first jQuery plugin, so please be harsh :)
+	//this is my first jQuery plugin, so please be harsh ;)
 
 }(jQuery));
