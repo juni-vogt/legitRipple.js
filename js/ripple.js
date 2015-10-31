@@ -26,31 +26,37 @@
 		if (passedOptions && passedOptions.unbind)
 			return this; //end here, dont rebind events
 
-		var $active,
-			$ripple,
+		var $active, //ripple container
+			$ripple, //ripple element
 
-			initEventID, //ID of the touch event which triggered the ripple
+			initEventID, //unique identifier of the touch event which triggered the ripple
+
 			isTouchEvent = function(e) {
-				return e.type.startsWith("touch");
-				// return e.originalEvent.constructor.name == "TouchEvent";
+				return !!e.type.match(/^touch/);
+				//return e.type.startsWith("touch");
+				//return e.originalEvent.constructor.name == "TouchEvent";
 			},
 			getCoords = function(e, id) {
-				//returns coordinates of touch or mouse events
-				if (isTouchEvent(e)) e = e.originalEvent.touches[id];
+				//returns array with coordinates of either touch or mouse events
+				if (isTouchEvent(e))
+					e = getTouchEventByID(e.originalEvent.touches, id);
 				return [e.pageX, e.pageY];
 			},
-			getChangedEventByID = function(e, id) {
-				var changedWithID; //can only be one or none
-				$.each(e.originalEvent.changedTouches, function(i, o)  {
-					if (o.identifier == id) changedWithID = o;
-				});
-				return changedWithID;
+			getTouchEventByID = function(touchEvents, id) {
+				//filter touch events array by identifier
+				//returns touch event or undefined
+				return $.makeArray(touchEvents).filter(function(o, i) {
+					return o.identifier == id;
+				})[0]; //[0] -> there can only be one
 			},
+
 			eventsToBlock = 0,
 			shouldBeBlocked = function(e) {
 
 				if (e.type == "touchstart")
 					eventsToBlock = 3;
+				if (e.type == "scroll")
+					eventsToBlock = 0;
 
 				var shouldBlock = eventsToBlock && !isTouchEvent(e);
 
@@ -84,15 +90,17 @@
 		this.addClass("legitRipple") //only adds if not added 👍
 			.removeData("unbound")
 			.on("mousedown.ripple touchstart.ripple", function(e) {
-				// console.log("touchstart, eventsToBlock:", eventsToBlock)
 				if (shouldBeBlocked(e) &&
-					!$active) { //shouldBeBlocked always needs to be tested, so it's first
+					//shouldBeBlocked always needs to be tested so it needs to
+					//be first
+					!$active) {
 					$active = $(this);
+
 					initEventID = isTouchEvent(e) ?
 						e.originalEvent.changedTouches[0].identifier :
-						//using [0] because there can't be multiple ripples
-						//active on the same element at the same time
-						-1; //there can only be one cursor (right?!)
+						//using only the first changed touch because there can't
+						//be multiple ripples in the same element
+						-1; //mouse events don't have identifiers
 
 					touch(getCoords(e, initEventID));
 				}
@@ -109,23 +117,24 @@
 				if (shouldBeBlocked(e) &&
 					$active && !$active.data("unbound") &&
 					(isTouchEvent(e) ?
-						getChangedEventByID(e, initEventID) : //if ripple init event changed
-						initEventID == -1)) //only let mouse interfere with mouse caused ripples
+						getTouchEventByID(e.originalEvent.changedTouches, initEventID) : //if ripple init event changed
+						!~initEventID)) //if init event was mouse event
 					drag(getCoords(e, initEventID));
 			})
 			.on("mouseup.ripple touchend.ripple touchcancel.ripple", function(e) {
 				if (shouldBeBlocked(e) &&
 					$active && !$active.data("unbound") &&
-					(isTouchEvent(e) ? getChangedEventByID(e, initEventID) : initEventID == -1))
+					(isTouchEvent(e) ?
+						getTouchEventByID(e.originalEvent.changedTouches, initEventID) :
+						!~initEventID))
 					release();
 			})
 			.on('contextmenu.ripple', function(e) {
 				shouldBeBlocked(e);
 			});
 
-		$(window).on("scroll.ripple", function() {
-			//blur for tab switching on chrome mobile
-			eventsToBlock = 0;
+		$(window).on("scroll.ripple", function(e) {
+			shouldBeBlocked(e);
 			if ($active && !$active.data("unbound")) release();
 		});
 
@@ -180,7 +189,6 @@
 			//ripple behaviour functions
 
 			touch = function(coords) {
-				// console.log("touch");
 				options = {}; //reset options
 				mousemoved = 0; //reset drag amount
 
@@ -216,7 +224,6 @@
 			},
 
 			drag = function(coords) {
-				// console.log("drag");
 				var scale;
 				mousemoved++;
 				//this needs to be here because it's used in positionAndScale to
@@ -247,7 +254,6 @@
 			},
 
 			release = function() {
-				// console.log("release");
 				/*
 				this approach to changing transition speed is very specific to
 				the plugin's use case because it's only works with linear

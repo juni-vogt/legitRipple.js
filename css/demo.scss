@@ -11,6 +11,8 @@ body {
 	margin: 0;
 	font: 20px "Helvetica Neue", Helvetica, Arial, sans-serif;
 	background: #f5f5f5;
+	-webkit-font-smoothing: antialiased;
+	//fix safari jumping between font-smoothing values
 }
 main, .maxWidthWrapper {
 	padding: 3em 2em;
@@ -327,29 +329,29 @@ aside {
         }
         &:after {
         	content: ")";
-		}
+}
+}
+dt {
+	margin-top: 1.25em;
+	margin-bottom: .125em;
+}
+dl dl dt {
+	margin-top: .25em;
+	&:after {
+		content:":";
 	}
-	dt {
-		margin-top: 1.25em;
-		margin-bottom: .125em;
+}
+h3 {
+	margin-top: 2em;
+}
+dt.comment, dt.comment + dd {
+	opacity: 0.3;
+}
+dt.comment {
+	&:after {
+		content:" *coming soon*";
 	}
-	dl dl dt {
-		margin-top: .25em;
-		&:after {
-			content:":";
-		}
-	}
-	h3 {
-		margin-top: 2em;
-	}
-	dt.comment, dt.comment + dd {
-		opacity: 0.3;
-	}
-	dt.comment {
-		&:after {
-			content:" *coming soon*";
-		}
-	}
+}
 }
 // #cards div {
 // 	padding: 1.5em 1.25em;
@@ -449,10 +451,14 @@ header, section:not(#demos-section), footer {
 
 footer {
 	background: #202429;
-	line-height: 2;
+	line-height: 1.5;
 	color: #aaa;
 	a {
 		color: white;
+	}
+	.maxWidthWrapper {
+		padding-top: 3em;
+		padding-bottom: 3em*(4/3);
 	}
 }
 

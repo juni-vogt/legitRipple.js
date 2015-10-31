@@ -6,6 +6,7 @@ var gulp = require('gulp'),
 var jshint = require('gulp-jshint'),
     sass = require('gulp-sass'),
     autoprefixer = require('gulp-autoprefixer'),
+    babel = require('gulp-babel'),
     minifyCss = require('gulp-minify-css'),
     uglify = require('gulp-uglify'),
     rename = require('gulp-rename'),
@@ -62,6 +63,7 @@ gulp.task('sass', function() {
 gulp.task('buildJS', ['jshint'], function() {
 
     return gulp.src(paths.js.home + "ripple.js")
+        .pipe(babel())
         .pipe(uglify({
             preserveComments: "some"
         }))
