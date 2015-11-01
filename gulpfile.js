@@ -1,6 +1,7 @@
 // Include gulp
 var gulp = require('gulp'),
-    p = require('./package.json');
+    p = require('./package.json')
+    fs = require('fs');
 
 // Include Our Plugins
 var jshint = require('gulp-jshint'),
@@ -12,6 +13,9 @@ var jshint = require('gulp-jshint'),
     rename = require('gulp-rename'),
     header = require('gulp-header'),
     connect = require('gulp-connect'),
+    markdown = require('gulp-markdown-it'),
+    replace = require('gulp-replace'),
+    toc = require('gulp-doctoc'),
 
     //file watch paths
     paths = {
@@ -28,28 +32,27 @@ var jshint = require('gulp-jshint'),
     },
 
     date = new Date(),
-    datetime = date.getDate() + "/" + (date.getMonth() + 1) + "/" + date.getFullYear() +
-    " @ " + date.getHours() + ":" + (date.getMinutes() < 10 ? "0" : "") + date.getMinutes() +
-    ":" + (date.getSeconds() < 10 ? "0" : "") + date.getSeconds(),
+    datetime = date.getDate() + '/' + (date.getMonth() + 1) + '/' + date.getFullYear() +
+    ' @ ' + date.getHours() + ':' + (date.getMinutes() < 10 ? '0' : '') + date.getMinutes() +
+    ':' + (date.getSeconds() < 10 ? '0' : '') + date.getSeconds(),
     headerText = function(filename) {
-        return '/*' + "\n" +
-            p.name + " v" + p.version + /*" by " + p.author +*/ ", Copyright by " + p.author + " (" + p.license + " license)" +
-            "\n" +
-            filename + ", compiled: " + datetime + "\n" +
+        return '/*' + '\n' +
+            p.name + ' v' + p.version + /*' by ' + p.author +*/ ', Copyright by ' + p.author + ' (' + p.license + ' license)' +
+            '\n' +
+            filename + ', compiled: ' + datetime + '\n' +
             '*/\n';
     };
 
 
 // Lint Task
 gulp.task('jshint', function() {
-    return gulp.src(paths.js.home + "*.js")
+    return gulp.src(paths.js.home + '*.js')
         .pipe(jshint());
 });
 
 // Compile Our Sass
 gulp.task('sass', function() {
-
-    return gulp.src(paths.css.home + "*.scss")
+    return gulp.src(paths.css.home + '*.scss')
         .pipe(sass({
             outputStyle: 'expanded'
         }))
@@ -59,13 +62,65 @@ gulp.task('sass', function() {
         .pipe(gulp.dest(paths.css.home));
 });
 
+// Inject readme and its toc into index.html
+gulp.task('inject-markdown', ['markdown', 'toc'], function() {
+    return gulp.src('index.html')
+        // .pipe(inject(
+        //     gulp.src(['demo-media/readme.html', 'demo-media/toc.html']), {
+        //         transform: function(filePath, file) {
+        //             return file.contents.toString('utf8')
+        //         }
+        //     }
+        // ))
+        .pipe(replace(/inject:toc -->[^]*?(?=<!-- endinject)/g,
+            'inject:toc -->\n' + fs.readFileSync('demo-media/toc.html', 'utf8')))
+        .pipe(replace(/inject:readme -->[^]*?(?=<!-- endinject)/g,
+            'inject:readme -->\n' + fs.readFileSync('demo-media/readme.html', 'utf8')))
+        .pipe(gulp.dest('.'));
+});
+
+//Compile readme to html
+gulp.task('markdown', function() {
+    return gulp.src(['./README.md'])
+        .pipe(replace(/[^]*(?=## Usage)/gm, '')) //exclude unitl usage section
+        .pipe(replace(/## Why[^]*/gm, '')) //exclude after Why another… section
+        .pipe(markdown({
+            options: {
+                html: true
+            }
+        }))
+        .pipe(replace(/<h(\d)>(.*)?(?=<\/h\d>)/gm, function(match, p1, p2) {
+            // console.log(match,+"\n\n\n\n", p1,+"\n\n\n\n", p2);
+            return '<h' + p1 + ' id="' + p2.toLowerCase().replace(/[^\w\s]/g, '').replace(/\s/g, '-') + '">' + p2;
+        })) //add IDs to headings
+        .pipe(replace('<pre', '<pre class="rainbow"'))
+        .pipe(replace('class="language-', 'data-language="')) //change code language markup
+        .pipe(replace('</pre>', '</pre><br>')) //add linebreak after code snippets
+        .pipe(rename('readme.html'))
+        .pipe(gulp.dest('demo-media'));
+});
+
+//Get a toc of the readme
+gulp.task('toc', function() {
+    return gulp.src(['./README.md'])
+        .pipe(replace(/^#(?=[^#]).*/gm, '')) //exclude h1
+        .pipe(toc({
+            title: ' ',
+        }))
+        .pipe(replace(/<!-- END[^]*/g, '')) //remove comments of toc plugin
+        .pipe(replace(/<!-- .*/g, ''))
+        .pipe(markdown())
+        .pipe(rename('toc.html'))
+        .pipe(gulp.dest('demo-media'));
+});
+
 // Minify JS
 gulp.task('buildJS', ['jshint'], function() {
 
-    return gulp.src(paths.js.home + "ripple.js")
+    return gulp.src(paths.js.home + 'ripple.js')
         .pipe(babel())
         .pipe(uglify({
-            preserveComments: "some"
+            preserveComments: 'some'
         }))
         .pipe(rename('ripple.min.js'))
         .pipe(header(headerText('ripple.min.js')))
@@ -75,7 +130,7 @@ gulp.task('buildJS', ['jshint'], function() {
 // Minify CSS
 gulp.task('buildCSS', ['sass'], function() {
 
-    return gulp.src(paths.css.home + "ripple.css")
+    return gulp.src(paths.css.home + 'ripple.css')
         .pipe(minifyCss())
         .pipe(rename('ripple.min.css'))
         .pipe(header(headerText('ripple.min.css')))
@@ -93,19 +148,27 @@ gulp.task('connect', function() {
 // Watch Files For Changes
 gulp.task('watch', function() {
 
-    gulp.watch("**/*.html").on("change", function() {
-        gulp.src("**/*.html").pipe(connect.reload());
+    gulp.watch('**/*.html').on('change', function() {
+        gulp.src('**/*.html').pipe(connect.reload());
     });
-    gulp.watch(paths.js.src + "*.js", ['jshint']).on("change", function() {
-        gulp.src(paths.js.src + "*.js").pipe(connect.reload());
+
+    gulp.watch('README.md', ['inject-markdown']).on('change', function() {
+        gulp.src('./index.html').pipe(connect.reload());
     });
-    gulp.watch(paths.css.src + "*.scss", ['sass']);
-    gulp.watch(paths.css.src + "*.css").on("change", function() {
-        gulp.src(paths.css.src + "*.css").pipe(connect.reload());
+
+    gulp.watch(paths.js.src + '*.js', ['jshint']).on('change', function() {
+        gulp.src(paths.js.src + '*.js').pipe(connect.reload());
     });
+
+    gulp.watch(paths.css.src + '*.scss', ['sass']);
+
+    gulp.watch(paths.css.src + '*.css').on('change', function() {
+        gulp.src(paths.css.src + '*.css').pipe(connect.reload());
+    });
+
 
 });
 
 
 gulp.task('default', ['watch', 'connect']);
-gulp.task('build', ['buildCSS', 'buildJS']);
+gulp.task('build', ['jshint', 'buildCSS', 'buildJS', 'inject-markdown']);
