@@ -742,7 +742,7 @@ aside {
   font-size: .65em;
 }
 
-#docs p, #docs code {
+#docs p, #docs pre code {
   line-height: 1.6;
 }
 
@@ -750,17 +750,79 @@ aside {
   padding-top: 1em;
 }
 
+#docs table, #docs th, #docs td {
+  border: 1px solid #ddd;
+}
+
 #docs th, #docs td {
   padding: 0.5em 0.8em;
-  border: 1px solid #ddd;
 }
 
 #docs tr:nth-of-type(even) {
   background: #eee;
 }
 
+@media (max-width: 700px) {
+  #docs table, #docs thead, #docs tbody, #docs th, #docs td, #docs tr {
+    display: block;
+  }
+  #docs thead tr {
+    position: absolute;
+    top: -9999px;
+    left: -9999px;
+  }
+  #docs table {
+    border-bottom: 1px solid #ddd;
+  }
+  #docs td {
+    border: none;
+    position: relative;
+    padding-left: 50%;
+  }
+  #docs td:before {
+    position: absolute;
+    top: 0;
+    left: 0;
+    padding: 0.5em 0.8em;
+    width: 50%;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+  }
+  #docs td:before {
+    font-weight: bold;
+  }
+  #docs td:nth-of-type(1):before {
+    content: "Option";
+  }
+  #docs td:nth-of-type(2):before {
+    content: "Description";
+  }
+  #docs td:nth-of-type(3):before {
+    content: "Expected Input";
+  }
+  #docs td:nth-of-type(4):before {
+    content: "Default";
+  }
+}
+
+@media (max-width: 400px) {
+  #docs td {
+    padding-left: .8em;
+  }
+  #docs td:before {
+    position: static;
+    padding: 0;
+    margin-top: .25em;
+    margin-bottom: .5em;
+    width: 100%;
+    white-space: normal;
+    display: block;
+  }
+}
+
 code {
-  font: .8em cuisine, menlo, monospace;
+  font: .8em "Cuisine", "Menlo", monospace;
   background: rgba(0, 0, 0, 0.04);
   border-radius: 4px;
   padding: 0 0.25em;

@@ -327,7 +327,7 @@ aside {
 
 //Info sections
 #docs {
-	p, code {
+	p, pre code {
 		line-height: 1.6;
 	}
 
@@ -335,16 +335,83 @@ aside {
 		padding-top: 1em;
 	}
 
+	table, th, td {
+		border: 1px solid #ddd;
+	}
 	th, td {
 		padding: .5em .8em;
-		border: 1px solid #ddd;
 	}
 	tr:nth-of-type(even) {
 		background: #eee;
 	}
+	//content specific
 }
+
+@media (max-width: 700px) {
+
+	#docs {
+		// Force table to not be like tables anymore
+		table, thead, tbody, th, td, tr {
+			display: block;
+		}
+
+		// Hide table headers (but not display: none;, for accessibility)
+		thead tr {
+			position: absolute;
+			top: -9999px;
+			left: -9999px;
+		}
+
+		table {
+			border-bottom: 1px solid #ddd;
+		}
+		td {
+			// Behave like a "row"
+			border: none;
+			position: relative;
+			padding-left: 50%;
+		}
+
+		td:before {
+			position: absolute;
+			top: 0;
+			left: 0;
+			padding: .5em .8em;
+			width: 50%;
+			white-space: nowrap;
+			text-overflow: ellipsis;
+			overflow: hidden;
+		}
+
+		// Label the data
+		td:before { font-weight: bold }
+		td:nth-of-type(1):before { content: "Option"; }
+		td:nth-of-type(2):before { content: "Description"; }
+		td:nth-of-type(3):before { content: "Expected Input"; }
+		td:nth-of-type(4):before { content: "Default"; }
+	}
+}
+
+@media (max-width: 400px) {
+	#docs {
+		td {
+			padding-left: .8em;
+		}
+
+		td:before {
+			position: static;
+			padding: 0;
+			margin-top: .25em;
+			margin-bottom: .5em;
+			width: 100%;
+			white-space: normal;
+			display: block;
+		}
+	}
+}
+
 code {
-	font: .8em cuisine, menlo, monospace;
+	font: .8em "Cuisine", "Menlo", monospace;
 	background: rgba(0,0,0,0.04);
 	border-radius: 4px;
 	padding: 0 .25em;
