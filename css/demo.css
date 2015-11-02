@@ -413,7 +413,7 @@ body {
 }
 
 main, .maxWidthWrapper {
-  padding: 3em 2em;
+  padding: 3em 1.2em;
   max-width: 896px;
   margin: 0 auto;
 }
@@ -468,7 +468,7 @@ header .maxWidthWrapper {
 
 header .maxWidthWrapper > span {
   font-size: .65em;
-  right: 3.07692em;
+  right: 1.84615em;
   position: absolute;
   bottom: -2.5em;
 }
@@ -763,31 +763,30 @@ aside {
 }
 
 @media (max-width: 700px) {
-  #docs table, #docs thead, #docs tbody, #docs th, #docs td, #docs tr {
-    display: block;
-  }
-  #docs thead tr {
-    position: absolute;
-    top: -9999px;
-    left: -9999px;
+  #docs thead {
+    height: 0;
+    float: left;
+    overflow: hidden;
   }
   #docs table {
-    border-bottom: 1px solid #ddd;
+    table-layout: fixed;
+    width: 100%;
   }
   #docs td {
     border: none;
-    position: relative;
-    padding-left: 50%;
+    display: table;
+    width: 100%;
   }
   #docs td:before {
-    position: absolute;
-    top: 0;
-    left: 0;
-    padding: 0.5em 0.8em;
+    display: table-cell;
     width: 50%;
-    white-space: nowrap;
-    text-overflow: ellipsis;
-    overflow: hidden;
+  }
+  #docs td ~ td:before {
+    padding-top: .8em;
+  }
+  #docs tr {
+    display: block;
+    padding: 0.5em 0.8em;
   }
   #docs td:before {
     font-weight: bold;
@@ -806,18 +805,10 @@ aside {
   }
 }
 
-@media (max-width: 400px) {
-  #docs td {
-    padding-left: .8em;
-  }
+@media (max-width: 475px) {
   #docs td:before {
-    position: static;
-    padding: 0;
-    margin-top: .25em;
-    margin-bottom: .5em;
-    width: 100%;
-    white-space: normal;
     display: block;
+    width: 100%;
   }
 }
 

@@ -21,7 +21,7 @@ body {
 	//fix safari jumping between font-smoothing values
 }
 main, .maxWidthWrapper {
-	padding: 3em 2em;
+	padding: 3em 1.2em;
 	max-width: $maxWidth;
 	margin: 0 auto;
 }
@@ -70,7 +70,7 @@ header {
 
 		&>span {
 			font-size: .65em;
-			right: (2em/.65);
+			right: (1.2em/.65);
 			position: absolute;
 			bottom: -2.5em;
 		}
@@ -344,43 +344,41 @@ aside {
 	tr:nth-of-type(even) {
 		background: #eee;
 	}
-	//content specific
 }
 
+// max-width is individual to each table
 @media (max-width: 700px) {
 
 	#docs {
-		// Force table to not be like tables anymore
-		table, thead, tbody, th, td, tr {
-			display: block;
-		}
-
 		// Hide table headers (but not display: none;, for accessibility)
-		thead tr {
-			position: absolute;
-			top: -9999px;
-			left: -9999px;
+		thead {
+			height: 0;
+			float: left;
+			overflow: hidden;
 		}
 
 		table {
-			border-bottom: 1px solid #ddd;
-		}
-		td {
-			// Behave like a "row"
-			border: none;
-			position: relative;
-			padding-left: 50%;
+			table-layout: fixed;
+			width: 100%;
 		}
 
+		// Make fake headers and cells behave like a "row"
+		td {
+			border: none;
+			display: table;
+			width: 100%;
+		}
 		td:before {
-			position: absolute;
-			top: 0;
-			left: 0;
-			padding: .5em .8em;
+			display: table-cell;
 			width: 50%;
-			white-space: nowrap;
-			text-overflow: ellipsis;
-			overflow: hidden;
+		}
+
+		td ~ td:before { // not first
+			padding-top: .8em;
+		}
+		tr {
+			display: block;
+			padding: .5em .8em;
 		}
 
 		// Label the data
@@ -392,20 +390,11 @@ aside {
 	}
 }
 
-@media (max-width: 400px) {
+@media (max-width: 475px) {
 	#docs {
-		td {
-			padding-left: .8em;
-		}
-
 		td:before {
-			position: static;
-			padding: 0;
-			margin-top: .25em;
-			margin-bottom: .5em;
-			width: 100%;
-			white-space: normal;
 			display: block;
+			width: 100%;
 		}
 	}
 }
