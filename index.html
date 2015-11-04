@@ -188,11 +188,12 @@
 			<div class="overflow box" data-text="Works on weird aspect ratios!">
 				<!-- <p>bleh</p> -->
 			</div>
-			<!--
-			<br>
-			<br>
-			<a href="#">Check it out on GitHub</a> -->
 		</section>
+
+		<a href="https://github.com/matthias-vogt/legitRipple.js" class="clickMePlease">
+			<button class="levitate">Check it out on GitHub!</button>
+		</a>
+
 		<section id="docs">
 			<!-- inject:readme -->
 <h2 id="usage">Usage</h2>
@@ -369,7 +370,7 @@ $.ripple.destroy();
 If you want to remove these ripples later, just change the CSS via jQuery like:</p>
 <pre class="rainbow"><code data-language="javascript">$(&quot;.ripple-element&gt;.legitRipple-ripple&quot;).css(&quot;opacity&quot;, &quot;0 !important&quot;);
 </code></pre><br>
-<p>Moreover, you can manually trigger ripples <a href="https://github.com/matthias-vogt/legitRipple.js/blob/gh-pages/js/demo.js#L61-L76">like in the demo</a> by faking mousedown/touchstart events and do some <a href="http://codepen.io/matze/pen/PPJxyr">crazy stuff</a> with it.</p>
+<p>Moreover, you can manually trigger ripples <a href="https://github.com/matthias-vogt/legitRipple.js/blob/gh-pages/js/demo.js#L68-76">like in the demo</a> by faking mousedown/touchstart events and do some <a href="http://codepen.io/matze/pen/PPJxyr">crazy stuff</a> with it.</p>
 <h3 id="callback">Callback</h3>
 <p>For the callback option, you can pass a function which is called everytime the ripple's style attribute changes.</p>
 <pre class="rainbow"><code data-language="javascript">$(&quot;.elements&quot;).ripple({callback: function($container, $ripple, posI, maxDiameter) {
@@ -432,7 +433,7 @@ If you want to remove these ripples later, just change the CSS via jQuery like:<
 			<p>This uses CSS3 transitions, so <a href="http://caniuse.com/#feat=css-transitions">browser support</a> is ie10+</p>
 		</section>
 
-	</section>
+		</section>
 
 	</main>
 	<footer>

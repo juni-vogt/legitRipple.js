@@ -47,6 +47,8 @@ $(function() {
             scaleMode: 0
         },
 
+        ".clickMePlease button": {},
+
         //why
         "#v1": {
             scaleMode: 0

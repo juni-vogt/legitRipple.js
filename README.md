@@ -135,7 +135,7 @@ If you want to remove these ripples later, just change the CSS via jQuery like:
 $(".ripple-element>.legitRipple-ripple").css("opacity", "0 !important");
 ```
 
-Moreover, you can manually trigger ripples [like in the demo](https://github.com/matthias-vogt/legitRipple.js/blob/gh-pages/js/demo.js#L68-94) by faking mousedown/touchstart events and do some [crazy stuff](http://codepen.io/matze/pen/PPJxyr) with it.
+Moreover, you can manually trigger ripples [like in the demo](https://github.com/matthias-vogt/legitRipple.js/blob/gh-pages/js/demo.js#L68-76) by faking mousedown/touchstart events and do some [crazy stuff](http://codepen.io/matze/pen/PPJxyr) with it.
 
 
 ### Callback
