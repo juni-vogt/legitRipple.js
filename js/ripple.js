@@ -139,10 +139,10 @@
 		});
 
 
-		var options,
+		var options = {},
 			activeDimensions,
 			mousedownCoords,
-			mousemoved,
+			mousemoved = 0,
 
 			setOptions = function() {
 
@@ -152,7 +152,10 @@
 					//interdependencies with other options and thus need to
 					//check them when being set.
 
-					dragging: true,
+					fixedPos: null,
+					dragging: function() {
+						return !options.fixedPos;
+					},
 					adaptPos: function() { //depends on dragging
 						return options.dragging;
 					},
@@ -166,11 +169,10 @@
 					},
 					//formula for the smallest enclosing circle of a rectancle
 					scaleMode: "fixed",
-					hasCustomRipple: false,
+					template: false,
 					allowDragging: false,
 					callback: null
 				};
-
 				passedOptions = passedOptions || {};
 
 				$.each(defaults, function(name, defaultVal) {
@@ -189,8 +191,6 @@
 			//ripple behaviour functions
 
 			touch = function(coords) {
-				options = {}; //reset options
-				mousemoved = 0; //reset drag amount
 
 				//get vars for ripple size, position calculation and maxDiameter
 				//default option
@@ -203,11 +203,15 @@
 
 				$ripple = $('<span/>');
 
-				if (options.hasCustomRipple)
-					$active.clone()
-					.children('.legitRipple-custom').last()
-					.removeClass('legitRipple-custom')
-					.appendTo($ripple);
+				if (options.template)
+					$ripple.append(
+						(typeof options.template === "object" ?
+							options.template :
+							$active.children('.legitRipple-template')
+							.last())
+						.clone()
+						.removeClass('legitRipple-template')
+					).addClass('legitRipple-custom');
 
 				$ripple.addClass('legitRipple-ripple').appendTo($active);
 
@@ -276,11 +280,10 @@
 
 				//remove ripples when both width and opacity transitions ended
 				$ripple.on('transitionend webkitTransitionEnd oTransitionEnd', function() {
-					if ($(this).data("firstEnded")) {
+					if ($(this).data("oneEnded"))
 						$(this).off().remove();
-					} else {
-						$(this).data("firstEnded", true);
-					}
+					else
+						$(this).data("oneEnded", true);
 				});
 			},
 
@@ -291,7 +294,7 @@
 					//calculate ALL the things
 					//for markup convenience, default x-coords are always
 					//calculated - even though that might be redundant c:
-					posI = [
+					posI = options.fixedPos || [
 						((coords[0] - $active.offset().left) / activeDimensions[0]),
 						((coords[1] - $active.offset().top) / activeDimensions[1])
 					],
@@ -310,8 +313,8 @@
 					];
 				//TODO: do this with vectors
 
-
 				var shouldChangePos = options.dragging || mousemoved === 0;
+
 				//positions need to be set on mousedown
 
 				if (shouldChangePos && $active.css("display") == "inline") {

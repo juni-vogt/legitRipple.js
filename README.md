@@ -26,7 +26,7 @@ $.ripple({
   ".material": {},
   ".material.circle": {maxDiameter: "100%"},
   ".callback": {
-    hasCustomRipple: true
+    template: $("<p/>").text("Custom ripple content!")
     callback: function($container, $ripple, posI, maxDiameter) {
       //is called whenever the ripple's css properties change
     }
@@ -36,21 +36,23 @@ $.ripple({
 
 
 ### Options
-| Option            | Description                                                                                                                                                                                                                                                                                | Expected Input                                     | Default   |
-|-------------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|----------------------------------------------------|-----------|
-| `maxDiameter`     | Sets a ripple max-width. `adaptPos: true` requires this to be in %; can be any unit with `adaptPos: false`. 100% for circles.                                                                                                                                                              | Number with unit as `String` ("100%" or "3.125em") | `false`   |
-| `dragging`        | Whether the ripple should be able to be dragged                                                                                                                                                                                                                                            | `Boolean`                                          | `true`    |
-| `adaptPos`        | Whether to take the mouse position relative to the ripple-container's dimensions into account when positioning the ripple. Note: [more info on "adaptPos"](#why-another-ripple-plugin)                                                                                                     | `Boolean`                                          | `true`    |
-| `scaleMode`       | How to scale the ripple while dragging:<br><br>`"proportional"`: Proportional to the amount it was dragged. Will probably become much bigger than its container.<br><br>`"fixed"`: Don't scale and release ripple while dragging upwards.<br><br>falsey values: Don't scale while dragging | `String` or falsey value                           | `"fixed"` |
-| `hasCustomRipple` | If using a [custom ripple element](#custom-elements).                                                                                                                                                                                                                                      | `Boolean`                                          | `false`   |
-| `allowDragging`   | HTML5 dragging is disabled on ripple elements by default for nicer interaction.                                                                                                                                                                                                            | `Boolean`                                          | `false`   |
-| `unbind`          | When set, unbinds all of the ripple's event handlers (see [Destroying, unbinding and overwriting](#destroying-unbinding-and-overwriting))                                                                                                                                                                                       | `Boolean`                                          | `false`   |
-| `callback`        | A function to be called each time the ripple element's style property changes                                                                                                                                                                                                              | `function`                                         | `null`    |
+| Option            | Description                                                                                                                                                                                                                                                                                | Expected Input                                                         | Default   |
+|-------------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|------------------------------------------------------------------------|-----------|
+| `maxDiameter`     | Gives the ripple a max-width. `adaptPos: true` requires this to be in %; can be any unit with `adaptPos: false`. 100% for circles.                                                                                                                                                              | Number with unit as `String` ("100%" or "3.125em")                     | `false`   |
+| `dragging`        | Whether the ripple should be able to be dragged.                                                                                                                                                                                                                                            | `Boolean`                                                              | `true`    |
+| `adaptPos`        | Whether to take the mouse position relative to the ripple-container's dimensions into account when positioning the ripple. Note: [more info on "adaptPos"](#why-another-ripple-plugin)                                                                                                     | `Boolean`                                                              | `true`    |
+| `scaleMode`       | How to scale the ripple while dragging:<br><br>`"proportional"`: Proportional to the amount it was dragged. Will probably become much bigger than its container.<br><br>`"fixed"`: Don't scale and release ripple while dragging upwards.<br><br>falsey values: Don't scale while dragging | `String` or falsey value                                               | `"fixed"` |
+| `template` | Set the HTML content of ripples. See: [custom ripple element](#custom-elements).                                                                                                                                                                                                                                      | `NodeList`, Element or `true` when the template is in the HTML markup                                                              | `null`   |
+| `fixedPos`        | Gives the ripple a fixed position in the parent.                                                                                                                                                                                                                                           | `Array` with two indices as x- and y-coordinates ([.5, .5] = 50%, 50%) | `false`   |
+| `allowDragging`   | HTML5 dragging is disabled on ripple elements by default for nicer interaction.                                                                                                                                                                                                            | `Boolean`                                                              | `false`   |
+| `unbind`          | When set, unbinds all of the ripple's event handlers (see [Destroying, unbinding and overwriting](#destroying-unbinding-and-overwriting))                                                                                                                                                  | `Boolean`                                                              | `false`   |
+| `callback`        | A function to be called each time the ripple element's style property changes                                                                                                                                                                                                              | `function`                                                             | `null`    |
+
 #### Coming soon
 | Option               | Description                                                       | Expected Input                             | Default |
 |----------------------|-------------------------------------------------------------------|--------------------------------------------|---------|
 | `rippleOnHover`      | Whether to use the ripple as a hover effect                       | Boolean                                    | `false` |
-| `destinationElement` | An element other than the clicked one the ripple should travel to | jQuery Element Object or selector `String` | `null`  |
+| `destinationElement` | An element other than the clicked one the ripple should travel to | `NodeList`, Element or selector `String` | `null`  |
 
 
 ### Destroying, unbinding and overwriting
@@ -83,7 +85,7 @@ $.ripple.destroy();
 
 ### Custom ripples
 #### Custom CSS
-Ripples can be targeted using the `.legitRipple-ripple` class, their containers using `.legitRipple`. CSS selectors for ripples shouldn't be order-specific to target all ripples since there can be multiple ripples active in an element at once. For example, `.legitRipple-ripple:first-of-type` wouldn't target all possible ripples.
+Ripples can be targeted using the `.legitRipple-ripple` class, their containers using `.legitRipple`. CSS selectors for ripples shouldn't be order-specific to target all ripples since there can be multiple ripples active in an element at once.
 ```css
 .container .legitRipple-ripple {
     background: yellow;
@@ -94,30 +96,32 @@ Ripples can be targeted using the `.legitRipple-ripple` class, their containers 
 ```
 
 #### Custom elements
-You can even use custom elements for the ripple by setting the `hasCustomRipple` option to true and adding the following markup to your HTML:
+You can even use custom elements for ripples by setting the `template` option with an Element or `NodeList` as the value, like `template: $("<p/>").text("Look, ma, I'm custom!")`.
+
+Alternatively, you can add the following markup to your HTML:
 ```html
 <div>
     Container Element
-    <div class="legitRipple-custom">Your custom element</div>
+    <div class="legitRipple-template">Your custom element</div>
 </div>
 ```
 How the code will look after a ripple is triggered:
 ```html
 <div class="legitRipple">
     Container Element
-    <div class="legitRipple-custom">Your custom element</div>
-    <span class="legitRipple-ripple">
+    <div class="legitRipple-template">Your custom element</div>
+    <span class="legitRipple-ripple legitRipple-custom">
         <div>Your custom element</div>
     </span>
 </div>
 ```
 
-The custom element is used as a template and will be hidden by CSS on load. When a ripple is triggered, the custom element will be `.clone()`'d, the `legitRipple-custom` class removed and wrapped in a `<span/>` with a `legitRipple-ripple` class before being appended to the ripple container.
+The custom element is used as a template and will be hidden by CSS on load. When a ripple is triggered, the custom element will be `.clone()`'d, the `legitRipple-template` class removed and wrapped in a `<span/>` with a `legitRipple-ripple` class before being appended to the ripple container.
 
 By default, when using custom ripple elements, each direct child of `.legitRipple-ripple` will be scaled up to cover the entire ripple container, like:
 
 ```css
-.legitRipple-custom ~ .legitRipple-ripple > * {
+.legitRipple-custom > * {
   position: absolute;
   top: 50%;
   left: 50%;

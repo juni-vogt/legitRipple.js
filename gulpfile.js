@@ -45,7 +45,7 @@ var jshint = require('gulp-jshint'),
 
 
 // Lint Task
-gulp.task('jshint', function() {
+gulp.task('lint', function() {
     return gulp.src(paths.js.home + '*.js')
         .pipe(jshint());
 });
@@ -115,7 +115,7 @@ gulp.task('toc', function() {
 });
 
 // Minify JS
-gulp.task('buildJS', ['jshint'], function() {
+gulp.task('buildJS', ['lint'], function() {
 
     return gulp.src(paths.js.home + 'ripple.js')
         .pipe(babel())
@@ -156,7 +156,7 @@ gulp.task('watch', function() {
         gulp.src('./index.html').pipe(connect.reload());
     });
 
-    gulp.watch(paths.js.src + '*.js', ['jshint']).on('change', function() {
+    gulp.watch(paths.js.src + '*.js', ['lint']).on('change', function() {
         gulp.src(paths.js.src + '*.js').pipe(connect.reload());
     });
 
@@ -171,4 +171,4 @@ gulp.task('watch', function() {
 
 
 gulp.task('default', ['watch', 'connect']);
-gulp.task('build', ['jshint', 'buildCSS', 'buildJS', 'inject-markdown']);
+gulp.task('build', ['lint', 'buildCSS', 'buildJS', 'inject-markdown']);

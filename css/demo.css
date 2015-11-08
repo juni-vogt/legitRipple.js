@@ -263,7 +263,8 @@ select {
  *    `input` and others.
  */
 button,
-html input[type="button"], input[type="reset"],
+html input[type="button"],
+input[type="reset"],
 input[type="submit"] {
   -webkit-appearance: button;
   /* 2 */
@@ -454,7 +455,7 @@ header p {
 
 header b {
   font-weight: normal;
-  border-bottom: solid 0.075em;
+  border-bottom: solid .075em;
 }
 
 header .legitRipple-ripple {
@@ -537,6 +538,13 @@ main > section {
 
 #demos-section h2 ~ * {
   margin: 3em;
+  float: left;
+}
+
+#demos-section:after {
+  content: "";
+  clear: both;
+  display: block;
 }
 
 #demos-section h2 + * {
@@ -547,8 +555,10 @@ main > section {
 .levitate {
   position: relative;
   box-shadow: 0 0.1em 0.4em -0.15em rgba(0, 0, 0, 0.75);
-  -webkit-transition: -webkit-transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
-          transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+  -webkit-transition: box-shadow .2s ease-in-out, -webkit-transform .2s ease-in-out;
+  transition: box-shadow .2s ease-in-out, -webkit-transform .2s ease-in-out;
+  transition: transform .2s ease-in-out, box-shadow .2s ease-in-out;
+  transition: transform .2s ease-in-out, box-shadow .2s ease-in-out, -webkit-transform .2s ease-in-out;
 }
 
 .levitate:hover {
@@ -561,7 +571,7 @@ button {
   background: #4184f3;
   border: 0;
   font-size: 1em;
-  padding: 0.625em 2.2em;
+  padding: .625em 2.2em;
   min-width: 8.5em;
   color: white;
   border-radius: 3px;
@@ -570,8 +580,10 @@ button {
 }
 
 button.levitate {
-  -webkit-transition: -webkit-transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out, background-color 0.2s ease-in-out;
-          transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out, background-color 0.2s ease-in-out;
+  -webkit-transition: box-shadow .2s ease-in-out, background-color .2s ease-in-out, -webkit-transform .2s ease-in-out;
+  transition: box-shadow .2s ease-in-out, background-color .2s ease-in-out, -webkit-transform .2s ease-in-out;
+  transition: transform .2s ease-in-out, box-shadow .2s ease-in-out, background-color .2s ease-in-out;
+  transition: transform .2s ease-in-out, box-shadow .2s ease-in-out, background-color .2s ease-in-out, -webkit-transform .2s ease-in-out;
 }
 
 button:focus {
@@ -585,8 +597,8 @@ button:active {
 button.flat {
   background: transparent;
   color: #333;
-  -webkit-transition: background-color 0.2s ease-in-out;
-          transition: background-color 0.2s ease-in-out;
+  -webkit-transition: background-color .2s ease-in-out;
+  transition: background-color .2s ease-in-out;
 }
 
 button.flat .legitRipple-ripple {
@@ -595,6 +607,34 @@ button.flat .legitRipple-ripple {
 
 button.flat:active {
   background: rgba(0, 0, 0, 0.115);
+}
+
+#dropdown-handle {
+  display: inline-block;
+  padding: .9em 1.4em;
+  border-radius: 50%;
+  -webkit-transition: background .4s ease .36s;
+  transition: background .4s ease .36s;
+}
+
+#dropdown-handle:before {
+  content: "";
+  float: left;
+  height: .2em;
+  width: .2em;
+  background: #444;
+  box-shadow: 0 -.5em #444, 0 .5em #444;
+  margin: 0.5em 0;
+}
+
+#dropdown-handle .legitRipple-ripple {
+  background: rgba(0, 0, 0, 0.2);
+}
+
+#dropdown-handle:active {
+  -webkit-transition-delay: 0s;
+          transition-delay: 0s;
+  background: rgba(0, 0, 0, 0.1);
 }
 
 #customRipple {
@@ -609,8 +649,8 @@ button.flat:active {
 
 a.legitRipple {
   overflow: visible;
-  -webkit-transition: color 0.1s ease-out;
-          transition: color 0.1s ease-out;
+  -webkit-transition: color .1s ease-out;
+  transition: color .1s ease-out;
 }
 
 a.legitRipple span {
@@ -699,8 +739,8 @@ aside {
   background-color: rgba(255, 255, 255, 0.7);
   padding: .7em;
   max-width: 140px;
-  -webkit-transition: opacity 0.2s ease-out 0.4s;
-          transition: opacity 0.2s ease-out 0.4s;
+  -webkit-transition: opacity .2s ease-out .4s;
+  transition: opacity .2s ease-out .4s;
 }
 
 .wrapper:hover span:first-child {
@@ -772,7 +812,7 @@ aside {
 }
 
 #docs th, #docs td {
-  padding: 0.5em 0.8em;
+  padding: .5em .8em;
 }
 
 #docs tr:nth-of-type(even) {
@@ -803,7 +843,7 @@ aside {
   }
   #docs tr {
     display: block;
-    padding: 0.5em 0.8em;
+    padding: .5em .8em;
   }
   #docs td:before {
     font-weight: bold;
@@ -833,7 +873,7 @@ code {
   font: .8em "Cuisine", "Menlo", monospace;
   background: rgba(0, 0, 0, 0.04);
   border-radius: 4px;
-  padding: 0 0.25em;
+  padding: 0 .25em;
 }
 
 #why-section video {

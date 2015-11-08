@@ -52,20 +52,19 @@ img ~ .legitRipple-ripple {
 	//that won't happen, though.
 }
 
-.legitRipple-custom {
+.legitRipple-template {
 	//hide custom ripple template
 	display: none;
-
-	&~.legitRipple-ripple {
-		display: inline-block;
-		overflow: hidden;
-		&>* {
-			position: absolute;
-			top: 50%;
-			left: 50%;
-			min-width: 100%;
-			min-height: 100%;
-			transform: translate(-50%, -50%);
-		}
+}
+.legitRipple-custom {
+	display: inline-block;
+	overflow: hidden;
+	&>* {
+		position: absolute;
+		top: 50%;
+		left: 50%;
+		min-width: 100%;
+		min-height: 100%;
+		transform: translate(-50%, -50%);
 	}
 }

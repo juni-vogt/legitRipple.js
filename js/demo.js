@@ -9,10 +9,14 @@ $(function() {
         //"button": {},
         //"#demobox": {}, //scaleMode: "proportional"
 
+        "#dropdown-handle": {
+            maxDiameter: "100%",
+        },
+
         "#customRipple": {
             //scaleMode: "proportional",
             scaleMode: null,
-            hasCustomRipple: true,
+            template: true,
             callback: function($active, $ripple, posI, maxDiameter) {
                 $ripple.children()[0].play(); //play video
             }

@@ -33,7 +33,7 @@
   -webkit-transform: translate(-50%, -50%) scale(1);
           transform: translate(-50%, -50%) scale(1);
   -webkit-transition: width 0.15s linear, opacity 0.9s ease-out;
-          transition: width 0.15s linear, opacity 0.9s ease-out;
+  transition: width 0.15s linear, opacity 0.9s ease-out;
   width: 0;
   opacity: 1;
   pointer-events: none;
@@ -51,16 +51,16 @@ img ~ .legitRipple-ripple {
   z-index: 0;
 }
 
-.legitRipple-custom {
+.legitRipple-template {
   display: none;
 }
 
-.legitRipple-custom ~ .legitRipple-ripple {
+.legitRipple-custom {
   display: inline-block;
   overflow: hidden;
 }
 
-.legitRipple-custom ~ .legitRipple-ripple > * {
+.legitRipple-custom > * {
   position: absolute;
   top: 50%;
   left: 50%;

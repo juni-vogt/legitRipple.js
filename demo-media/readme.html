@@ -14,7 +14,7 @@ $(&quot;.elements&quot;).ripple({
   &quot;.material&quot;: {},
   &quot;.material.circle&quot;: {maxDiameter: &quot;100%&quot;},
   &quot;.callback&quot;: {
-    hasCustomRipple: true
+    template: $(&quot;&lt;p/&gt;&quot;).text(&quot;Custom ripple content!&quot;)
     callback: function($container, $ripple, posI, maxDiameter) {
       //is called whenever the ripple's css properties change
     }
@@ -34,13 +34,13 @@ $(&quot;.elements&quot;).ripple({
 <tbody>
 <tr>
 <td><code>maxDiameter</code></td>
-<td>Sets a ripple max-width. <code>adaptPos: true</code> requires this to be in %; can be any unit with <code>adaptPos: false</code>. 100% for circles.</td>
+<td>Gives the ripple a max-width. <code>adaptPos: true</code> requires this to be in %; can be any unit with <code>adaptPos: false</code>. 100% for circles.</td>
 <td>Number with unit as <code>String</code> (&quot;100%&quot; or &quot;3.125em&quot;)</td>
 <td><code>false</code></td>
 </tr>
 <tr>
 <td><code>dragging</code></td>
-<td>Whether the ripple should be able to be dragged</td>
+<td>Whether the ripple should be able to be dragged.</td>
 <td><code>Boolean</code></td>
 <td><code>true</code></td>
 </tr>
@@ -57,9 +57,15 @@ $(&quot;.elements&quot;).ripple({
 <td><code>&quot;fixed&quot;</code></td>
 </tr>
 <tr>
-<td><code>hasCustomRipple</code></td>
-<td>If using a <a href="#custom-elements">custom ripple element</a>.</td>
-<td><code>Boolean</code></td>
+<td><code>template</code></td>
+<td>Set the HTML content of ripples. See: <a href="#custom-elements">custom ripple element</a>.</td>
+<td><code>NodeList</code>, Element or <code>true</code> when the template is in the HTML markup</td>
+<td><code>null</code></td>
+</tr>
+<tr>
+<td><code>fixedPos</code></td>
+<td>Gives the ripple a fixed position in the parent.</td>
+<td><code>Array</code> with two indices as x- and y-coordinates ([.5, .5] = 50%, 50%)</td>
 <td><code>false</code></td>
 </tr>
 <tr>
@@ -102,7 +108,7 @@ $(&quot;.elements&quot;).ripple({
 <tr>
 <td><code>destinationElement</code></td>
 <td>An element other than the clicked one the ripple should travel to</td>
-<td>jQuery Element Object or selector <code>String</code></td>
+<td><code>NodeList</code>, Element or selector <code>String</code></td>
 <td><code>null</code></td>
 </tr>
 </tbody>
@@ -132,7 +138,7 @@ $.ripple.destroy();
 </code></pre><br>
 <h3 id="custom-ripples">Custom ripples</h3>
 <h4 id="custom-css">Custom CSS</h4>
-<p>Ripples can be targeted using the <code>.legitRipple-ripple</code> class, their containers using <code>.legitRipple</code>. CSS selectors for ripples shouldn't be order-specific to target all ripples since there can be multiple ripples active in an element at once. For example, <code>.legitRipple-ripple:first-of-type</code> wouldn't target all possible ripples.</p>
+<p>Ripples can be targeted using the <code>.legitRipple-ripple</code> class, their containers using <code>.legitRipple</code>. CSS selectors for ripples shouldn't be order-specific to target all ripples since there can be multiple ripples active in an element at once.</p>
 <pre class="rainbow"><code data-language="css">.container .legitRipple-ripple {
     background: yellow;
     /* You can change the transition properties too!
@@ -141,24 +147,25 @@ $.ripple.destroy();
 }
 </code></pre><br>
 <h4 id="custom-elements">Custom elements</h4>
-<p>You can even use custom elements for the ripple by setting the <code>hasCustomRipple</code> option to true and adding the following markup to your HTML:</p>
+<p>You can even use custom elements for ripples by setting the <code>template</code> option with an Element or <code>NodeList</code> as the value, like <code>template: $(&quot;&lt;p/&gt;&quot;).text(&quot;Look, ma, I'm custom!&quot;)</code>.</p>
+<p>Alternatively, you can add the following markup to your HTML:</p>
 <pre class="rainbow"><code data-language="html">&lt;div&gt;
     Container Element
-    &lt;div class=&quot;legitRipple-custom&quot;&gt;Your custom element&lt;/div&gt;
+    &lt;div class=&quot;legitRipple-template&quot;&gt;Your custom element&lt;/div&gt;
 &lt;/div&gt;
 </code></pre><br>
 <p>How the code will look after a ripple is triggered:</p>
 <pre class="rainbow"><code data-language="html">&lt;div class=&quot;legitRipple&quot;&gt;
     Container Element
-    &lt;div class=&quot;legitRipple-custom&quot;&gt;Your custom element&lt;/div&gt;
-    &lt;span class=&quot;legitRipple-ripple&quot;&gt;
+    &lt;div class=&quot;legitRipple-template&quot;&gt;Your custom element&lt;/div&gt;
+    &lt;span class=&quot;legitRipple-ripple legitRipple-custom&quot;&gt;
         &lt;div&gt;Your custom element&lt;/div&gt;
     &lt;/span&gt;
 &lt;/div&gt;
 </code></pre><br>
-<p>The custom element is used as a template and will be hidden by CSS on load. When a ripple is triggered, the custom element will be <code>.clone()</code>'d, the <code>legitRipple-custom</code> class removed and wrapped in a <code>&lt;span/&gt;</code> with a <code>legitRipple-ripple</code> class before being appended to the ripple container.</p>
+<p>The custom element is used as a template and will be hidden by CSS on load. When a ripple is triggered, the custom element will be <code>.clone()</code>'d, the <code>legitRipple-template</code> class removed and wrapped in a <code>&lt;span/&gt;</code> with a <code>legitRipple-ripple</code> class before being appended to the ripple container.</p>
 <p>By default, when using custom ripple elements, each direct child of <code>.legitRipple-ripple</code> will be scaled up to cover the entire ripple container, like:</p>
-<pre class="rainbow"><code data-language="css">.legitRipple-custom ~ .legitRipple-ripple &gt; * {
+<pre class="rainbow"><code data-language="css">.legitRipple-custom &gt; * {
   position: absolute;
   top: 50%;
   left: 50%;
