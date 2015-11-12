@@ -401,7 +401,7 @@ If you want to remove these ripples later, just change the CSS via jQuery like:<
 <h2 id="touch-support">Touch support</h2>
 <p>legitRipple.js has full touch support. You can even use multi-touch for multiple ripples in different elements at the same time.</p>
 <h2 id="motivation">Motivation</h2>
-<p>On android, the ripples don't spread in all directions equally as fast. They're positioned relative to the touch position as the touch position is positioned relative to the ripple's container.</p>
+<p>On Android, ripples don't spread in all directions equally as fast. They're positioned relative to the touch position as the touch position is positioned relative to the ripple's container.</p>
 <p><img src="https://raw.githubusercontent.com/matthias-vogt/legitRipple.js/gh-pages/demo-media/reference-1.gif" alt="Reference 1">
 <img src="https://raw.githubusercontent.com/matthias-vogt/legitRipple.js/gh-pages/demo-media/reference-2.gif" alt="Reference 2">
 <br><em>App courtesies of <a href="https://play.google.com/store/apps/details?id=com.sonyericsson.music">Music</a> and <a href="https://play.google.com/store/apps/details?id=com.kabouzeid.gramophone">Phonograph Music Player</a></em></p>
@@ -426,10 +426,8 @@ If you want to remove these ripples later, just change the CSS via jQuery like:<
 
 
 		<section id="why-section">
-			<h2 id="why-another-ripple-plugin">Why another ripple plugin?</h2>
-			<p>There are a <a href="https://github.com/search?l=JavaScript&amp;q=material+ripple&amp;type=Repositories&amp;utf8=%E2%9C%93"><em>lot</em></a> of javascript ripple plugins out there but I noticed that none of them replicate the ripple on android exactly. Which is not surprising since it's not documented in <a href="https://www.google.com/design/spec/animation/responsive-interaction.html">google's design spec</a> either.</p>
-
-			<p>On android, the ripple itself doesn't spread in all directions equally as fast, it is positioned relative to the touch position (<span class="touchposition"></span>) as the touch position is positioned relative to the ripple's container.</p>
+			<h2 id="why-another-ripple-plugin">Motivation</h2>
+			<p>On android, the ripples don't spread in all directions equally as fast. They're positioned relative to the touch position as the touch position is positioned relative to the ripple's container.</p>
 
 			<div class="container">
 				<video loop autoplay>
@@ -448,10 +446,13 @@ If you want to remove these ripples later, just change the CSS via jQuery like:<
 			<div class="levitate overflow" id="v1">{ adaptPos: true }</div>
 			<div class="levitate overflow" id="v2">{ adaptPos: false }</div>
 
-			<p>This effect however hadn't been replicated in any plugins yet, so I decided to make one.</p>
-			<p>Adding to the incentive was that most of them don't slow the ripple spread on mousedown and speed it up again on mouseup or don't have what is called the "fixed" <code>scaleMode</code> in this plugin implemented correctly</p>
-			<p>This plugin is probably also the only one with customizable ripples and that works with inline elements.</p>
-			<p>You could maybe say that it's an unnecessarily perfectionist approach to this simple effect but that's your call to decide ;)</p>
+			<p>There are <em><a href="https://github.com/search?l=JavaScript&q=material+ripple&type=Repositories">a lot</a></em> of similar plugins out there but this effect, hadn't been replicated in any of them AFAIK (which is not surprising since it's not documented in <a href="https://www.google.com/design/spec/animation/responsive-interaction.html">Google's Material Design spec</a> either), so I decided to make my own.</p>
+
+			<p>Adding to the incentive was that the plugins I saw don't slow the ripple spread on mousedown and speed it up again on mouseup or don't have dragging or touch support implemented correctly.</p>
+
+			<p>legitRipple.js is probably also the only one which works with inline elements and has ripples with customizable HTML.</p>
+
+			<p>Maybe it's a bit overkill for this simple effect but that's your call to decide ;)</p>
 		</section>
 
 		<section id="support-section">

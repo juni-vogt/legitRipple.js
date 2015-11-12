@@ -165,7 +165,7 @@ legitRipple.js has full touch support. You can even use multi-touch for multiple
 
 
 ## Motivation
-On android, the ripples don't spread in all directions equally as fast. They're positioned relative to the touch position as the touch position is positioned relative to the ripple's container.
+On Android, ripples don't spread in all directions equally as fast. They're positioned relative to the touch position as the touch position is positioned relative to the ripple's container.
 
 ![Reference 1](https://raw.githubusercontent.com/matthias-vogt/legitRipple.js/gh-pages/demo-media/reference-1.gif)
 ![Reference 2](https://raw.githubusercontent.com/matthias-vogt/legitRipple.js/gh-pages/demo-media/reference-2.gif)

@@ -83,7 +83,7 @@ gulp.task('inject-markdown', ['markdown', 'toc'], function() {
 gulp.task('markdown', function() {
     return gulp.src(['./README.md'])
         .pipe(replace(/[^]*(?=## Usage)/gm, '')) //exclude unitl usage section
-        .pipe(replace(/## Why[^]*/gm, '')) //exclude after Why another… section
+        .pipe(replace(/## Motivation[^]*/gm, '')) //exclude anything after "Motivation" section
         .pipe(markdown({
             options: {
                 html: true
