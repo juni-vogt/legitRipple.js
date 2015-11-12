@@ -191,7 +191,6 @@
 			//ripple behaviour functions
 
 			touch = function(coords) {
-
 				//get vars for ripple size, position calculation and maxDiameter
 				//default option
 				activeDimensions = [$active.outerWidth(), $active.outerHeight()];
@@ -276,7 +275,9 @@
 					.css("width", options.maxDiameter)
 					.css("opacity", "0");
 
+				//reset temporary variables
 				$active = null; //allows to only trigger release() once
+				mousemoved = 0;
 
 				//remove ripples when both width and opacity transitions ended
 				$ripple.on('transitionend webkitTransitionEnd oTransitionEnd', function() {
