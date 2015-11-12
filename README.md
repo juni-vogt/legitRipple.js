@@ -1,13 +1,17 @@
 # legitRipple.js
-A lightweight, CSS based jQuery plugin for material-design ripple effects.<br>
+A jQuery plugin for legit Material-Design ripple effects.<br>
 <br>
 <img src="https://raw.githubusercontent.com/matthias-vogt/legitRipple.js/gh-pages/demo-media/demo.gif" alt="Demo" height="90">
 <br>
 Demo: https://matthias-vogt.github.io/legitRipple.js/
 
+* **Lightweight**: <2kb gzipped
+* **Configurable**: Lots of options, custom HTML, custom CSS (custom transition durations)
+* **CSS based**: Smooth CSS transitions
+* **Legit**: Nice interaction, Glorious multi-touch
 
 ## Usage
-The plugin depends on [jQuery](https://jquery.com/), so make sure you have that loaded. Afterwards, you can use it like this:
+legitRipple.js depends on [jQuery](https://jquery.com/), so make sure you have that loaded. When the DOM is ready, you can use it like this:
 ```javascript
 //ripple with default options
 $(".some, .elements").ripple();
@@ -25,8 +29,8 @@ You can also use alternative syntax if you have a lot of ripple elements with di
 $.ripple({
   ".material": {},
   ".material.circle": {maxDiameter: "100%"},
+  ".customHTML": {template: $("<p/>").text("Custom ripple content!")},
   ".callback": {
-    template: $("<p/>").text("Custom ripple content!")
     callback: function($container, $ripple, posI, maxDiameter) {
       //is called whenever the ripple's css properties change
     }
@@ -40,7 +44,7 @@ $.ripple({
 |-------------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|------------------------------------------------------------------------|-----------|
 | `maxDiameter`     | Gives the ripple a max-width. `adaptPos: true` requires this to be in %; can be any unit with `adaptPos: false`. 100% for circles.                                                                                                                                                              | Number with unit as `String` ("100%" or "3.125em")                     | `false`   |
 | `dragging`        | Whether the ripple should be able to be dragged.                                                                                                                                                                                                                                            | `Boolean`                                                              | `true`    |
-| `adaptPos`        | Whether to take the mouse position relative to the ripple-container's dimensions into account when positioning the ripple. Note: [more info on "adaptPos"](#why-another-ripple-plugin)                                                                                                     | `Boolean`                                                              | `true`    |
+| `adaptPos`        | Whether to take the mouse position relative to the ripple-container's dimensions into account when positioning the ripple. Note: [more info on "adaptPos"](#motivation)                                                                                                     | `Boolean`                                                              | `true`    |
 | `scaleMode`       | How to scale the ripple while dragging:<br><br>`"proportional"`: Proportional to the amount it was dragged. Will probably become much bigger than its container.<br><br>`"fixed"`: Don't scale and release ripple while dragging upwards.<br><br>falsey values: Don't scale while dragging | `String` or falsey value                                               | `"fixed"` |
 | `template` | Set the HTML content of ripples. See: [custom ripple element](#custom-elements).                                                                                                                                                                                                                                      | `NodeList`, Element or `true` when the template is in the HTML markup                                                              | `null`   |
 | `fixedPos`        | Gives the ripple a fixed position in the parent.                                                                                                                                                                                                                                           | `Array` with two indices as x- and y-coordinates ([.5, .5] = 50%, 50%) | `false`   |
@@ -63,10 +67,9 @@ $(".ripple.noScale").ripple({scaleMode: 0});
 //.ripple has default options
 //.ripple.noScale has default options and {scaleMode: 0}
 
-$(".foo, .bar, .baz").ripple({scaleMode: 0});
-$(".bar").ripple({dragging: false});
-//.foo and .baz have default options and {scaleMode: 0}
-//.bar has default options and {dragging: false}
+$(".ripple.noScale").ripple({scaleMode: 0});
+$(".ripple").ripple();
+//.ripple and ripple.noScale have default options
 ```
 
 You can also unbind event handlers from ripples or destroy all ripples.
@@ -98,14 +101,14 @@ Ripples can be targeted using the `.legitRipple-ripple` class, their containers 
 #### Custom elements
 You can even use custom elements for ripples by setting the `template` option with an Element or `NodeList` as the value, like `template: $("<p/>").text("Look, ma, I'm custom!")`.
 
-Alternatively, you can add the following markup to your HTML:
+Alternatively, you can set the `template` option to `true` and add the following markup to your HTML:
 ```html
 <div>
     Container Element
     <div class="legitRipple-template">Your custom element</div>
 </div>
 ```
-How the code will look after a ripple is triggered:
+How the code will look when a ripple is triggered:
 ```html
 <div class="legitRipple">
     Container Element
@@ -158,25 +161,23 @@ $(".elements").ripple({callback: function($container, $ripple, posI, maxDiameter
 
 
 ## Touch support
-The plugin has full touch support. You can even use multi-touch for multiple ripples in different elements at the same time.
+legitRipple.js has full touch support. You can even use multi-touch for multiple ripples in different elements at the same time.
 
 
-## Why another ripple plugin?
-There are *[a lot](https://github.com/search?l=JavaScript&q=material+ripple&type=Repositories&utf8=%E2%9C%9)* of javascript ripple plugins out there but I noticed that none of them replicate the ripple on android exactly. Which is not surprising since it's not documented in [google's Material Design spec](https://www.google.com/design/spec/animation/responsive-interaction.html) either.
-
-On android, the ripple itself doesn't spread in all directions equally as fast. It's positioned relative to the touch position as the touch position is positioned relative to the ripple's container.
+## Motivation
+On android, the ripples don't spread in all directions equally as fast. They're positioned relative to the touch position as the touch position is positioned relative to the ripple's container.
 
 ![Reference 1](https://raw.githubusercontent.com/matthias-vogt/legitRipple.js/gh-pages/demo-media/reference-1.gif)
 ![Reference 2](https://raw.githubusercontent.com/matthias-vogt/legitRipple.js/gh-pages/demo-media/reference-2.gif)
-<br>*App courtesy of [Music](https://play.google.com/store/apps/details?id=com.sonyericsson.music) and [Phonograph Music Player](https://play.google.com/store/apps/details?id=com.kabouzeid.gramophone)*
+<br>*App courtesies of [Music](https://play.google.com/store/apps/details?id=com.sonyericsson.music) and [Phonograph Music Player](https://play.google.com/store/apps/details?id=com.kabouzeid.gramophone)*
 
-This effect, however, hadn't been replicated in any plugins yet, so I decided to make one.
+There are *[a lot](https://github.com/search?l=JavaScript&q=material+ripple&type=Repositories)* of similar plugins out there but this effect, hadn't been replicated in any of them AFAIK (which is not surprising since it's not documented in [Google's Material Design spec](https://www.google.com/design/spec/animation/responsive-interaction.html) either), so I decided to make my own.
 
-Adding to the incentive was that those I've seen don't slow the ripple spread on mousedown and speed it up again on mouseup or don't have, what in this plugin is called the `"fixed"` `scaleMode` implemented correctly.
+Adding to the incentive was that the plugins I saw don't slow the ripple spread on mousedown and speed it up again on mouseup or don't have dragging or touch support implemented correctly.
 
-This plugin is probably also the only one with customizable ripples and working with inline elements.
+legitRipple.js is probably also the only one which works with inline elements and has ripples with customizable HTML.
 
-You could maybe say that it's a bit overkill for this simple effect but that's your call to decide ;)
+Maybe it's a bit overkill for this simple effect but that's your call to decide ;)
 
 
 ## Browser support

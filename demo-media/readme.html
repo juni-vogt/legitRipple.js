@@ -1,5 +1,5 @@
 <h2 id="usage">Usage</h2>
-<p>The plugin depends on <a href="https://jquery.com/">jQuery</a>, so make sure you have that loaded. Afterwards, you can use it like this:</p>
+<p>legitRipple.js depends on <a href="https://jquery.com/">jQuery</a>, so make sure you have that loaded. When the DOM is ready, you can use it like this:</p>
 <pre class="rainbow"><code data-language="javascript">//ripple with default options
 $(&quot;.some, .elements&quot;).ripple();
 </code></pre><br>
@@ -13,8 +13,8 @@ $(&quot;.elements&quot;).ripple({
 <pre class="rainbow"><code data-language="javascript">$.ripple({
   &quot;.material&quot;: {},
   &quot;.material.circle&quot;: {maxDiameter: &quot;100%&quot;},
+  &quot;.customHTML&quot;: {template: $(&quot;&lt;p/&gt;&quot;).text(&quot;Custom ripple content!&quot;)},
   &quot;.callback&quot;: {
-    template: $(&quot;&lt;p/&gt;&quot;).text(&quot;Custom ripple content!&quot;)
     callback: function($container, $ripple, posI, maxDiameter) {
       //is called whenever the ripple's css properties change
     }
@@ -46,7 +46,7 @@ $(&quot;.elements&quot;).ripple({
 </tr>
 <tr>
 <td><code>adaptPos</code></td>
-<td>Whether to take the mouse position relative to the ripple-container's dimensions into account when positioning the ripple. Note: <a href="#why-another-ripple-plugin">more info on &quot;adaptPos&quot;</a></td>
+<td>Whether to take the mouse position relative to the ripple-container's dimensions into account when positioning the ripple. Note: <a href="#motivation">more info on &quot;adaptPos&quot;</a></td>
 <td><code>Boolean</code></td>
 <td><code>true</code></td>
 </tr>
@@ -120,10 +120,9 @@ $(&quot;.ripple.noScale&quot;).ripple({scaleMode: 0});
 //.ripple has default options
 //.ripple.noScale has default options and {scaleMode: 0}
 
-$(&quot;.foo, .bar, .baz&quot;).ripple({scaleMode: 0});
-$(&quot;.bar&quot;).ripple({dragging: false});
-//.foo and .baz have default options and {scaleMode: 0}
-//.bar has default options and {dragging: false}
+$(&quot;.ripple.noScale&quot;).ripple({scaleMode: 0});
+$(&quot;.ripple&quot;).ripple();
+//.ripple and ripple.noScale have default options
 </code></pre><br>
 <p>You can also unbind event handlers from ripples or destroy all ripples.</p>
 <pre class="rainbow"><code data-language="javascript">$(&quot;.ripple&quot;).ripple({unbind: true});
@@ -148,13 +147,13 @@ $.ripple.destroy();
 </code></pre><br>
 <h4 id="custom-elements">Custom elements</h4>
 <p>You can even use custom elements for ripples by setting the <code>template</code> option with an Element or <code>NodeList</code> as the value, like <code>template: $(&quot;&lt;p/&gt;&quot;).text(&quot;Look, ma, I'm custom!&quot;)</code>.</p>
-<p>Alternatively, you can add the following markup to your HTML:</p>
+<p>Alternatively, you can set the <code>template</code> option to <code>true</code> and add the following markup to your HTML:</p>
 <pre class="rainbow"><code data-language="html">&lt;div&gt;
     Container Element
     &lt;div class=&quot;legitRipple-template&quot;&gt;Your custom element&lt;/div&gt;
 &lt;/div&gt;
 </code></pre><br>
-<p>How the code will look after a ripple is triggered:</p>
+<p>How the code will look when a ripple is triggered:</p>
 <pre class="rainbow"><code data-language="html">&lt;div class=&quot;legitRipple&quot;&gt;
     Container Element
     &lt;div class=&quot;legitRipple-template&quot;&gt;Your custom element&lt;/div&gt;
@@ -193,4 +192,15 @@ If you want to remove these ripples later, just change the CSS via jQuery like:<
 }});
 </code></pre><br>
 <h2 id="touch-support">Touch support</h2>
-<p>The plugin has full touch support. You can even use multi-touch for multiple ripples in different elements at the same time.</p>
+<p>legitRipple.js has full touch support. You can even use multi-touch for multiple ripples in different elements at the same time.</p>
+<h2 id="motivation">Motivation</h2>
+<p>On android, the ripples don't spread in all directions equally as fast. They're positioned relative to the touch position as the touch position is positioned relative to the ripple's container.</p>
+<p><img src="https://raw.githubusercontent.com/matthias-vogt/legitRipple.js/gh-pages/demo-media/reference-1.gif" alt="Reference 1">
+<img src="https://raw.githubusercontent.com/matthias-vogt/legitRipple.js/gh-pages/demo-media/reference-2.gif" alt="Reference 2">
+<br><em>App courtesies of <a href="https://play.google.com/store/apps/details?id=com.sonyericsson.music">Music</a> and <a href="https://play.google.com/store/apps/details?id=com.kabouzeid.gramophone">Phonograph Music Player</a></em></p>
+<p>There are <em><a href="https://github.com/search?l=JavaScript&amp;q=material+ripple&amp;type=Repositories">a lot</a></em> of similar plugins out there but this effect, hadn't been replicated in any of them AFAIK (which is not surprising since it's not documented in <a href="https://www.google.com/design/spec/animation/responsive-interaction.html">Google's Material Design spec</a> either), so I decided to make my own.</p>
+<p>Adding to the incentive was that the plugins I saw don't slow the ripple spread on mousedown and speed it up again on mouseup or don't have dragging or touch support implemented correctly.</p>
+<p>legitRipple.js is probably also the only one which works with inline elements and has ripples with customizable HTML.</p>
+<p>Maybe it's a bit overkill for this simple effect but that's your call to decide ;)</p>
+<h2 id="browser-support">Browser support</h2>
+<p>This uses CSS3 transitions, so <a href="http://caniuse.com/#feat=css-transitions">browser support</a> is ie10+.</p>
