@@ -224,6 +224,15 @@
 					.css("transition-duration", [parseFloat(transitionDurs) * 5.5 + "s"]
 						.concat(transitionDurs.slice(1)).join(","))
 					.css("width", options.maxDiameter);
+
+				//remove ripples when both width and opacity transitions ended
+				$ripple.on('transitionend webkitTransitionEnd oTransitionEnd', function() {
+					console.log("end", $(this).data("oneEnded"));
+					if ($(this).data("oneEnded"))
+						$(this).off().remove();
+					else
+						$(this).data("oneEnded", true);
+				});
 			},
 
 			drag = function(coords) {
@@ -278,14 +287,6 @@
 				//reset temporary variables
 				$active = null; //allows to only trigger release() once
 				mousemoved = 0;
-
-				//remove ripples when both width and opacity transitions ended
-				$ripple.on('transitionend webkitTransitionEnd oTransitionEnd', function() {
-					if ($(this).data("oneEnded"))
-						$(this).off().remove();
-					else
-						$(this).data("oneEnded", true);
-				});
 			},
 
 			positionAndScale = function(coords, scale) {
