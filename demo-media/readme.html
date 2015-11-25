@@ -21,6 +21,7 @@ $(&quot;.elements&quot;).ripple({
   }
 });
 </code></pre><br>
+<p>You can't apply the ripple effect on <a href="//www.w3.org/TR/html-markup/syntax.html#void-element"><code>void elements</code></a> (those that can't have child elements; <img>, <input>, …). However, you can simply wrap them and apply the effect to the wrapper element.</p>
 <h3 id="options">Options</h3>
 <table>
 <thead>
@@ -193,14 +194,3 @@ If you want to remove these ripples later, just change the CSS via jQuery like:<
 </code></pre><br>
 <h2 id="touch-support">Touch support</h2>
 <p>legitRipple.js has full touch support. You can even use multi-touch for multiple ripples in different elements at the same time.</p>
-<h2 id="motivation">Motivation</h2>
-<p>On Android, ripples don't spread in all directions equally as fast. They're positioned relative to the touch position as the touch position is positioned relative to the ripple's container.</p>
-<p><img src="https://raw.githubusercontent.com/matthias-vogt/legitRipple.js/gh-pages/demo-media/reference-1.gif" alt="Reference 1">
-<img src="https://raw.githubusercontent.com/matthias-vogt/legitRipple.js/gh-pages/demo-media/reference-2.gif" alt="Reference 2">
-<br><em>App courtesies of <a href="https://play.google.com/store/apps/details?id=com.sonyericsson.music">Music</a> and <a href="https://play.google.com/store/apps/details?id=com.kabouzeid.gramophone">Phonograph Music Player</a></em></p>
-<p>There are <em><a href="https://github.com/search?l=JavaScript&amp;q=material+ripple&amp;type=Repositories">a lot</a></em> of similar plugins out there but this effect, hadn't been replicated in any of them AFAIK (which is not surprising since it's not documented in <a href="https://www.google.com/design/spec/animation/responsive-interaction.html">Google's Material Design spec</a> either), so I decided to make my own.</p>
-<p>Adding to the incentive was that the plugins I saw don't slow the ripple spread on mousedown and speed it up again on mouseup or don't have dragging or touch support implemented correctly.</p>
-<p>legitRipple.js is probably also the only one which works with inline elements and has ripples with customizable HTML.</p>
-<p>Maybe it's a bit overkill for this simple effect but that's your call to decide ;)</p>
-<h2 id="browser-support">Browser support</h2>
-<p>This uses CSS3 transitions, so <a href="http://caniuse.com/#feat=css-transitions">browser support</a> is ie10+.</p>
