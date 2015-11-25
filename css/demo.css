@@ -985,7 +985,7 @@ pre.rainbow code {
   display: inline-block;
 }
 
-@media (max-width: 1256px) {
+@media (max-width: 1336px) {
   nav {
     display: none;
   }
