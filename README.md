@@ -38,6 +38,7 @@ $.ripple({
 });
 ```
 
+You can't apply the ripple effect on [`void elements`](//www.w3.org/TR/html-markup/syntax.html#void-element) (those that can't have child elements; <img>, <input>, …). However, you can simply wrap them and apply the effect to the wrapper element.
 
 ### Options
 | Option            | Description                                                                                                                                                                                                                                                                                | Expected Input                                                         | Default   |
