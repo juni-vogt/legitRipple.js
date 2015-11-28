@@ -3,7 +3,7 @@
   "description": "Material Design ripples with jQuery",
   "main": [
     "dist/ripple.min.js",
-    "dist/ripple.min.css",
+    "dist/ripple.min.css"
   ],
   "dependencies": { "jquery": "latest" },
   "authors": [
@@ -20,6 +20,6 @@
   "homepage": "https://github.com/matthias-vogt/legitRipple.js",
   "moduleType": [],
   "ignore": [
-    "**/.*",
+    "**/.*"
   ]
 }
