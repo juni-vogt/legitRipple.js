@@ -63,32 +63,34 @@ $(function() {
         },
     });
 
-    //remember to update "Manually controlling ripples" in readme when adding lines
+    // remember to update "Manually controlling ripples" in readme when adding lines
 
 
-    //faking mouse/touch events to make ripples:
+    // faking mouse/touch events to make ripples:
     for (var i = 4; i > 0; i--) {
         setTimeout(function(i) {
             $("#fadeInOverlay")
-                .ripple()
-                .trigger($.Event("mousedown", {
-                    pageX: $("h1").offset().left,
-                    pageY: $("h1").offset().top
-                }))
+                .ripple({
+                    fixedPos: [
+                        $("h1").offset().left,
+                        $("h1").offset().top
+                    ],
+                    adaptPos: true
+                })
+                .trigger("mousedown")
                 .ripple({ //remove user interaction
                     unbind: true
                 });
-        }, 200 * i, i);
+        }, 240 * i, i);
     };
 
-    //removing ripples after animation for performance
+    // removing ripples after animation for performance
     setTimeout(function() {
             $("#fadeInOverlay").addClass('introFinished')
                 .children(".legitRipple-ripple").remove();
         },
-        200 * 4 + //last ripple's start time
-        0.125 * 7 * 1000 + //+ last ripple's animation-duration
-        100 //giving the browser a break
+        240 * 4 + // last ripple's start time
+        125 * 7 * 1000 // last ripple's animation-duration
     );
 
 

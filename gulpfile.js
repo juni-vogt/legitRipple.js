@@ -1,6 +1,6 @@
 // Include gulp
 var gulp = require('gulp'),
-    p = require('./package.json')
+    p = require('./package.json'),
     fs = require('fs');
 
 // Include Our Plugins
@@ -31,16 +31,15 @@ var jshint = require('gulp-jshint'),
         }
     },
 
+    /*
     date = new Date(),
     datetime = date.getDate() + '/' + (date.getMonth() + 1) + '/' + date.getFullYear() +
     ' @ ' + date.getHours() + ':' + (date.getMinutes() < 10 ? '0' : '') + date.getMinutes() +
     ':' + (date.getSeconds() < 10 ? '0' : '') + date.getSeconds(),
+    */
     headerText = function(filename) {
-        return '/*' + '\n' +
-            p.name + ' v' + p.version + /*' by ' + p.author +*/ ', Copyright by ' + p.author + ' (' + p.license + ' license)' +
-            '\n' +
-            filename + ', compiled: ' + datetime + '\n' +
-            '*/\n';
+        return '/*! ' + p.name + ' v' + p.version + ': ' + filename +
+            ' by ' + p.author + ' (' + p.license + ' license) */\n';
     };
 
 

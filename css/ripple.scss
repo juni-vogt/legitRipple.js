@@ -1,12 +1,15 @@
 .legitRipple {
 	position: relative;
 	overflow: hidden;
-	user-select: none; //would interfere with dragging
+	user-select: none; // would interfere with dragging
 	z-index: 0;
-	//z-index needs to be defined or sometimes the ripple will be
-	//behind the element
+	// z-index needs to be something other than auto or the ripple will appear
+	// behind the container element sometimes
 
 	//default: .15s, .9s
+	/*
+	Example for different transition-durations:
+
 	&.longOpacity .legitRipple-ripple {
 		transition-duration: .15s, .9s*4;
 	}
@@ -18,28 +21,37 @@
 		transition-duration: .15s*5, .9s*4;
 		transition-timing-function: linear, cubic-bezier(1, 0, 0.8, 0);
 	}
+	*/
 }
 
-//default ripple styling
+// default ripple styling
 .legitRipple-ripple {
 	position: absolute;
-	z-index: -1;
-	transform: translate(-50%, -50%) scale(1); //pixelated scaling :/
-	transition:
-		width .15s linear, //has to be linear
-		opacity .9s ease-out; //cubic-bezier(1, 0, 0.75, 0.75)
-	//transition initial values
-	width: 0;
-	opacity: 1;
-	//will-change: transform, width, opacity;
-	pointer-events: none;
-	//clicking the drops themselves doesn't produce more, covered links work
-	border-radius: 50%;
+	z-index: -1; // appear behind other elements by default
+	transform: translate(-50%, -50%);
 
+	pointer-events: none; // prevents ripples from being clickable producing
+	                      // more ripples. Additional enhancing feature.
+	                      // Only relevant with overflow: visible; on parent.
+	                      // Not supported by ie10
+	border-radius: 50%;
 	background: rgba(255,255,255,0.4);
 
+	// performance
+	will-change: transform, width, opacity;
+	transform: translate3d(0,0,0);
+
+	// initial values for transition
+	width: 0;
+	opacity: 1;
+
+	transition:
+		width .15s linear, // has to be linear for correct transition speed up
+		                   // on release()
+		opacity .9s ease-out; // Also try: cubic-bezier(1, 0, 0.75, 0.75)
+
 	&:before {
-		//1:1 aspect ratio
+		// 1:1 aspect ratio
 		content: "";
 		padding-top: 100%;
 		display: block;
@@ -47,17 +59,16 @@
 }
 
 img ~ .legitRipple-ripple {
-	z-index: 0; //should appear in front of images
-	//if image is after ripple element, this won't work.
-	//that won't happen, though.
+	z-index: auto; // ripples should not appear behind images
+	// if the image element is after ripple element, this won't work.
+	// that won't happen, though.
 }
 
 .legitRipple-template {
-	//hide custom ripple template
+	// hide custom ripple template
 	display: none;
 }
 .legitRipple-custom {
-	display: inline-block;
 	overflow: hidden;
 	&>* {
 		position: absolute;

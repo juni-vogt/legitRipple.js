@@ -1,7 +1,7 @@
 {
   "name": "legitRipple.js",
   "version": "1.0.0",
-  "description": "jQuery plugin for legit Material Design ripples",
+  "description": "Material Design ripples with jQuery",
   "main": "gulpfile.js",
   "devDependencies": {
     "gulp": "^3.9.0",

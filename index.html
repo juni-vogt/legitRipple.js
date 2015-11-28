@@ -68,6 +68,7 @@
 <ul>
 <li><a href="#usage">Usage</a>
 <ul>
+<li><a href="#install">Install</a></li>
 <li><a href="#options">Options</a>
 <ul>
 <li><a href="#coming-soon">Coming soon</a></li>
@@ -165,12 +166,12 @@
 			</div>
 
 			<div class="longDrop longOpacity box levitate" id="long">
-				You can add <code>longDrop</code> and <code>longOpacity</code> classes
+				You can even change the <code>transition-duration</code>s
 				<p>
-					…for longer transitions.
+					…for longer or shorter ripple animations.
 					<br>
 					<br>
-					<code>class="longDrop longOpacity"</code>
+					<code>transition-duration: .75s, .36s;</code>
 				</p>
 			</div>
 
@@ -228,7 +229,16 @@ $(&quot;.elements&quot;).ripple({
   }
 });
 </code></pre><br>
-<p>You can't apply the ripple effect on <a href="//www.w3.org/TR/html-markup/syntax.html#void-element"><code>void elements</code></a> (those that can't have child elements; <img>, <input>, …). However, you can simply wrap them and apply the effect to the wrapper element.</p>
+<p>You can't apply the ripple effect on <a href="//www.w3.org/TR/html-markup/syntax.html#void-element"><code>void elements</code></a> (those that can't have child elements; <code>&lt;img&gt;</code>, `<input>, …). However, you can simply wrap them and apply the effect to the wrapper element.</p>
+<h3 id="install">Install</h3>
+<pre class="rainbow"><code data-language="html">&lt;link href=&quot;stylesheet&quot; type=&quot;text/css&quot; href=&quot;ripple.min.css&quot;&gt;
+&lt;script src=&quot;jquery.min.js&quot;&gt;&lt;/script&gt;
+&lt;script src=&quot;ripple.min.js&quot;&gt;&lt;/script&gt;
+</code></pre><br>
+<p>For better loading performance, I'd recommend loading the script as non-critical content (by putting the <code>&lt;script&gt;</code> and <code>&lt;style&gt;</code> tags at the end of the body tag).</p>
+<p>Install and update easily using <a href="http://bower.io">bower</a>:</p>
+<pre class="rainbow"><code data-language="sh">bower install --save legitripple
+</code></pre><br>
 <h3 id="options">Options</h3>
 <table>
 <thead>
@@ -273,7 +283,7 @@ $(&quot;.elements&quot;).ripple({
 <tr>
 <td><code>fixedPos</code></td>
 <td>Gives the ripple a fixed position in the parent.</td>
-<td><code>Array</code> with two indices as x- and y-coordinates ([.5, .5] = 50%, 50%)</td>
+<td><code>true</code> for centered position or <code>Array</code> with x- and y-coordinates relative to the parent's offset (e.g. [20, 40] = x: 20px, y: 40px)</td>
 <td><code>false</code></td>
 </tr>
 <tr>
@@ -284,7 +294,7 @@ $(&quot;.elements&quot;).ripple({
 </tr>
 <tr>
 <td><code>unbind</code></td>
-<td>When set, unbinds all of the ripple's event handlers (see <a href="#destroying-unbinding-and-overwriting">Destroying, unbinding and overwriting</a>)</td>
+<td>When set, unbinds all of the ripple's event handlers. Doesn't remove any elements or classes. (see <a href="#destroying-unbinding-and-overwriting">Destroying, unbinding and overwriting</a>)</td>
 <td><code>Boolean</code></td>
 <td><code>false</code></td>
 </tr>
@@ -314,9 +324,9 @@ $(&quot;.elements&quot;).ripple({
 <td><code>false</code></td>
 </tr>
 <tr>
-<td><code>destinationElement</code></td>
+<td><code>destination</code></td>
 <td>An element other than the clicked one the ripple should travel to</td>
-<td><code>NodeList</code>, Element or selector <code>String</code></td>
+<td><code>NodeList</code>, Element or selector <code>String</code>  or <code>Array</code> of coordinates in px</td>
 <td><code>null</code></td>
 </tr>
 </tbody>
@@ -349,7 +359,7 @@ $.ripple.destroy();
 <pre class="rainbow"><code data-language="css">.container .legitRipple-ripple {
     background: yellow;
     /* You can change the transition properties too!
-       Just don't try and change the easing. */
+       Just don't try and change the width transition's easing. */
     transition-duration: .15s, .9s; /*width, opacity*/
 }
 </code></pre><br>
@@ -386,7 +396,7 @@ $.ripple.destroy();
 If you want to remove these ripples later, just change the CSS via jQuery like:</p>
 <pre class="rainbow"><code data-language="javascript">$(&quot;.ripple-element&gt;.legitRipple-ripple&quot;).css(&quot;opacity&quot;, &quot;0 !important&quot;);
 </code></pre><br>
-<p>Moreover, you can manually trigger ripples <a href="https://github.com/matthias-vogt/legitRipple.js/blob/gh-pages/js/demo.js#L68-76">like in the demo</a> by faking mousedown/touchstart events and do some <a href="http://codepen.io/matze/pen/PPJxyr">crazy stuff</a> with it.</p>
+<p>Moreover, you can manually trigger ripples <a href="https://github.com/matthias-vogt/legitRipple.js/blob/gh-pages/js/demo.js#L69-L82">like in the demo</a> by faking mousedown/touchstart events and do some <a href="http://codepen.io/matze/pen/PPJxyr">crazy stuff</a> with it.</p>
 <h3 id="callback">Callback</h3>
 <p>For the callback option, you can pass a function which is called everytime the ripple's style attribute changes.</p>
 <pre class="rainbow"><code data-language="javascript">$(&quot;.elements&quot;).ripple({callback: function($container, $ripple, posI, maxDiameter) {
