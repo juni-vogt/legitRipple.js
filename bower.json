@@ -20,6 +20,10 @@
   "homepage": "https://github.com/matthias-vogt/legitRipple.js",
   "moduleType": [],
   "ignore": [
-    "**/.*"
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
   ]
 }
