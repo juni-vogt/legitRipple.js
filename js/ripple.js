@@ -152,7 +152,7 @@
 					tapTimeout = setTimeout(function() {
 					$lastTapTarget.trigger(lastTapEvent);
 					tapTimeout = null;
-				}, 125);
+				}, options.touchDelay);
 				else
 					$lastTapTarget.trigger(lastTapEvent);
 			}
@@ -238,6 +238,7 @@
 					scaleMode: 'fixed',
 					template: null,
 					allowDragging: false,
+					touchDelay: 100,
 					callback: null
 				};
 

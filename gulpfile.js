@@ -151,9 +151,7 @@ gulp.task('watch', function() {
         gulp.src('**/*.html').pipe(connect.reload());
     });
 
-    gulp.watch('README.md', ['inject-markdown']).on('change', function() {
-        gulp.src('./index.html').pipe(connect.reload());
-    });
+    gulp.watch('README.md', ['inject-markdown']);
 
     gulp.watch(paths.js.src + '*.js', ['lint']).on('change', function() {
         gulp.src(paths.js.src + '*.js').pipe(connect.reload());
