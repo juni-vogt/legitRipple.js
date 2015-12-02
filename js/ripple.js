@@ -213,19 +213,19 @@
 			setOptions = function() {
 
 				var defaults = {
-					// some of these are functions, either for their values to be
+					// some of these are getters, either for their values to be
 					// only processed when needed or because they have
 					// interdependencies with other options and thus need to
 					// check them when being set.
 
 					fixedPos: null,
-					dragging: function() { // depends on fixedPos
+					get dragging() { // depends on fixedPos
 						return !options.fixedPos;
 					},
-					adaptPos: function() { // depends on dragging
+					get adaptPos() { // depends on dragging
 						return options.dragging;
 					},
-					maxDiameter: function() { // depends on adaptPos
+					get maxDiameter() { // depends on adaptPos
 						return Math.sqrt(
 								Math.pow(containerDimensions[0], 2) +
 								Math.pow(containerDimensions[1], 2)
@@ -245,10 +245,7 @@
 				// extend options with passed options
 				$.each(defaults, function(name, defaultVal) {
 					options[name] = name in passedOptions ?
-						passedOptions[name] :
-						typeof defaultVal == 'function' ?
-						defaultVal() :
-						defaultVal;
+						passedOptions[name] : defaultVal;
 				});
 			},
 
