@@ -38,7 +38,7 @@ $.ripple({
 });
 ```
 
-You can't apply the ripple effect on [`void elements`](//www.w3.org/TR/html-markup/syntax.html#void-element) (those that can't have child elements; `<img>`, `<input>, …). However, you can simply wrap them and apply the effect to the wrapper element.
+You can't apply the ripple effect on [`void elements`](//www.w3.org/TR/html-markup/syntax.html#void-element) (those that can't have child elements; `<img>`, `<input>`, …). However, you can simply wrap them and apply the effect to the wrapper element.
 
 ### Install
 ```html
@@ -46,7 +46,7 @@ You can't apply the ripple effect on [`void elements`](//www.w3.org/TR/html-mark
 <script src="jquery.min.js"></script>
 <script src="ripple.min.js"></script>
 ```
-For better loading performance, I'd recommend loading the script as non-critical content (by putting the `<script>` and `<style>` tags at the end of the body tag).
+For better loading performance, I'd recommend loading the script as non-critical content (by putting the `<script>` and `<style>` tags at the end of the body tag). Please also consider concatenating it with your other dependencies.
 
 Install and update easily using [bower](http://bower.io):
 ```sh
@@ -61,7 +61,7 @@ bower install --save legitripple
 | `adaptPos`        | Whether to take the mouse position relative to the ripple-container's dimensions into account when positioning the ripple. Note: [more info on "adaptPos"](#motivation)                                                                                                     | `Boolean`                                                              | `true`    |
 | `scaleMode`       | How to scale the ripple while dragging:<br><br>`"proportional"`: Proportional to the amount it was dragged. Will probably become much bigger than its container.<br><br>`"fixed"`: Don't scale and release ripple while dragging upwards.<br><br>falsey values: Don't scale while dragging | `String` or falsey value                                               | `"fixed"` |
 | `template` | Set the HTML content of ripples. See: [custom ripple element](#custom-elements).                                                                                                                                                                                                                                      | `NodeList`, Element or `true` when the template is in the HTML markup                                                              | `null`   |
-| `fixedPos`        | Gives the ripple a fixed position in the parent.                                                                                                                                                                                                                                           | `true` for centered position or `Array` with x- and y-coordinates relative to the parent's offset (e.g. [20, 40] = x: 20px, y: 40px) | `false`   |
+| `fixedPos`        | Gives the ripple a fixed position in the parent.                                                                                                                                                                                                                                           | `true` for centered position or `Array` with x- and y-coordinates relative to the parent's offset (e.g. `[20, 40]` = x: 20px, y: 40px) | `false`   |
 | `allowDragging`   | HTML5 dragging is disabled on ripple elements by default for nicer interaction.                                                                                                                                                                                                            | `Boolean`                                                              | `false`   |
 | `unbind`          | When set, unbinds all of the ripple's event handlers. Doesn't remove any elements or classes. (see [Destroying, unbinding and overwriting](#destroying-unbinding-and-overwriting))                                                                                                                                                  | `Boolean`                                                              | `false`   |
 | `touchDelay`      | Time to delay triggering of ripples on touch devices (e.g. to enable scrolling past ripple elements without triggering ripples)                                                                                                                                                                                                               | Time in ms as `number`                                                             | `100`    |

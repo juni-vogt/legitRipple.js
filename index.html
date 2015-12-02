@@ -198,12 +198,6 @@
 			<a href="https://github.com/matthias-vogt/legitRipple.js" class="clickMePlease">
 				<button class="levitate">Check it out on GitHub!</button>
 			</a>
-			<br>
-			<br>
-			<p>To embed the plugin, put these at the end of your page's <code>head</code> or <code>body</code> tags. <code>ripple.min.js</code> needs to be loaded after jQuery.</p>
-			<pre class="rainbow"><code data-language="html">&lt;link rel=&quot;stylesheet&quot; href=&quot;//cdn.rawgit.com/matthias-vogt/legitRipple.js/gh-pages/dist/ripple.min.css&quot;&gt;
-&lt;script src=&quot;//cdn.rawgit.com/matthias-vogt/legitRipple.js/gh-pages/dist/ripple.min.js&quot;&gt;&lt;/script&gt;</code></pre>
-			<br>
 
 			<!-- inject:readme -->
 <h2 id="usage">Usage</h2>
@@ -229,13 +223,13 @@ $(&quot;.elements&quot;).ripple({
   }
 });
 </code></pre><br>
-<p>You can't apply the ripple effect on <a href="//www.w3.org/TR/html-markup/syntax.html#void-element"><code>void elements</code></a> (those that can't have child elements; <code>&lt;img&gt;</code>, `<input>, …). However, you can simply wrap them and apply the effect to the wrapper element.</p>
+<p>You can't apply the ripple effect on <a href="//www.w3.org/TR/html-markup/syntax.html#void-element"><code>void elements</code></a> (those that can't have child elements; <code>&lt;img&gt;</code>, <code>&lt;input&gt;</code>, …). However, you can simply wrap them and apply the effect to the wrapper element.</p>
 <h3 id="install">Install</h3>
 <pre class="rainbow"><code data-language="html">&lt;link href=&quot;stylesheet&quot; type=&quot;text/css&quot; href=&quot;ripple.min.css&quot;&gt;
 &lt;script src=&quot;jquery.min.js&quot;&gt;&lt;/script&gt;
 &lt;script src=&quot;ripple.min.js&quot;&gt;&lt;/script&gt;
 </code></pre><br>
-<p>For better loading performance, I'd recommend loading the script as non-critical content (by putting the <code>&lt;script&gt;</code> and <code>&lt;style&gt;</code> tags at the end of the body tag).</p>
+<p>For better loading performance, I'd recommend loading the script as non-critical content (by putting the <code>&lt;script&gt;</code> and <code>&lt;style&gt;</code> tags at the end of the body tag). Please also consider concatenating it with your other dependencies.</p>
 <p>Install and update easily using <a href="http://bower.io">bower</a>:</p>
 <pre class="rainbow"><code data-language="sh">bower install --save legitripple
 </code></pre><br>
@@ -283,7 +277,7 @@ $(&quot;.elements&quot;).ripple({
 <tr>
 <td><code>fixedPos</code></td>
 <td>Gives the ripple a fixed position in the parent.</td>
-<td><code>true</code> for centered position or <code>Array</code> with x- and y-coordinates relative to the parent's offset (e.g. [20, 40] = x: 20px, y: 40px)</td>
+<td><code>true</code> for centered position or <code>Array</code> with x- and y-coordinates relative to the parent's offset (e.g. <code>[20, 40]</code> = x: 20px, y: 40px)</td>
 <td><code>false</code></td>
 </tr>
 <tr>
