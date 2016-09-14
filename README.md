@@ -187,6 +187,7 @@ On Android, ripples don't spread in all directions equally as fast. They're posi
 <br>*App courtesies of [Music](https://play.google.com/store/apps/details?id=com.sonyericsson.music) and [Phonograph Music Player](https://play.google.com/store/apps/details?id=com.kabouzeid.gramophone)*
 
 There are *[a lot](https://github.com/search?l=JavaScript&q=material+ripple&type=Repositories)* of similar plugins out there but this effect, hadn't been replicated in any of them AFAIK (which is not surprising since it's not documented in [Google's Material Design spec](https://www.google.com/design/spec/animation/responsive-interaction.html) either), so I decided to make my own.
+**Update**: I did some more research and this effect can be achieved with the [paper-ripple](https://github.com/PolymerElements/) Polymer element, using the recenters attribute which makes ripples "grow toward the center of [their] container". So definitely use that if you use polymer.
 
 Adding to the incentive was that the plugins I saw don't slow the ripple spread on mousedown and speed it up again on mouseup or don't have dragging or touch support implemented correctly.
 
