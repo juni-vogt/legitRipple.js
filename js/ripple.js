@@ -218,7 +218,7 @@
 					// interdependencies with other options and thus need to
 					// check them when being set.
 
-          color: 'rgba(255, 255, 255, 0.4)',
+          				color: 'rgba(255, 255, 255, 0.4)',
 					fixedPos: null,
 					get dragging() { // depends on fixedPos
 						return !options.fixedPos;
@@ -269,7 +269,7 @@
 
 				$ripple = $('<span/>').addClass('legitRipple-ripple');
         
-        $ripple.css('background', options.color);
+        			$ripple.css('background', options.color);
 
 				if (options.template)
 					$ripple.append(
