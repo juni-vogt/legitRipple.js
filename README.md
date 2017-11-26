@@ -20,7 +20,8 @@ $(".some, .elements").ripple();
 //ripple with custom options
 $(".elements").ripple({
   scaleMode: false,
-  maxDiameter: "100%"
+  maxDiameter: "100%",
+  color: "rgba(0, 0, 0, .26)";
 });
 ```
 
@@ -56,7 +57,8 @@ bower install --save legitripple
 ### Options
 | Option            | Description                                                                                                                                                                                                                                                                                | Expected Input                                                         | Default   |
 |-------------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|------------------------------------------------------------------------|-----------|
-| `maxDiameter`     | Gives the ripple a max-width. `adaptPos: true` requires this to be in %; can be any unit with `adaptPos: false`. 100% for circles.                                                                                                                                                              | Number with unit as `String` ("100%" or "3.125em")                     | `false`   |
+| `color`     | Easily gives the ripple a custom color.                                                                                                            | A CSS value for colors, like `"blue"`, `"#212121"`, `"rgba(33, 150, 243)"` or `"rgba(55, 71, 79, .2)"` | `"rgba(255, 255, 255, .4)"` | 
+|`maxDiameter`      | Gives the ripple a max-width. `adaptPos: true` requires this to be in %; can be any unit with `adaptPos: false`. 100% for circles.                                                                                                                                                              | Number with unit as `String` ("100%" or "3.125em")                     | `false`   |
 | `dragging`        | Whether the ripple should be able to be dragged.                                                                                                                                                                                                                                            | `Boolean`                                                              | `true`    |
 | `adaptPos`        | Whether to take the mouse position relative to the ripple-container's dimensions into account when positioning the ripple. Note: [more info on "adaptPos"](#motivation)                                                                                                     | `Boolean`                                                              | `true`    |
 | `scaleMode`       | How to scale the ripple while dragging:<br><br>`"proportional"`: Proportional to the amount it was dragged. Will probably become much bigger than its container.<br><br>`"fixed"`: Don't scale and release ripple while dragging upwards.<br><br>falsey values: Don't scale while dragging | `String` or falsey value                                               | `"fixed"` |
